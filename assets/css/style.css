@@ -1188,3 +1188,25 @@ section .container {
 .credits a:hover {
   color: #fff;
 }
+
+/* ===== Scrollbar CSS ===== */
+  /* Firefox */
+  * {
+    scrollbar-width: auto;
+    scrollbar-color: #18d26e #111212;
+  }
+
+  /* Chrome, Edge, and Safari */
+  *::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: #111212;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background-color: #18d26e;
+    border-radius: 17px;
+    border: 3px inset #9c1111;
+  }
