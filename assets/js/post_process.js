@@ -10,8 +10,8 @@ function post_process() {
     if (POST_FX.scanlines.on) draw_scanlines(POST_FX.scanlines)
     if (POST_FX.aberration.on) draw_aberration(POST_FX.aberration)
     if (POST_FX.glitch.on) draw_glitch(POST_FX.glitch)
-    if (POST_FX.grain.on) draw_scanlines(POST_FX.scanlines)
-    if (POST_FX.bloom.on) draw_scanlines(POST_FX.scanlines)
+    if (POST_FX.grain.on) draw_grain(POST_FX.grain)
+    if (POST_FX.bloom.on) draw_bloom(POST_FX.bloom)
 }
 
 function draw_scanlines(config) {
@@ -42,6 +42,8 @@ function draw_aberration(config) {
 
     context.restore()
     noTint()
+
+    drawingContext.globalCompositeOperation = 'source-over'
 }
 
 function trigger_glitch() {
@@ -80,11 +82,58 @@ function draw_glitch(config) {
 
         if (sh < 1) continue
 
-
-        
-        context.drawImage(context.canvas, sx, sy, sw, sh, sx + slice.offset, sy, sw, sh)
-
+        if (slice.color_shift) {
+            context.globalCompositeOperation = 'lighter'
+            context.globalAlpha = 0.3
+            context.drawImage(context.canvas, sx, sy, sw, sh, sx + slice.offset * 1.5, sy, sw, sh)
+            context.globalAlpha = 0.2
+            context.drawImage(context.canvas, sx, sy, sw, sh, sx - slice.offset, sy, sw, sh)
+            context.globalCompositeOperation = 'source-over'
+            context.globalAlpha = 1
+        } else {
+            context.drawImage(context.canvas, sx, sy, sw, sh, sx + slice.offset, sy, sw, sh)
+        }
     }
 
     if (!still_active) glitch_slices = []
+
+    context.restore()
+    drawingContext.globalCompositeOperation = 'source-over'
+}
+
+function draw_grain(config) {
+    let num_particles = config.amount * 100
+    for (let i = 0; i < num_particles; i++) {
+        let x = random(width)
+        let y = random(height)
+        let alpha = random(30, 100)
+        let size = random(1, 2)
+
+        if (random() < 0.5) {
+            stroke(255, 255, 255, alpha)
+        } else {
+            stroke(0, 0, 0, alpha)
+        }
+        strokeWeight(size)
+        point(x, y)
+    }
+    noStroke()
+}
+
+function draw_bloom(config) {
+    let x = width/2 - buffer_width/2
+    let y = height/2 - buffer_height/2
+
+    drawingContext.filter = `blur(${config.radius * 2}px)`
+    drawingContext.globalCompositeOperation = 'screen'
+    tint(255, 255, 255, config.strength * 120)
+    image(final_buffer, x, y)
+
+    drawingContext.filter = `blur(${config.radius}px)`
+    tint(255, 255, 255, config.strength * 80)
+    image(final_buffer, x, y)
+
+    drawingContext.filter = 'none'
+    drawingContext.globalCompositeOperation = 'source-over'
+    noTint()
 }
