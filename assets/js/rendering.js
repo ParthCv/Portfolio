@@ -10,10 +10,11 @@ function render_buffer() {
 
     rendering_buffer.loadPixels()
     const grid = 12 //min-6 max-18
+    const pd = rendering_buffer.pixelDensity()
 
     for (let sy = 0; sy < buffer_height; sy += grid) {
         for (let sx = 0; sx < buffer_width; sx += grid) {
-            let idx = (sy * buffer_width + sx) * 4
+            let idx = ((sy * buffer_width * pd * pd) + sx * pd) * 4
             let r = rendering_buffer.pixels[idx]
             let g = rendering_buffer.pixels[idx + 1]
             let b = rendering_buffer.pixels[idx + 2]

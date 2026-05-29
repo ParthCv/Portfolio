@@ -1,5 +1,6 @@
 function setup() {
     createCanvas(windowWidth, windowHeight)
+    frameRate(60)
     rendering_buffer = createGraphics(buffer_width, buffer_height)
     final_buffer = createGraphics(buffer_width, buffer_height)
 }
@@ -29,4 +30,8 @@ function mouseDragged() {
         last_mouseX = mouseX
         last_mouseY = mouseY
     }
+}
+
+function windowResized() {
+    resizeCanvas(windowWidth, windowHeight)
 }

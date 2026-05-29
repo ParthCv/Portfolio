@@ -52,8 +52,8 @@ function trigger_glitch() {
 
     for (let i = 0; i < num_slices; i++) {
         glitch_slices.push({
-            y: random(height),
-            h: random(2, height * 0.08),
+            y: random(height/2 - buffer_height/2, height/2 + buffer_height/2),
+            h: random(2, buffer_height * 0.08),
             offset: random(-80, 80),
             duration: random(0.05, 0.3),
             color_shift: random() < 0.4
@@ -67,6 +67,21 @@ function draw_glitch(config) {
     let context = drawingContext
     context.save()
 
+    // drawImage ignores the canvas transform and works in raw device pixels
+    // so reset transform and convert all coords to device pixels
+    let t = context.getTransform()
+    let pr = t.a // scale factor (p5 sets this to pixelDensity * devicePixelRatio)
+    context.resetTransform()
+
+    let bx = floor(width/2 - buffer_width/2) * pr
+    let by = floor(height/2 - buffer_height/2) * pr
+    let bw = buffer_width * pr
+    let bh = buffer_height * pr
+
+    context.beginPath()
+    context.rect(bx, by, bw, bh)
+    context.clip()
+
     let still_active = false
 
     for (let slice of glitch_slices) {
@@ -75,23 +90,22 @@ function draw_glitch(config) {
 
         still_active = true
 
-        let sx = floor(width/2 - buffer_width/2)
-        let sy = floor(slice.y)
-        let sw = floor(buffer_width)
-        let sh = floor(slice.h)
+        let sy = slice.y * pr
+        let sh = slice.h * pr
+        let offset = slice.offset * pr
 
         if (sh < 1) continue
 
         if (slice.color_shift) {
             context.globalCompositeOperation = 'lighter'
             context.globalAlpha = 0.3
-            context.drawImage(context.canvas, sx, sy, sw, sh, sx + slice.offset * 1.5, sy, sw, sh)
+            context.drawImage(context.canvas, bx + offset * 1.5, sy, bw, sh, bx, sy, bw, sh)
             context.globalAlpha = 0.2
-            context.drawImage(context.canvas, sx, sy, sw, sh, sx - slice.offset, sy, sw, sh)
+            context.drawImage(context.canvas, bx - offset, sy, bw, sh, bx, sy, bw, sh)
             context.globalCompositeOperation = 'source-over'
             context.globalAlpha = 1
         } else {
-            context.drawImage(context.canvas, sx, sy, sw, sh, sx + slice.offset, sy, sw, sh)
+            context.drawImage(context.canvas, bx + offset, sy, bw, sh, bx, sy, bw, sh)
         }
     }
 
