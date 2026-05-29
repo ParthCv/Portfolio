@@ -14,7 +14,7 @@ let final_buffer // final image with post process
 const buffer_height = 800
 const buffer_width = 800
 
-let render_mode = RENDER_MODE.ASCII
+let render_mode = RENDER_MODE.RINGS
 
 const POST_FX = {
     scanlines:  { on: true, alpha: 40, spacing: 4 },
