@@ -19,9 +19,11 @@ let render_mode = RENDER_MODE.DEFAULT
 const POST_FX = {
     scanlines:  { on: false, alpha: 40, spacing: 4 },
     aberration: { on: false, offset: 6 },
-    glitch:     { on: false, intensity: 0.5 },
+    glitch:     { on: true, intensity: 0.5 },
     grain:      { on: false, amount: 30 },
     bloom:      { on: false, strength: 0.6 },
 }
 
-// glitch effect stu
+//glitch
+let glitch_slices = []
+let glitch_timer = 0
