@@ -14,13 +14,13 @@ let final_buffer // final image with post process
 const buffer_height = 800
 const buffer_width = 800
 
-let render_mode = RENDER_MODE.RINGS
+let render_mode = RENDER_MODE.DOTS
 
 const POST_FX = {
     scanlines:  { on: true, alpha: 40, spacing: 4 },
     aberration: { on: true, offset: 6 },
     glitch:     { on: true, intensity: 0.5 },
-    grain:      { on: true, amount: 30 },
+    grain:      { on: true, amount: 2 },
     bloom:      { on: true, strength: 0.5, radius: 8 },
 }
 
