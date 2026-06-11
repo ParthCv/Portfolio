@@ -9,6 +9,8 @@ function draw_flower(config) {
 
     if (bloom < 1) bloom += config.bloom_speed
 
+    if (stem_growth < 1) stem_growth += 0.008
+
     // main layers
     for (let layer = 0; layer < config.total_layers; layer++) {
         let lr = layer / config.total_layers
@@ -70,8 +72,11 @@ function draw_flower(config) {
         }
     }
 
-    let stem_bloom = constrain(bloom / 0.3, 0, 1)
-    define_stem(all_petals, flower_scale, config, stem_bloom)
+    // let stem_bloom = constrain(bloom / 0.3, 0, 1)
+    define_stem(all_petals, flower_scale, config, stem_growth)
+    define_leaves(all_petals, flower_scale, config, stem_growth)
+    define_thorns(all_petals, flower_scale, config, stem_growth)
+
     all_petals.sort((a, b) => b.z - a.z)
     draw_all(all_petals)
     rendering_buffer.loadPixels()
@@ -189,6 +194,34 @@ function draw_all(all_petals) {
             }
             draw_petal(p.length, p.width, p.ruffle_amt, p.ruffle_phase, p.shape_fn)
             rendering_buffer.pop()
+        }
+
+        if (p.type === 'leaf') {
+            rendering_buffer.push()
+            if (render_mode === RENDER_MODE.WIREFRAME) {
+                rendering_buffer.noFill()
+                rendering_buffer.stroke(p.r, p.g, p.b)
+                rendering_buffer.strokeWeight(0.8)
+            } else {
+                rendering_buffer.fill(p.r, p.g, p.b)
+                rendering_buffer.noStroke()
+            }
+            rendering_buffer.beginShape()
+            rendering_buffer.vertex(p.base.x, p.base.y)
+            rendering_buffer.vertex(p.top.x,  p.top.y)
+            rendering_buffer.vertex(p.tip.x,  p.tip.y)
+            rendering_buffer.vertex(p.bot.x,  p.bot.y)
+            rendering_buffer.endShape(CLOSE)
+            rendering_buffer.pop()
+            continue
+        }
+
+        if (p.type === 'thorn') {
+            rendering_buffer.stroke(p.r, p.g, p.b)
+            rendering_buffer.strokeWeight(1.5)
+            rendering_buffer.line(p.base.x, p.base.y, p.tip.x, p.tip.y)
+            rendering_buffer.noStroke()
+            continue
         }
     }
 }
@@ -321,4 +354,113 @@ function project_stem_point(x3, y3, z3) {
     let rz4 = y3 * sin(rotX) + rz * cos(rotX)
     let s   = focal / (focal + rz4)
     return { x: rx * s, y: ry4 * s, z: rz4 }
+}
+
+function define_leaves(all_petals, flower_scale, config, stem_growth) {
+    if (!config.stem_leaves || config.stem_leaves.length === 0) return
+
+    let stem_len = config.stem_len * flower_scale
+
+    for (let leaf of config.stem_leaves) {
+        if (stem_growth < leaf.t) continue  // leaf hasn't grown yet
+
+        let t       = leaf.t
+        let side    = leaf.side
+        let sz      = leaf.size * 55 * flower_scale
+
+        // position along stem
+        let cx = sin(t * PI * config.stem_curve_freq) * config.stem_curve_amp * flower_scale +
+                 sin(t * PI * 0.8) * 6 * flower_scale
+        let y3 = t * stem_len
+
+        // leaf grows in with stem
+        let leaf_bloom = constrain((stem_growth - leaf.t) / 0.2, 0, 1)
+        let leaf_sz    = sz * leaf_bloom
+
+        if (leaf_sz < 1) continue
+
+        // project base position
+        let base = project_stem_point(cx, y3, 0)
+
+        // leaf is a flat shape — 3 projected points
+        let tip  = project_stem_point(cx + side * leaf_sz * 1.4, y3 - leaf_sz * 0.3, 0)
+        let top  = project_stem_point(cx + side * leaf_sz * 0.6, y3 - leaf_sz * 0.5, 0)
+        let bot  = project_stem_point(cx + side * leaf_sz * 0.6, y3 + leaf_sz * 0.3, 0)
+
+        // leaf normal points toward camera
+        let nx = side
+        let ny = -0.3
+        let nz = -0.8
+        let n_mag = sqrt(nx*nx + ny*ny + nz*nz)
+        nx /= n_mag; ny /= n_mag; nz /= n_mag
+
+        let nx_y     = nx * cos(rotY) + nz * sin(rotY)
+        let nz_y     = -nx * sin(rotY) + nz * cos(rotY)
+        let ny_final = ny * cos(rotX) - nz_y * sin(rotX)
+        let nz_final = ny * sin(rotX) + nz_y * cos(rotX)
+
+        let light = calculate_lighting(nx_y, ny_final, nz_final)
+        let lc    = config.stem_leaf_color || [45, 95, 35]
+
+        all_petals.push({
+            type: 'leaf',
+            base, tip, top, bot,
+            z:    (base.z + tip.z) / 2,
+            r:    constrain(lc[0] * light, 0, 255),
+            g:    constrain(lc[1] * light, 0, 255),
+            b:    constrain(lc[2] * light, 0, 255)
+        })
+    }
+}
+
+function define_thorns(all_petals, flower_scale, config, stem_growth) {
+    if (!config.stem_thorns || config.stem_thorns.length === 0) return
+
+    let stem_len = config.stem_len * flower_scale
+
+    for (let zone of config.stem_thorns) {
+        let steps = floor((zone.t_end - zone.t_start) / 0.04)
+
+        for (let i = 0; i < steps; i++) {
+            if (random() > zone.density) continue
+
+            let t  = zone.t_start + (i / steps) * (zone.t_end - zone.t_start)
+            if (t > stem_growth) continue
+
+            let y3 = t * stem_len
+            let cx = sin(t * PI * config.stem_curve_freq) * config.stem_curve_amp * flower_scale +
+                     sin(t * PI * 0.8) * 6 * flower_scale
+
+            let angle  = random(TWO_PI)
+            let radius = config.stem_radius * flower_scale
+            let thorn_len = random(6, 14) * flower_scale
+
+            // base of thorn on stem surface
+            let bx = cx + cos(angle) * radius
+            let bz = sin(angle) * radius
+
+            // tip points outward and slightly upward
+            let tx = bx + cos(angle) * thorn_len
+            let ty = y3 - thorn_len * 0.4
+            let tz = bz + sin(angle) * thorn_len
+
+            let base = project_stem_point(bx, y3, bz)
+            let tip  = project_stem_point(tx, ty, tz)
+
+            // check if facing camera
+            let nx_y     = cos(angle) * cos(rotY) + sin(angle) * sin(rotY)
+            let nz_y     = -cos(angle) * sin(rotY) + sin(angle) * cos(rotY)
+            let ny_final = 0
+            let nz_final = 0 * sin(rotX) + nz_y * cos(rotX)
+
+            if (nz_final > 0) continue
+
+            all_petals.push({
+                type: 'thorn',
+                base, tip,
+                z:    (base.z + tip.z) / 2,
+                r:    45, g: 70, b: 30
+            })
+        }
+    }
 }

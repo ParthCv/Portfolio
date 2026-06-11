@@ -6,8 +6,19 @@ function setup() {
 }
 
 function draw() {
-    background(0) // clear
-    draw_flower(SUNFLOWER_CONFIG)
+    background(0)
+
+    let configs = {
+        peony:     FLOWER_CONFIG,
+        lotus:     LOTUS_CONFIG,
+        rose:      ROSE_CONFIG,
+        gerbera:   GERBERA_CONFIG,
+        marigold:  MARIGOLD_CONFIG,
+        sunflower: SUNFLOWER_CONFIG,
+    }
+
+    let config = configs[FLOWER_LIST[flower_index]]
+    draw_flower(config)
     render_buffer()
     post_process()
 }
@@ -34,4 +45,11 @@ function mouseDragged() {
 
 function windowResized() {
     resizeCanvas(windowWidth, windowHeight)
+}
+
+function keyPressed() {
+    if (key === ' ') {
+        flower_index = (flower_index + 1) % FLOWER_LIST.length
+        bloom = 0  // only reset bloom, not stem
+    }
 }

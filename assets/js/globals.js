@@ -27,3 +27,10 @@ const POST_FX = {
 //glitch
 let glitch_slices = []
 let glitch_timer = 0
+
+// Flower stuff
+let stem_growth  = 0     // persists across flower switches
+let current_flower = 'peony'  // tracks active flower
+
+const FLOWER_LIST = ['peony', 'lotus', 'rose', 'gerbera', 'marigold', 'sunflower']
+let flower_index = 0

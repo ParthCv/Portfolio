@@ -39,6 +39,13 @@ const FLOWER_CONFIG = {
     stem_curve_amp: 18,
     stem_curve_freq: 0.3,
     stem_taper: 0.6,
+    stem_leaf_color: [45, 95, 35],
+    stem_leaves: [
+        { t: 0.25, side:  1, size: 1.0 },
+        { t: 0.50, side: -1, size: 0.85 },
+        { t: 0.35, side:  1, size: 0.7  },
+    ],
+    stem_thorns: [],
 
     // bloom
     bloom_speed: 0.0025,
