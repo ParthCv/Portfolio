@@ -65,7 +65,8 @@ function draw_flower(config) {
         })
     }
 
-    define_stem(all_petals, flower_scale, config)
+    let stem_bloom = constrain(bloom / 0.3, 0, 1)
+    define_stem(all_petals, flower_scale, config, stem_bloom)
     all_petals.sort((a, b) => b.z - a.z)
     draw_all(all_petals)
 
@@ -187,23 +188,28 @@ function draw_petal(length, width, ruffle_amt, ruffle_phase, shape_fn) {
     rendering_buffer.endShape(CLOSE)
 }
 
-function define_stem(all_petals, flower_scale, config) {
+function define_stem(all_petals, flower_scale, config, stem_bloom) {
     let sides    = config.stem_sides
     let segments = config.stem_segments
-    let radius   = config.stem_radius   * flower_scale
-    let stem_len = config.stem_len      * flower_scale
+    let radius   = config.stem_radius * flower_scale
+    let stem_len = config.stem_len    * flower_scale
     let sc       = config.stem_color
 
     for (let seg = 0; seg < segments; seg++) {
         let t0 = seg       / segments
         let t1 = (seg + 1) / segments
 
-        let y0  = t0 * stem_len
-        let y1  = t1 * stem_len
-        let cx0 = sin(t0 * PI * 0.3) * 18 * flower_scale + sin(t0 * PI * 0.8) * 6 * flower_scale
-        let cx1 = sin(t1 * PI * 0.3) * 18 * flower_scale + sin(t1 * PI * 0.8) * 6 * flower_scale
-        let r0  = lerp(radius * 0.6, radius, t0)
-        let r1  = lerp(radius * 0.6, radius, t1)
+        if (t0 > stem_bloom) continue
+        let y0 = t0 * stem_len
+        let y1 = min(t1, stem_bloom) * stem_len
+
+        let cx0 = sin(t0 * PI * config.stem_curve_freq) * config.stem_curve_amp * flower_scale +
+                  sin(t0 * PI * 0.8) * 6 * flower_scale
+        let cx1 = sin(t1 * PI * config.stem_curve_freq) * config.stem_curve_amp * flower_scale +
+                  sin(t1 * PI * 0.8) * 6 * flower_scale
+
+        let r0 = lerp(radius * config.stem_taper, radius, t0)
+        let r1 = lerp(radius * config.stem_taper, radius, t1)
 
         for (let s = 0; s < sides; s++) {
             let a0 = (TWO_PI / sides) * s
@@ -241,7 +247,7 @@ function define_stem(all_petals, flower_scale, config) {
     }
 }
 
-function project_stem_point(x3, y3, z3) {
+    function project_stem_point(x3, y3, z3) {
     let rx  = x3 * cos(rotY) + z3 * sin(rotY)
     let rz  = -x3 * sin(rotY) + z3 * cos(rotY)
     let ry4 = y3 * cos(rotX) - rz * sin(rotX)
