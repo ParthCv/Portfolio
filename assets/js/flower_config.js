@@ -98,7 +98,9 @@ const LOTUS_CONFIG = {
     stem_curve_amp:  4,
     stem_curve_freq: 0.2,
     stem_taper:      0.85,
-
+    stem_leaf_color: [40, 80, 50],
+    stem_leaves: [],
+    stem_thorns: [],
     // bloom
     bloom_speed:  0.002,
     bloom_delay:  0.25,
@@ -151,6 +153,14 @@ const ROSE_CONFIG = {
     stem_curve_amp:  12,
     stem_curve_freq: 0.25,
     stem_taper:      0.65,
+    stem_leaf_color: [40, 80, 30],
+    stem_leaves: [
+        { t: 0.3, side:  1, size: 0.9 },
+        { t: 0.55, side: -1, size: 0.8 },
+    ],
+    stem_thorns: [
+        { t_start: 0.1, t_end: 0.9, density: 0.35 }
+    ],
 
     // bloom
     bloom_speed:  0.002,
@@ -209,6 +219,12 @@ const GERBERA_CONFIG = {
     stem_curve_amp:  6,
     stem_curve_freq: 0.2,
     stem_taper:      0.8,
+    stem_leaf_color: [50, 90, 35],
+    stem_leaves: [
+        { t: 0.3, side:  1, size: 1.1 },
+        { t: 0.6, side: -1, size: 0.9 },
+    ],
+    stem_thorns: [],
 
     bloom_speed:  0.003,
     bloom_delay:  0.1,  // all petals open at once, barely staggered
@@ -253,6 +269,12 @@ const MARIGOLD_CONFIG = {
     stem_curve_amp:  10,
     stem_curve_freq: 0.3,
     stem_taper:      0.7,
+    stem_leaf_color: [50, 90, 35],
+    stem_leaves: [
+        { t: 0.3, side:  1, size: 1.1 },
+        { t: 0.6, side: -1, size: 0.9 },
+    ],
+    stem_thorns: [],
 
     bloom_speed:  0.003,
     bloom_delay:  0.2,
@@ -305,6 +327,12 @@ const SUNFLOWER_CONFIG = {
     stem_curve_amp:  8,
     stem_curve_freq: 0.2,
     stem_taper:      0.75,
+    stem_leaf_color: [50, 90, 35],
+    stem_leaves: [
+        { t: 0.3, side:  1, size: 1.1 },
+        { t: 0.6, side: -1, size: 0.9 },
+    ],
+    stem_thorns: [],
 
     bloom_speed:  0.003,
     bloom_delay:  0.05,
