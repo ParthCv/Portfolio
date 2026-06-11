@@ -7,7 +7,7 @@ function setup() {
 
 function draw() {
     background(0) // clear
-    draw_flower(LOTUS_CONFIG)
+    draw_flower(ROSE_CONFIG)
     render_buffer()
     post_process()
 }

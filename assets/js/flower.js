@@ -22,7 +22,7 @@ function draw_flower(config) {
         let len  = lerp(config.len.min,    config.len.max,    lr) * layer_bloom * flower_scale
         let wid  = lerp(config.wid.min,    config.wid.max,    lr) * layer_bloom * flower_scale
         let np   = floor(lerp(config.petals_per_layer.min, config.petals_per_layer.max, lr))
-        let off  = layer * 0.4
+        let off  = layer * config.layer_stagger
 
         let r = lerp(config.petal_color.inner[0], config.petal_color.outer[0], lr)
         let g = lerp(config.petal_color.inner[1], config.petal_color.outer[1], lr)
