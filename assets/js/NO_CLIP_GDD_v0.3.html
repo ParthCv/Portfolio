@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NO CLIP — Game Design Document v0.3</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Bebas+Neue&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F5F0E8;
+    --paper: #FBF8F2;
+    --ink: #1A1A18;
+    --ink-muted: #4A4A44;
+    --ink-faint: #8A8A80;
+    --yellow: #B8860B;
+    --red: #8B1A1A;
+    --blue: #1F4E79;
+    --green: #2E5E3A;
+    --border: rgba(26,26,24,0.15);
+    --border-strong: rgba(26,26,24,0.3);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    line-height: 1.7;
+    padding: 0;
+  }
+  .page {
+    max-width: 820px;
+    margin: 0 auto;
+    background: var(--paper);
+    padding: 4rem 3.5rem 6rem;
+    min-height: 100vh;
+    box-shadow: 0 0 80px rgba(0,0,0,0.06);
+  }
+
+  /* COVER */
+  .cover { border-bottom: 3px solid var(--ink); padding-bottom: 2.5rem; margin-bottom: 3rem; }
+  .cover-label { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.14em; color: var(--ink-muted); text-transform: uppercase; margin-bottom: 0.75rem; }
+  .cover-title { font-family: 'Bebas Neue', sans-serif; font-size: 110px; line-height: 0.85; letter-spacing: 0.01em; color: var(--ink); margin-bottom: 1rem; }
+  .cover-sub { font-family: 'IBM Plex Mono', monospace; font-size: 14px; color: var(--ink-muted); max-width: 30em; line-height: 1.6; }
+  .cover-meta { display: flex; gap: 2rem; flex-wrap: wrap; margin-top: 1.75rem; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--ink-faint); }
+
+  /* TOC */
+  .toc { background: var(--cream); border-radius: 10px; padding: 1.75rem 2rem; margin-bottom: 3.5rem; border: 0.5px solid var(--border); }
+  .toc-title { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 1rem; }
+  .toc-list { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 0.35rem 2rem; }
+  .toc-list a { color: var(--ink-muted); text-decoration: none; font-size: 13.5px; display: flex; gap: 0.6rem; padding: 0.2rem 0; }
+  .toc-list a:hover { color: var(--ink); }
+  .toc-list .tnum { font-family: 'IBM Plex Mono', monospace; color: var(--ink-faint); font-size: 11px; min-width: 2.2em; }
+
+  /* SECTIONS */
+  .section { margin-bottom: 3.5rem; scroll-margin-top: 2rem; }
+  .section-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 0.4rem; }
+  .section-title { font-family: 'Bebas Neue', sans-serif; font-size: 40px; letter-spacing: 0.02em; color: var(--ink); border-bottom: 1.5px solid var(--ink); padding-bottom: 0.4rem; margin-bottom: 1.5rem; }
+  .part-divider { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 0.12em; color: var(--ink-faint); text-transform: uppercase; margin: 4rem 0 2rem; padding-top: 2rem; border-top: 0.5px solid var(--border); }
+  .section-body p { font-size: 15px; color: var(--ink); margin-bottom: 1rem; line-height: 1.78; }
+  .section-body p:last-child { margin-bottom: 0; }
+  strong { font-weight: 500; }
+
+  .callout { border-left: 3px solid var(--ink); padding: 0.85rem 1.35rem; margin: 1.5rem 0; background: var(--cream); border-radius: 0 8px 8px 0; }
+  .callout-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 0.25rem; }
+  .callout p { font-size: 14px; color: var(--ink-muted); font-style: italic; margin: 0; line-height: 1.6; }
+
+  .flag { border: 1px solid rgba(31,78,121,0.4); background: rgba(31,78,121,0.06); border-radius: 8px; padding: 0.95rem 1.25rem; margin: 1.5rem 0; }
+  .flag-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--blue); margin-bottom: 0.35rem; }
+  .flag p { font-size: 13.5px; color: var(--blue); margin: 0; line-height: 1.65; }
+
+  .classified { border: 1.5px solid var(--border-strong); padding: 1.35rem 1.6rem; margin: 1.5rem 0; border-radius: 8px; position: relative; }
+  .classified::before { content: 'CLASSIFIED EXCERPT'; font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.15em; color: var(--ink-faint); position: absolute; top: -7px; left: 14px; background: var(--paper); padding: 0 6px; }
+  .classified p { font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--ink-muted); line-height: 1.7; margin-bottom: 0.5rem; }
+  .classified p:last-child { margin-bottom: 0; }
+  .redacted { background: var(--ink); border-radius: 2px; padding: 0 4px; user-select: none; color: transparent; }
+
+  .dark-web-post { background: var(--cream); border-radius: 8px; padding: 1.35rem; margin: 1.5rem 0; border: 0.5px solid var(--border); }
+  .dark-web-header { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--ink-faint); margin-bottom: 0.75rem; padding-bottom: 0.5rem; border-bottom: 0.5px solid var(--border); }
+  .dark-web-body { font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--ink-muted); line-height: 1.75; }
+
+  /* level grid */
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin: 1.5rem 0; }
+  .card { border: 0.5px solid var(--border); border-radius: 10px; padding: 1.1rem 1.25rem; background: var(--paper); }
+  .card-tag { font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.1em; color: var(--ink-faint); margin-bottom: 0.25rem; }
+  .card-name { font-weight: 500; font-size: 14.5px; color: var(--ink); margin-bottom: 0.4rem; }
+  .card-desc { font-size: 12.5px; color: var(--ink-muted); line-height: 1.6; margin-bottom: 0.5rem; }
+  .pill { display: inline-block; font-family: 'IBM Plex Mono', monospace; font-size: 10px; padding: 2px 9px; border-radius: 20px; border: 0.5px solid var(--border-strong); color: var(--ink-muted); }
+  .pill.danger { border-color: rgba(139,26,26,0.4); color: var(--red); }
+  .pill.safe { border-color: rgba(46,94,58,0.5); color: var(--green); }
+
+  /* flow */
+  .flow { margin: 1.5rem 0; }
+  .flow-step { display: flex; align-items: flex-start; gap: 14px; padding: 0.65rem 0; position: relative; }
+  .flow-num { width: 30px; height: 30px; flex-shrink: 0; border-radius: 50%; border: 1px solid var(--border-strong); display: flex; align-items: center; justify-content: center; font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--ink-muted); background: var(--paper); z-index: 1; }
+  .flow-step:not(:last-child)::before { content: ''; position: absolute; left: 14.5px; top: 30px; bottom: -6px; width: 1px; background: var(--border); }
+  .flow-name { font-weight: 500; font-size: 14px; color: var(--ink); padding-top: 3px; }
+  .flow-desc { font-size: 13px; color: var(--ink-muted); line-height: 1.55; margin-top: 1px; }
+
+  /* faction / char */
+  .block { border-top: 0.5px solid var(--border); padding-top: 1.1rem; margin-top: 1.1rem; }
+  .block:first-child { border-top: none; padding-top: 0; margin-top: 0; }
+  .block-name { font-weight: 500; font-size: 15px; color: var(--ink); margin-bottom: 0.2rem; }
+  .block-alias { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--ink-faint); margin-bottom: 0.5rem; }
+  .block-desc { font-size: 14px; color: var(--ink-muted); line-height: 1.65; }
+
+  /* tier */
+  .tier-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; margin: 1.5rem 0; }
+  .tier { border-radius: 10px; padding: 1.1rem 1.2rem; border: 0.5px solid var(--border); }
+  .tier-low { background: rgba(46,94,58,0.07); border-color: rgba(46,94,58,0.3); }
+  .tier-med { background: rgba(184,134,11,0.08); border-color: rgba(184,134,11,0.35); }
+  .tier-high { background: rgba(139,26,26,0.06); border-color: rgba(139,26,26,0.3); }
+  .tier-name { font-weight: 500; font-size: 15px; margin-bottom: 0.55rem; }
+  .tier-low .tier-name { color: var(--green); }
+  .tier-med .tier-name { color: var(--yellow); }
+  .tier-high .tier-name { color: var(--red); }
+  .tier-attr { display: flex; justify-content: space-between; gap: 8px; font-size: 12px; padding: 3px 0; border-bottom: 0.5px solid var(--border); }
+  .tier-attr:last-child { border-bottom: none; }
+  .tier-attr .k { color: var(--ink-muted); }
+  .tier-attr .v { color: var(--ink); font-weight: 500; text-align: right; }
+
+  .divider { border: none; border-top: 0.5px solid var(--border); margin: 2rem 0; }
+
+  /* systems map svg */
+  .map-wrap { margin: 1.5rem 0; }
+  svg .b { fill: none; stroke: var(--border-strong); }
+  svg text { font-family: 'IBM Plex Sans', sans-serif; }
+  svg .th { font-size: 14px; font-weight: 500; fill: var(--ink); }
+  svg .ts { font-size: 12px; font-weight: 400; fill: var(--ink-muted); }
+  svg .arr { stroke: var(--ink-muted); stroke-width: 1.2; fill: none; }
+  .nbox-gray { fill: rgba(26,26,24,0.05); stroke: var(--border-strong); stroke-width: 0.5; }
+  .nbox-purple { fill: rgba(83,74,183,0.08); stroke: rgba(83,74,183,0.4); stroke-width: 0.5; }
+  .nbox-teal { fill: rgba(15,110,86,0.08); stroke: rgba(15,110,86,0.4); stroke-width: 0.5; }
+  .nbox-amber { fill: rgba(184,134,11,0.1); stroke: rgba(184,134,11,0.4); stroke-width: 0.5; }
+  .nbox-coral { fill: rgba(216,90,48,0.08); stroke: rgba(216,90,48,0.4); stroke-width: 0.5; }
+  .nbox-red { fill: rgba(139,26,26,0.07); stroke: rgba(139,26,26,0.4); stroke-width: 0.5; }
+
+  /* TBD register */
+  .tbd { border: 0.5px solid var(--border); border-radius: 10px; padding: 1.1rem 1.3rem; margin-bottom: 12px; background: var(--paper); }
+  .tbd-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-bottom: 0.4rem; flex-wrap: wrap; }
+  .tbd-name { font-weight: 500; font-size: 14.5px; color: var(--ink); }
+  .tbd-status { font-family: 'IBM Plex Mono', monospace; font-size: 10px; padding: 2px 9px; border-radius: 20px; white-space: nowrap; }
+  .st-decide { background: rgba(184,134,11,0.12); color: var(--yellow); }
+  .st-park { background: rgba(26,26,24,0.06); color: var(--ink-faint); }
+  .st-lock { background: rgba(31,78,121,0.1); color: var(--blue); }
+  .st-design { background: rgba(139,26,26,0.07); color: var(--red); }
+  .tbd-body { font-size: 13px; color: var(--ink-muted); line-height: 1.6; }
+  .tbd-rec { font-size: 12.5px; color: var(--ink); margin-top: 0.4rem; }
+  .tbd-rec strong { font-weight: 500; }
+
+  .footer { margin-top: 4rem; padding-top: 2rem; border-top: 3px solid var(--ink); font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--ink-faint); }
+
+  @media (max-width: 720px) {
+    .page { padding: 2.5rem 1.5rem 4rem; }
+    .cover-title { font-size: 68px; }
+    .toc-list { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ============ COVER ============ -->
+  <div class="cover">
+    <div class="cover-label">Game Design Document — Lore &amp; Systems Bible</div>
+    <div class="cover-title">NO CLIP</div>
+    <div class="cover-sub">Under house arrest in a forgettable basement. Robbing banks on six continents. The contradiction is the fantasy.</div>
+    <div class="cover-meta">
+      <span>VERSION: 0.3 (CONSOLIDATED)</span>
+      <span>TONE: DARK COMEDY / GENUINE HORROR</span>
+      <span>SETTING: MODERN DAY</span>
+      <span>CANON: KANE PIXELS + BACKROOMS LEVELS</span>
+    </div>
+  </div>
+
+  <!-- ============ TOC ============ -->
+  <nav class="toc">
+    <div class="toc-title">Contents</div>
+    <ul class="toc-list">
+      <li><a href="#s1"><span class="tnum">01</span> The World Above</a></li>
+      <li><a href="#s2"><span class="tnum">02</span> The Backrooms: A History</a></li>
+      <li><a href="#s3"><span class="tnum">03</span> The Underground Discovers It</a></li>
+      <li><a href="#s4"><span class="tnum">04</span> The Levels</a></li>
+      <li><a href="#s4b"><span class="tnum">04b</span> Global Topology</a></li>
+      <li><a href="#sprod"><span class="tnum">—</span> Global Lore, Single Asset</a></li>
+      <li><a href="#s5"><span class="tnum">05</span> Entities (parked)</a></li>
+      <li><a href="#s6"><span class="tnum">06</span> The Protagonist &amp; Cast</a></li>
+      <li><a href="#s7"><span class="tnum">07</span> The Discovery</a></li>
+      <li><a href="#s8"><span class="tnum">08</span> Criminal Factions</a></li>
+      <li><a href="#s9"><span class="tnum">09</span> The Core Loop</a></li>
+      <li><a href="#s10"><span class="tnum">10</span> The Tracer &amp; The Find</a></li>
+      <li><a href="#s11"><span class="tnum">11</span> Vault Cracking</a></li>
+      <li><a href="#s12"><span class="tnum">12</span> Supply Runs</a></li>
+      <li><a href="#smap"><span class="tnum">★</span> Systems Map</a></li>
+      <li><a href="#stbd"><span class="tnum">!</span> TBD &amp; Open Decisions</a></li>
+      <li><a href="#snext"><span class="tnum">→</span> Next Steps</a></li>
+    </ul>
+  </nav>
+
+  <div class="part-divider">Part One — World &amp; Lore</div>
+
+  <!-- ============ S1 ============ -->
+  <section class="section" id="s1">
+    <div class="section-label">Section 01</div>
+    <div class="section-title">The World Above</div>
+    <div class="section-body">
+      <p>The game is set in <strong>Harwick</strong> — a fictional mid-sized North American city. Not glamorous enough to be a tourist destination, not small enough for everyone to know each other. The kind of city where a person can disappear into debt, bad decisions, and a basement apartment, and nobody bats an eye.</p>
+      <p>Harwick has a working port, a downtown financial district, a cluster of residential neighbourhoods, and an economy that was "revitalising" a decade ago and never quite finished. It feels slightly overcast even on sunny days. Good for crime. Bad for morale.</p>
+      <p>The police department is understaffed and overstretched. The courts process petty criminals on a conveyor belt. There is no dramatic crime war going on — just the quiet, unglamorous machinery of people doing illegal things and mostly getting away with it, until they don't.</p>
+    </div>
+  </section>
+
+  <!-- ============ S2 ============ -->
+  <section class="section" id="s2">
+    <div class="section-label">Section 02</div>
+    <div class="section-title">The Backrooms — A History</div>
+    <div class="section-body">
+      <p>The Backrooms are not a glitch. They are not a simulation. They are not hell, though some of what lives there might make you reconsider.</p>
+      <p>The current working theory among those who study them — a very small, very quiet group — is that the Backrooms are a <strong>spatial bleed</strong>: a layer of reality that exists underneath, alongside, or inside the physical world, accessible only through anomalous structural failures in space. These failures are called <strong>no-clips</strong>. You fall through a wall, a floor, a threshold that looks solid and isn't, and you're in.</p>
+      <p>No-clips have always existed. Medieval accounts describe monks walking through monastery walls into "corridors of yellow silence." A 1947 industrial accident in Ohio saw fourteen workers vanish from a basement — three returned, all mute, over the following weeks. A leaked 1983 Soviet report documented a facility that "partially intersected with non-standard spatial topology." The government suppressed all of it.</p>
+    </div>
+    <div class="classified">
+      <p>DECLASSIFIED // PROJECT STILLWATER // DOC-114b</p>
+      <p>"...anomalous zone first confirmed navigable by Agent <span class="redacted">XXXXXXX</span> in 1991. Zone interior demonstrates non-Euclidean geometry inconsistent with any known physical model. Agent reported ambient fluorescent lighting, carpeted floors, persistent smell of damp. No external light source identified. Duration of stay: approx. 14 hours subjective / 22 minutes objective..."</p>
+      <p>"...entities encountered on second entry. Classification: <span class="redacted">REDACTED</span>. Recommend all further entries be conducted with <span class="redacted">REDACTED</span>..."</p>
+      <p>STATUS: <span class="redacted">REDACTED</span> // CLEARANCE LEVEL 6+ ONLY</p>
+    </div>
+    <div class="section-body">
+      <p>By the 2000s, a classified US programme had a working understanding of the Backrooms. They had mapped roughly forty stable entry points nationally, lost eleven field operatives, and learned that the Backrooms were vast, partially navigable, extremely dangerous, and — crucially — <strong>not useful enough to justify the casualties.</strong> The programme was quietly mothballed.</p>
+      <p>What the government did not anticipate was the internet.</p>
+    </div>
+  </section>
+
+  <!-- ============ S3 ============ -->
+  <section class="section" id="s3">
+    <div class="section-label">Section 03</div>
+    <div class="section-title">The Underground Discovers It</div>
+    <div class="section-body">
+      <p>In the mid-2000s, grainy footage of "liminal spaces" began circulating on early internet forums. Most was photographers and urban explorers. But buried in the noise were posts describing something different — places accessed by accident, with no visible entry or exit, with the specific texture of wrongness the Backrooms generate.</p>
+      <p>By 2015, a loose network was deliberately attempting access. Most failed. Some succeeded and didn't come back. A few survived and started talking — carefully, pseudonymously, on dark web forums with strict vetting. Organised crime found this network the way it finds everything useful: through someone who owed money.</p>
+    </div>
+    <div class="dark-web-post">
+      <div class="dark-web-header">forum: LIMINAL_OPS // thread: it's_not_local // user: wallcrawler_88 // [archived]</div>
+      <div class="dark-web-body">
+        ok i need someone to check my work because i think i've been wrong about everything for two years.<br><br>
+        i marked my exit point. measured it. 400m east of my entry, every time, consistent. so i assumed the corridors mapped to real space. local bleed. made sense.<br><br>
+        last week i went deeper than i ever have. took a wrong turn, clipped out to test my bearings. the street signs were in a language i don't read. the cars were on the wrong side. i was not on my continent.<br><br>
+        the 400m thing was never real. it was just the shallowest exit and i never went past it. the backrooms don't map to here. they map to EVERYWHERE. every point on earth is one wrong turn away if you go deep enough.<br><br>
+        do you understand what this means. there is no bank on this planet you can't reach from your own basement.<br><br>
+        i'm not posting again. good luck.
+      </div>
+    </div>
+    <div class="section-body">
+      <p>By the early 2020s, at least three major criminal organisations in North America were running Backrooms logistics networks (detailed in Section 08). None trust each other. They coexist inside the same anomaly because it is big enough that you can go a very long time without running into anyone who wants to kill you. Usually.</p>
+    </div>
+  </section>
+
+  <!-- ============ S4 ============ -->
+  <section class="section" id="s4">
+    <div class="section-label">Section 04</div>
+    <div class="section-title">The Levels</div>
+    <div class="section-body">
+      <p>The Backrooms are a topology — a connected series of distinct spatial zones called <strong>levels</strong>, each with its own geometry, atmosphere, and hazard profile. Transitions are not always predictable: stable doorways, wrong-feeling floors, walls that aren't. The levels in the navigable Harwick play space:</p>
+    </div>
+    <div class="grid">
+      <div class="card"><div class="card-tag">Level 0</div><div class="card-name">The Lobby</div><div class="card-desc">Infinite yellow-carpeted offices. Fluorescent hum. Entry point for most new clippers. Low entity activity.</div><span class="pill safe">low risk</span></div>
+      <div class="card"><div class="card-tag">Level 1</div><div class="card-name">The Warehouse</div><div class="card-desc">Concrete floors, industrial shelving beyond visibility. Most trader hubs sit here.</div><span class="pill">moderate</span></div>
+      <div class="card"><div class="card-tag">Level 2</div><div class="card-name">Pipe Dreams</div><div class="card-desc">Narrow corridors of rusted pipe and steam. Disorienting transit corridor. High entity density.</div><span class="pill danger">high risk</span></div>
+      <div class="card"><div class="card-tag">Level 3</div><div class="card-name">The Electrical Station</div><div class="card-desc">Buzzing panels, ozone. Banks bleed through here — dense metal and cable resonate. Primary heist corridor.</div><span class="pill">moderate</span></div>
+      <div class="card"><div class="card-tag">Level 4</div><div class="card-name">Abandoned Office</div><div class="card-desc">Darker, decayed Level 0. High-value residential targets bleed in here.</div><span class="pill">moderate</span></div>
+      <div class="card"><div class="card-tag">Level 5</div><div class="card-name">The Hotel</div><div class="card-desc">Endless corridors, doors onto other corridors. Territorial, fast entities. High-value targets only.</div><span class="pill danger">high risk</span></div>
+      <div class="card"><div class="card-tag">Level 37</div><div class="card-name">The Pool Rooms</div><div class="card-desc">Still turquoise water, infinite tile. Cartel transit staging area. Don't swim.</div><span class="pill danger">high risk</span></div>
+      <div class="card"><div class="card-tag">The Hub</div><div class="card-name">Black Market Node</div><div class="card-desc">A stable anomalous pocket. Occupied by independent traders. Neutral ground, enforced by reputation.</div><span class="pill safe">neutral zone</span></div>
+    </div>
+  </section>
+
+  <!-- ============ S4b ============ -->
+  <section class="section" id="s4b">
+    <div class="section-label">Section 04b</div>
+    <div class="section-title">Global Topology — Two Layers</div>
+    <div class="section-body">
+      <p>The single most important rule of this world: <strong>the Backrooms warp space.</strong> Distance in the physical world means nothing inside. A wall in your Harwick basement does not connect to "somewhere 380m east" — it connects to wherever the topology folds it, and the topology folds the entire planet into a single navigable interior. The bank you crack tonight might bleed in from Seoul; tomorrow's from Zürich, Mumbai, São Paulo. You never travel <strong>across</strong> the world — you travel <strong>through</strong> the Backrooms, which touch everywhere at once.</p>
+      <p>The world is built from two layers — one that stays still so the player can learn it, one that reshuffles so every day feels fresh:</p>
+    </div>
+    <div class="tier-grid">
+      <div class="tier tier-low">
+        <div class="tier-name">Constant layer</div>
+        <div class="tier-attr"><span class="k">contains</span><span class="v">levels, Hub, traders</span></div>
+        <div class="tier-attr"><span class="k">behaviour</span><span class="v">never moves</span></div>
+        <div class="tier-attr"><span class="k">role</span><span class="v">home you learn</span></div>
+      </div>
+      <div class="tier tier-med">
+        <div class="tier-name">Variable layer (daily bleed)</div>
+        <div class="tier-attr"><span class="k">contains</span><span class="v">targets, pickups</span></div>
+        <div class="tier-attr"><span class="k">behaviour</span><span class="v">regenerates on sleep</span></div>
+        <div class="tier-attr"><span class="k">role</span><span class="v">the day's work</span></div>
+      </div>
+    </div>
+    <div class="section-body">
+      <p>Difficulty is measured in <strong>depth</strong>, not real-world distance — how far into the Backrooms a target sits. Higher-value targets bleed in deeper, behind heavier entity presence, with harder cracks. A suburban credit union sits shallow; a Swiss private bank sits deep.</p>
+    </div>
+    <div class="callout">
+      <div class="callout-label">Why this is the whole pitch</div>
+      <p>"You are under house arrest in a basement in a forgettable city. You cannot leave your home. And you are robbing banks on six continents. The contradiction IS the fantasy."</p>
+    </div>
+  </section>
+
+  <!-- ============ PROD ============ -->
+  <section class="section" id="sprod">
+    <div class="section-label">Production Reality</div>
+    <div class="section-title">Global Lore, Single Asset</div>
+    <div class="section-body">
+      <p>The world is global. The build is not. The global scope lives entirely in the job briefing ("Target: private bank, Seoul financial district") — flavour and difficulty signal, delivered as text and audio, never as a 3D environment. When you reach a target you clip through one wall into a single self-contained room: the vault interior. You are never in "the bank," only ever inside the one room that holds the loot. Every vault reuses the same core safe-room asset, lightly redressed by type and value tier. The Backrooms themselves are the real explorable space; targets are pocket dimensions you punch into and out of.</p>
+    </div>
+    <div class="callout">
+      <div class="callout-label">In-world justification</div>
+      <p>"Why do all vaults feel the same? Because you're not seeing the bank — you're seeing the bleed. The Backrooms render every vault through the same anomalous geometry. A vault in Delhi and a vault in Oslo arrive at your wall wearing the same face. The world flattens itself to fit the corridor."</p>
+    </div>
+  </section>
+
+  <!-- ============ S5 ============ -->
+  <section class="section" id="s5">
+    <div class="section-label">Section 05</div>
+    <div class="section-title">Entities — What Lives There</div>
+    <div class="flag">
+      <div class="flag-label">Status — parked for later</div>
+      <p>Entities are the heaviest system in the game: each needs behaviour, a tell, an avoidance pattern, and integration with the procedural map. They are deliberately deferred until the core skeleton is proven. What follows is the design philosophy to build against when the time comes — not a finished spec.</p>
+    </div>
+    <div class="section-body">
+      <p>The Backrooms are not empty. Entities do not hunt in the conventional sense — they <strong>respond</strong>: to sound, to panic, to prolonged presence in their zone. The core doctrine: <strong>if you study them, you can avoid them. If you panic, you die.</strong></p>
+      <p>Each entity has a <strong>tell</strong> — an audio or environmental cue signalling proximity — and a <strong>response pattern</strong> the player can learn and exploit. None chase indefinitely. All are patient. Entities do not spawn near stable entry/exit points, trader hubs, or the safe room behind a stealing door; they occupy the deep transit corridors between you and the target. Gameplay against them is stealth, hiding, and observation — never combat. The player's real weapon is knowledge, accumulated in the laptop wiki (Section 09.6).</p>
+    </div>
+    <div class="callout">
+      <div class="callout-label">Design philosophy (hold this when building entities)</div>
+      <p>"Entities are not jump-scare delivery mechanisms. They are environmental hazards with learnable behaviour. Every entity kill should feel like the player's fault — because it was."</p>
+    </div>
+  </section>
+
+  <!-- ============ S6 ============ -->
+  <section class="section" id="s6">
+    <div class="section-label">Section 06</div>
+    <div class="section-title">The Protagonist &amp; Cast</div>
+    <div class="block">
+      <div class="block-name">The Player Character — "The Clipper"</div>
+      <div class="block-alias">// small-time thief, recently released, accidentally brilliant</div>
+      <div class="block-desc">Not a mastermind, not especially brave. Got into theft through proximity and a group of friends who turned out not to be friends. Served time for a robbery that wasn't entirely their idea and entirely their fault to get caught in. Released on probation with a house-arrest monitor and a basement flat. Their defining trait is <strong>adaptability</strong> — not a planner, but the kind of person who treats impossible situations as logistics problems rather than existential ones. The Backrooms don't break them the way they break most people; they're too busy thinking about the route home.</div>
+    </div>
+    <div class="block">
+      <div class="block-name">Razor — "The Friend"</div>
+      <div class="block-alias">// fixer, tech guy, running partner, potential liability</div>
+      <div class="block-desc">Wasn't at the original job — the one guy smart enough not to show up. Longer in the life, more connections, a moral compass pointing roughly toward "we" rather than "me," most of the time. Handles the tech: tracers, receivers, dark web research, the laptop. Found the forum posts. Takes a cut of everything. Genuinely funny — texts during heists, has opinions about your technique — and will absolutely sell you out if pushed far enough. The game tracks how far that is.</div>
+    </div>
+    <div class="block">
+      <div class="block-name">Gravel — "The Trader"</div>
+      <div class="block-alias">// black market fence, operates from The Hub, neutral not harmless</div>
+      <div class="block-desc">Nobody knows how long he's been in The Hub or how he got there, and he doesn't offer this. Sells equipment, buys stolen goods, extends credit to reliable operators at unkind-but-not-cartoonish rates. Speaks in the flat cadence of someone who has heard every story and rated most of them mediocre. Not an ally — a recurring business contact who happens to exist in a dimension most people don't know about.</div>
+    </div>
+  </section>
+
+  <!-- ============ S7 ============ -->
+  <section class="section" id="s7">
+    <div class="section-label">Section 07</div>
+    <div class="section-title">The Discovery — Opening Lore</div>
+    <div class="section-body">
+      <p>It starts with the wall in the basement. Three weeks after release, moving boxes and ignoring a parole officer's call, the protagonist leans against the far wall and goes through it. Not dramatically — they're just in a corridor that smells like carpet adhesive and hasn't seen sunlight since before they were born, and the wall behind them looks perfectly solid.</p>
+      <p>They panic, stumble back through a seam to the basement floor, and tell Razor. Razor doesn't think they've lost it — he thinks they've found something. Three days of dark web research later: the forums, the archived posts, the cautious documentation of levels and entities, and wallcrawler_88's revelation that distance was always fake.</p>
+      <p>Razor does the maths. The ankle monitor that traps them in a basement is meaningless — the whole planet is reachable through one wall. They are the most mobile criminal on Earth and they never have to leave home. They look at the monitor. They look at the laptop. They look at each other.</p>
+    </div>
+    <div class="callout">
+      <div class="callout-label">Tone anchor</div>
+      <p>"The game begins not with urgency but with two idiots who have just realised they might have found the world's greatest criminal loophole and are trying very hard not to get excited about it."</p>
+    </div>
+  </section>
+
+  <!-- ============ S8 ============ -->
+  <section class="section" id="s8">
+    <div class="section-label">Section 08</div>
+    <div class="section-title">Criminal Factions</div>
+    <div class="block">
+      <div class="block-name">The Caldera Cartel</div>
+      <div class="block-alias">// encountered via: porter / supply runs</div>
+      <div class="block-desc">Drug and weapons cartel with established Backrooms logistics. Uses the clipper population as independent couriers — plausible deniability, no direct connection. Porter missions are well-paid, high-risk, and come with a clear message: lose the cargo and you pay for it. Not cruel without reason. Very cruel with reason.</div>
+    </div>
+    <div class="block">
+      <div class="block-name">Seraya Lenta — "Grey Ribbon"</div>
+      <div class="block-alias">// encountered via: advanced / late content</div>
+      <div class="block-desc">Russian syndicate that moves people through the Backrooms; most of those people did not choose to go. Encountering their operations is a deliberate tone shift — the dark-comedy register drops entirely. They are the hard ceiling of how bad things get in this world.</div>
+    </div>
+    <div class="block">
+      <div class="block-name">The Independent Network</div>
+      <div class="block-alias">// no name — where the protagonist belongs</div>
+      <div class="block-desc">No hierarchy, no membership — just reputation, trust, and the shared interest of everyone in The Hub in not making enemies. The protagonist earns standing through successful runs, honoured debts, and not getting anyone killed. Standing unlocks better contracts, better traders, and information about what's deeper in.</div>
+    </div>
+    <div class="block">
+      <div class="block-name">The Government — Project Stillwater remnants</div>
+      <div class="block-alias">// background presence, encountered late game</div>
+      <div class="block-desc">The programme was mothballed; the knowledge wasn't destroyed. Someone in a federal agency has watched the clipper community grow for a decade, waiting for a reason to re-engage. The protagonist's escalating profile may become that reason. Their interest isn't criminal justice — it's strategic. They want back in.</div>
+    </div>
+  </section>
+
+  <div class="part-divider">Part Two — Core Systems</div>
+
+  <!-- ============ S9 ============ -->
+  <section class="section" id="s9">
+    <div class="section-label">Section 09</div>
+    <div class="section-title">The Core Loop</div>
+    <div class="section-body">
+      <p>Every day runs the same skeleton so the player internalises the rhythm; the content inside reshuffles daily so it never goes stale.</p>
+    </div>
+    <div class="flow">
+      <div class="flow-step"><div class="flow-num">1</div><div><div class="flow-name">Wake up</div><div class="flow-desc">New day, bleed regenerated.</div></div></div>
+      <div class="flow-step"><div class="flow-num">2</div><div><div class="flow-name">Check the board</div><div class="flow-desc">Razor has posted 1–3 jobs to the laptop, tagged value / location / depth. You choose.</div></div></div>
+      <div class="flow-step"><div class="flow-num">3</div><div><div class="flow-name">Gear up &amp; clip in</div><div class="flow-desc">Pack inventory — tools, consumables, empty loot space. Step through the basement wall.</div></div></div>
+      <div class="flow-step"><div class="flow-num">4</div><div><div class="flow-name">Navigate the bleed</div><div class="flow-desc">Find the target's corridor via tracer. Read entity tells. The longest, tensest stretch.</div></div></div>
+      <div class="flow-step"><div class="flow-num">5</div><div><div class="flow-name">Clip into the safe</div><div class="flow-desc">Punch through one wall. Run the cracking minigame against a clock.</div></div></div>
+      <div class="flow-step"><div class="flow-num">6</div><div><div class="flow-name">Grab &amp; get out</div><div class="flow-desc">Loot into limited inventory. Retrace the route home.</div></div></div>
+      <div class="flow-step"><div class="flow-num">7</div><div><div class="flow-name">Sell &amp; launder</div><div class="flow-desc">At the Hub: cash to the launderer, valuables to the fence. Both convert to safe bank money.</div></div></div>
+      <div class="flow-step"><div class="flow-num">8</div><div><div class="flow-name">Pay Razor</div><div class="flow-desc">Drop his cut. Skip too often and his trust drops — eventually he turns on you.</div></div></div>
+      <div class="flow-step"><div class="flow-num">9</div><div><div class="flow-name">Sleep</div><div class="flow-desc">Spend on gear via the laptop, then sleep to advance. The day resets.</div></div></div>
+    </div>
+
+    <div class="section-label" style="margin-top:2rem;">09.2 — The three job tiers</div>
+    <div class="section-body"><p>Razor posts 1–3 jobs a day. The tier sets every variable at once — the core risk/reward dial of the whole game.</p></div>
+    <div class="tier-grid">
+      <div class="tier tier-low"><div class="tier-name">Low value</div><div class="tier-attr"><span class="k">payout</span><span class="v">small</span></div><div class="tier-attr"><span class="k">find</span><span class="v">easy / shallow</span></div><div class="tier-attr"><span class="k">minigame</span><span class="v">simple</span></div><div class="tier-attr"><span class="k">region</span><span class="v">safe</span></div><div class="tier-attr"><span class="k">fine if caught</span><span class="v">low</span></div></div>
+      <div class="tier tier-med"><div class="tier-name">Medium value</div><div class="tier-attr"><span class="k">payout</span><span class="v">moderate</span></div><div class="tier-attr"><span class="k">find</span><span class="v">moderate</span></div><div class="tier-attr"><span class="k">minigame</span><span class="v">involved</span></div><div class="tier-attr"><span class="k">region</span><span class="v">some entities</span></div><div class="tier-attr"><span class="k">fine if caught</span><span class="v">medium</span></div></div>
+      <div class="tier tier-high"><div class="tier-name">High value</div><div class="tier-attr"><span class="k">payout</span><span class="v">large</span></div><div class="tier-attr"><span class="k">find</span><span class="v">hard / deep</span></div><div class="tier-attr"><span class="k">minigame</span><span class="v">complex, timed</span></div><div class="tier-attr"><span class="k">region</span><span class="v">heavy, deep</span></div><div class="tier-attr"><span class="k">fine if caught</span><span class="v">severe</span></div></div>
+    </div>
+
+    <div class="section-label" style="margin-top:2rem;">09.3 — Time, night, and why you sleep</div>
+    <div class="section-body">
+      <p>Time passes as you operate, and the Backrooms worsen as it gets later: entity spawn rate climbs, jumpscares get more frequent, and <strong>liminal randomness</strong> spikes — the Kane Pixels texture of the space becoming visibly unstable (a crashed car half-merged into a wall, a chair embedded in the ceiling, the cardboard cutout figure watching, balloons drifting a dead corridor, lights stuttering). Sleeping is the safe reset. But night is also when rare anomalous objects spawn — high-value oddities that only appear when the space destabilises. So night becomes a real choice: sleep safe, or push deeper for the rare spawn and risk losing everything you carry.</p>
+    </div>
+
+    <div class="section-label" style="margin-top:2rem;">09.4 — Inventory &amp; carry-risk</div>
+    <div class="section-body">
+      <p>You cannot carry everything; loot, tools, and consumables compete for limited space. The critical tension is the <strong>death penalty on unsold goods</strong>: loot in your inventory is unbanked and at risk — die to an entity on the way home and you lose what you carry. Selling or laundering at the Hub converts it to safe bank money, which death cannot touch. Every run carries an escalating "cash out or push on" decision.</p>
+    </div>
+    <div class="callout"><div class="callout-label">The loop's central tension</div><p>"Everything you're carrying is at risk until you sell it. Greed is the real enemy — the entities are just how greed kills you."</p></div>
+
+    <div class="section-label" style="margin-top:2rem;">09.5 — Progression philosophy</div>
+    <div class="section-body"><p>Guiding principle: <strong>tools make the mundane easy and the impossible possible.</strong> Most gear lowers friction on routine tasks (friction-reducers: better tracer, minigame helpers, energy drinks). A smaller set acts as <strong>keys</strong> unlocking specific high-tier jobs or regions (e.g. a mask for the Pool Rooms, entity counters, deep-corridor equipment). Every purchase must answer a clear "this lets me do X." No stat bloat.</p></div>
+
+    <div class="section-label" style="margin-top:2rem;">09.6 — The laptop wiki</div>
+    <div class="section-body"><p>Entity gameplay is stealth and reading signs — the player's real weapon is <strong>knowledge</strong>, and the laptop wiki is where it accumulates. Survive an entity, observe its tell, and the wiki fills in. A new player dies to the unknown; a veteran reads the room. A fresh entity drops them back into fear. The laptop also holds the job board, bank account, and gear shop.</p></div>
+  </section>
+
+  <!-- ============ S10 ============ -->
+  <section class="section" id="s10">
+    <div class="section-label">Section 10</div>
+    <div class="section-title">The Tracer &amp; The Find</div>
+    <div class="section-body">
+      <p>The tracer's defining choice is what it does <strong>not</strong> do: it does not route you. It gives a <strong>heading</strong> — a raw direction toward the target, pointing straight through walls — and leaves the maze-solving to you. You track <strong>one job at a time</strong>. The gap between "the direction I want" and "the path the maze allows" is the entire navigation game. The player is never lost, but never guided.</p>
+    </div>
+    <div class="callout"><div class="callout-label">Core principle</div><p>"A GPS draws your path and removes the maze. A compass only points and keeps every corridor a decision. Never lost, never guided — the sweet spot where a maze stays tense instead of frustrating."</p></div>
+    <div class="section-body"><p>The find runs four beats, escalating from broad navigation to a tight, tactile search:</p></div>
+    <div class="flow">
+      <div class="flow-step"><div class="flow-num">1</div><div><div class="flow-name">Lock the job</div><div class="flow-desc">Tracer locks a heading toward the target's bleed point.</div></div></div>
+      <div class="flow-step"><div class="flow-num">2</div><div><div class="flow-name">Follow the heading</div><div class="flow-desc">Travel toward the direction through the maze — wrong turns, dead ends, wrap-arounds.</div></div></div>
+      <div class="flow-step"><div class="flow-num">3</div><div><div class="flow-name">Proximity glow</div><div class="flow-desc">Close to the room, the tracer lights up. You're in the right area — now find the exact wall.</div></div></div>
+      <div class="flow-step"><div class="flow-num">4</div><div><div class="flow-name">Find the seam</div><div class="flow-desc">Push against walls to find where the geometry gives. Clip through into the safe.</div></div></div>
+    </div>
+    <div class="section-body">
+      <p>Once found, you mark the no-clip door with <strong>blue tape</strong> (the film nod). A taped door is a known door — it persists so you can return, under two conditions, whichever comes first: <strong>until you sleep</strong> (the bleed regenerates) or <strong>until the room is empty</strong>. This unlocks <strong>multi-trip looting</strong>: a rich room you can't empty in one inventory load forces the cash-out-or-push-on choice again and again. The blue tape is the greed engine.</p>
+      <p>The room behind the stealing door is a <strong>safe area</strong> — entities don't follow in, linger, or spawn there. A deliberate pressure-release valve and a reliable anchor for multi-trip looting: the destination is always safe even when the journey never is.</p>
+      <p>The tracer always knows the way to <strong>home base</strong> (always tracked) and to the <strong>launderer</strong> and <strong>fence</strong> (tracked after first found) — the fixed stars of the constant layer. The heading home is always available: the player can never be truly lost, only in danger.</p>
+    </div>
+  </section>
+
+  <!-- ============ S11 ============ -->
+  <section class="section" id="s11">
+    <div class="section-label">Section 11</div>
+    <div class="section-title">Vault Cracking</div>
+    <div class="section-body">
+      <p>The minigame is the <strong>climax of a run</strong> — a skill check under a clock, the only thing between the player and the money. Tonally the inverse of the corridor: out there you were quiet and hiding; in here you're fast, working with your hands against a countdown. The safe room is entity-free, so the threat is <strong>the alarm</strong> — start the crack and the clock starts. Finish in time or you're caught: hauled out, fined, dumped home.</p>
+    </div>
+    <div class="section-body">
+      <p>A vault crack is not one minigame — it's a <strong>sequence of small timed tasks</strong> sharing one countdown. Build a handful of good task types; generate variety by combining and parameterising. The tier scales four dials at once:</p>
+    </div>
+    <div class="tier-grid">
+      <div class="tier tier-low"><div class="tier-name">Low tier</div><div class="tier-attr"><span class="k">tasks</span><span class="v">1</span></div><div class="tier-attr"><span class="k">complexity</span><span class="v">simple</span></div><div class="tier-attr"><span class="k">timer</span><span class="v">generous</span></div><div class="tier-attr"><span class="k">tools</span><span class="v">basic only</span></div></div>
+      <div class="tier tier-med"><div class="tier-name">Medium tier</div><div class="tier-attr"><span class="k">tasks</span><span class="v">2–3 chained</span></div><div class="tier-attr"><span class="k">complexity</span><span class="v">moderate</span></div><div class="tier-attr"><span class="k">timer</span><span class="v">tighter</span></div><div class="tier-attr"><span class="k">tools</span><span class="v">mid-tier helps</span></div></div>
+      <div class="tier tier-high"><div class="tier-name">High tier</div><div class="tier-attr"><span class="k">tasks</span><span class="v">3+ chained</span></div><div class="tier-attr"><span class="k">complexity</span><span class="v">demanding</span></div><div class="tier-attr"><span class="k">timer</span><span class="v">brutal</span></div><div class="tier-attr"><span class="k">tools</span><span class="v">specialised req'd</span></div></div>
+    </div>
+    <div class="section-body"><p>Starting palette of task types — some 2D overlay (cheap, snappy), some 3D diegetic (tactile, the Schedule 1 feel):</p></div>
+    <div class="grid">
+      <div class="card"><div class="card-name">Lockpick</div><div class="card-desc">Tension-and-alignment. Feel for the give, don't snap the pin.</div><span class="pill">2D · basic tool</span></div>
+      <div class="card"><div class="card-name">Bypass the alarm</div><div class="card-desc">Trace and connect the right circuit before the line goes live.</div><span class="pill">2D overlay</span></div>
+      <div class="card"><div class="card-name">Crack the keypad</div><div class="card-desc">Listen for the click, read the wear, narrow the code. Mastermind + audio.</div><span class="pill">2D + audio</span></div>
+      <div class="card"><div class="card-name">Drill the hinges</div><div class="card-desc">Keep pressure in the sweet zone, don't overheat. Steady-hand meter.</div><span class="pill">3D · mid tool</span></div>
+      <div class="card"><div class="card-name">Thermal / acid cut</div><div class="card-desc">The "water pour" analog — guide a lance or pour acid along a line.</div><span class="pill danger">3D · gated tool</span></div>
+      <div class="card"><div class="card-name">Hack the e-lock</div><div class="card-desc">Signal/node puzzle, beat the lockout. Modern high-security vaults.</div><span class="pill danger">2D · gated tool</span></div>
+    </div>
+    <div class="section-body">
+      <p>Tools either reduce friction on tasks you can do or are <strong>keys</strong> unlocking task types — and therefore vaults — you can't attempt without them. This powers <strong>multi-vault jobs</strong>: a single job can hold multiple vaults at different security levels. The first you crack today; the second is sealed behind a tool you haven't bought, becoming a reason to come back stronger.</p>
+      <p>Variety without new content comes from three axes: <strong>combination</strong> (same tasks, different sequences under one clock), <strong>parameterisation</strong> (tunable pin count, code length, timer, tolerance), and <strong>unlock cadence</strong> (new task types arrive with new tools, growing the palette as the old one wears).</p>
+    </div>
+  </section>
+
+  <!-- ============ S12 ============ -->
+  <section class="section" id="s12">
+    <div class="section-label">Section 12</div>
+    <div class="section-title">Supply Runs</div>
+    <div class="section-body">
+      <p>The courier layer — you're not stealing, you're carrying. Deliberately simpler than a heist: no minigame, no crack. The entire challenge is the journey, twice over.</p>
+    </div>
+    <div class="flow">
+      <div class="flow-step"><div class="flow-num">1</div><div><div class="flow-name">Accept the run</div><div class="flow-desc">Take a supply contract instead of (or alongside) a theft job.</div></div></div>
+      <div class="flow-step"><div class="flow-num">2</div><div><div class="flow-name">Find the pickup</div><div class="flow-desc">Tracer points to the pickup room. Navigate, find the seam, clip in.</div></div></div>
+      <div class="flow-step"><div class="flow-num">3</div><div><div class="flow-name">Grab the cargo</div><div class="flow-desc">Pick the goods off the floor. No skill check — just load it.</div></div></div>
+      <div class="flow-step"><div class="flow-num">4</div><div><div class="flow-name">Get the dropoff</div><div class="flow-desc">Destination appears on the tracer. Carry the contraband across the map.</div></div></div>
+      <div class="flow-step"><div class="flow-num">5</div><div><div class="flow-name">Place the goods</div><div class="flow-desc">Deliver the correct cargo. Done right, you're paid. Done wrong, you pay.</div></div></div>
+    </div>
+    <div class="section-body">
+      <p>Supply failure — wrong cargo, undelivered, or dying mid-run — pulls money straight out of your <strong>bank</strong>, the one mechanic that breaks the "banked money is safe" rule. That makes supply runs uniquely scary: you're risking savings, not just today's haul.</p>
+      <p>Behind every supplier is a hidden <strong>relationship meter</strong> — a reputation system. Deliver well and it climbs (higher pay, more frequent and lucrative contracts); fail and it drops (reduced pay, fewer jobs, eventually a supplier who stops trusting you). This turns supply runs into a long-game investment in <em>who</em> you work for as more suppliers come online.</p>
+    </div>
+  </section>
+
+  <div class="part-divider">Part Three — Synthesis</div>
+
+  <!-- ============ SYSTEMS MAP ============ -->
+  <section class="section" id="smap">
+    <div class="section-label">Systems Map</div>
+    <div class="section-title">The Whole Machine</div>
+    <div class="section-body">
+      <p>Steps 1–6 form a closed <strong>flywheel</strong>: take a job → navigate → crack/deliver → sell &amp; bank → buy gear → unlock harder jobs → which loops back. That closed loop is the engine of the entire game; everything else modifies it. The lower bands are the systems that shape the flywheel without being part of it; the bottom band is the constant layer that never moves.</p>
+    </div>
+    <div class="map-wrap">
+      <svg width="100%" viewBox="0 0 680 760" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="No Clip systems map">
+        <defs>
+          <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+        </defs>
+        <text class="th" x="20" y="24">The core loop — a self-feeding flywheel</text>
+        <text class="ts" x="20" y="44">Each step feeds the next; money loops back into capability</text>
+
+        <g><rect class="nbox-gray" x="250" y="72" width="180" height="56" rx="8"/><text class="th" x="340" y="96" text-anchor="middle">1 · Take a job</text><text class="ts" x="340" y="114" text-anchor="middle">1 of 1–3 from Razor</text></g>
+        <line x1="430" y1="100" x2="520" y2="100" class="arr" marker-end="url(#arrow)"/>
+        <g><rect class="nbox-purple" x="500" y="72" width="160" height="56" rx="8"/><text class="th" x="580" y="96" text-anchor="middle">2 · Navigate</text><text class="ts" x="580" y="114" text-anchor="middle">tracer + the maze</text></g>
+        <line x1="580" y1="128" x2="580" y2="178" class="arr" marker-end="url(#arrow)"/>
+        <g><rect class="nbox-purple" x="490" y="180" width="170" height="56" rx="8"/><text class="th" x="575" y="204" text-anchor="middle">3 · Crack / deliver</text><text class="ts" x="575" y="222" text-anchor="middle">minigame or dropoff</text></g>
+        <line x1="575" y1="236" x2="575" y2="286" class="arr" marker-end="url(#arrow)"/>
+        <g><rect class="nbox-teal" x="490" y="288" width="170" height="56" rx="8"/><text class="th" x="575" y="312" text-anchor="middle">4 · Sell &amp; bank</text><text class="ts" x="575" y="330" text-anchor="middle">Hub → safe money</text></g>
+        <line x1="490" y1="316" x2="360" y2="316" class="arr" marker-end="url(#arrow)"/>
+        <g><rect class="nbox-teal" x="180" y="288" width="170" height="56" rx="8"/><text class="th" x="265" y="312" text-anchor="middle">5 · Buy gear</text><text class="ts" x="265" y="330" text-anchor="middle">tools = capability</text></g>
+        <line x1="265" y1="288" x2="265" y2="238" class="arr" marker-end="url(#arrow)"/>
+        <g><rect class="nbox-gray" x="175" y="180" width="180" height="56" rx="8"/><text class="th" x="265" y="204" text-anchor="middle">6 · Unlock harder jobs</text><text class="ts" x="265" y="222" text-anchor="middle">deeper, richer, riskier</text></g>
+        <path d="M265 180 L265 100 L244 100" class="arr" fill="none" marker-end="url(#arrow)"/>
+        <text class="ts" x="150" y="144" text-anchor="middle">loops back</text>
+
+        <line x1="20" y1="386" x2="660" y2="386" stroke="rgba(26,26,24,0.15)" stroke-width="0.5"/>
+        <text class="th" x="20" y="414">The systems that shape the loop</text>
+
+        <g><rect class="nbox-amber" x="20" y="432" width="200" height="74" rx="8"/><text class="th" x="120" y="456" text-anchor="middle">Daily reset + clock</text><text class="ts" x="120" y="476" text-anchor="middle">sleep regenerates bleed</text><text class="ts" x="120" y="492" text-anchor="middle">night = danger + rares</text></g>
+        <g><rect class="nbox-purple" x="240" y="432" width="200" height="74" rx="8"/><text class="th" x="340" y="456" text-anchor="middle">Tracer + blue tape</text><text class="ts" x="340" y="476" text-anchor="middle">compass, not GPS</text><text class="ts" x="340" y="492" text-anchor="middle">found doors persist</text></g>
+        <g><rect class="nbox-coral" x="460" y="432" width="200" height="74" rx="8"/><text class="th" x="560" y="456" text-anchor="middle">Carry-risk</text><text class="ts" x="560" y="476" text-anchor="middle">loot unsafe till sold</text><text class="ts" x="560" y="492" text-anchor="middle">greed is the enemy</text></g>
+        <g><rect class="nbox-coral" x="20" y="522" width="305" height="74" rx="8"/><text class="th" x="172" y="546" text-anchor="middle">Relationships</text><text class="ts" x="172" y="566" text-anchor="middle">Razor's trust · supplier rep · standing</text><text class="ts" x="172" y="582" text-anchor="middle">set pay, jobs, and betrayal risk</text></g>
+        <g><rect class="nbox-red" x="345" y="522" width="315" height="74" rx="8"/><text class="th" x="502" y="546" text-anchor="middle">Fail states</text><text class="ts" x="502" y="566" text-anchor="middle">caught · killed · supply failure</text><text class="ts" x="502" y="582" text-anchor="middle">fines, lost loot, bank penalty</text></g>
+
+        <line x1="20" y1="626" x2="660" y2="626" stroke="rgba(26,26,24,0.15)" stroke-width="0.5"/>
+        <text class="th" x="20" y="654">The constant layer — never reshuffles</text>
+
+        <g><rect class="nbox-gray" x="20" y="670" width="190" height="56" rx="8"/><text class="th" x="115" y="694" text-anchor="middle">Home base</text><text class="ts" x="115" y="712" text-anchor="middle">the basement wall</text></g>
+        <g><rect class="nbox-gray" x="225" y="670" width="215" height="56" rx="8"/><text class="th" x="332" y="694" text-anchor="middle">The Hub — traders</text><text class="ts" x="332" y="712" text-anchor="middle">launderer + fence (Gravel)</text></g>
+        <g><rect class="nbox-gray" x="455" y="670" width="205" height="56" rx="8"/><text class="th" x="557" y="694" text-anchor="middle">The laptop</text><text class="ts" x="557" y="712" text-anchor="middle">board · bank · shop · wiki</text></g>
+      </svg>
+    </div>
+    <div class="flag">
+      <div class="flag-label">The one balance risk to watch</div>
+      <p>The flywheel is healthy — money buys capability, capability unlocks harder content, harder content pays more. The risk: if gear makes things <em>too</em> easy too fast, the loop spins out and the horror evaporates. Keep gear unlocking <strong>access to harder things</strong> rather than trivialising existing things (the "keys over stat-boosts" rule). Hold that line and the loop self-balances.</p>
+    </div>
+  </section>
+
+  <!-- ============ TBD REGISTER ============ -->
+  <section class="section" id="stbd">
+    <div class="section-label">Open Items</div>
+    <div class="section-title">TBD &amp; Open Decisions</div>
+    <div class="section-body">
+      <p>Everything still open, gathered in one place. Status tags: <span class="tbd-status st-park">parked</span> = deferred on purpose, <span class="tbd-status st-decide">decide</span> = a design call to make, <span class="tbd-status st-lock">lock before build</span> = decide before that system is prototyped, <span class="tbd-status st-design">design</span> = needs a whole design pass.</p>
+    </div>
+
+    <div class="tbd"><div class="tbd-head"><span class="tbd-name">Entities — the whole system</span><span class="tbd-status st-park">parked</span></div><div class="tbd-body">Behaviour, tells, avoidance patterns, map integration, wiki population, the full stealth language. Heaviest system in the game; deferred until the core skeleton is proven. Philosophy is captured in Section 05.</div></div>
+
+    <div class="tbd"><div class="tbd-head"><span class="tbd-name">Endgame — "become a Backrooms ruler"</span><span class="tbd-status st-design">design</span></div><div class="tbd-body">The win condition is undefined. What does "ruler" mean mechanically? This is the game's destination and needs its own design pass.</div></div>
+
+    <div class="tbd"><div class="tbd-head"><span class="tbd-name">Crime-type catalogue</span><span class="tbd-status st-design">design</span></div><div class="tbd-body">New crime types to plug into the job framework: exam theft (the funny one), arson, painting heists for clients, stealing documents from a CEO, smuggling people, etc. Needs a design pass on how each maps onto the existing job / supply-run structures.</div></div>
+
+    <div class="tbd"><div class="tbd-head"><span class="tbd-name">Caught vs killed — penalty separation</span><span class="tbd-status st-decide">decide</span></div><div class="tbd-body">"Caught" (fail minigame → fine, scales with tier) and "killed" (entity → lose carried loot + fine) should feel different.</div><div class="tbd-rec"><strong>Recommendation:</strong> keep them distinct so cops and monsters are feared for different reasons. Decide whether high-tier jobs also carry harsher entity-death penalties.</div></div>
+
+    <div class="tbd"><div class="tbd-head"><span class="tbd-name">Night "bonus" — shape</span><span class="tbd-status st-decide">decide</span></div><div class="tbd-body">Two readable options: (A) night-only rare anomalous spawns — push-your-luck; (B) a flat payout multiplier for operating late.</div><div class="tbd-rec"><strong>Recommendation:</strong> (A). It's emergent and creepy, and makes the Kane Pixels glitch-objects mechanically valuable rather than just atmospheric.</div></div>
+
+    <div class="tbd"><div class="tbd-head"><span class="tbd-name">Mid-run banking</span><span class="tbd-status st-decide">decide</span></div><div class="tbd-body">Is there a deaddrop / partial-deposit mechanic mid-run, or is the full-return-trip risk the intended brutality? Determines how punishing deep jobs feel — no mid-run banking = nerve-shredding all-or-nothing; deaddrop = more forgiving, more frequent small payouts.</div></div>
+
+    <div class="tbd"><div class="tbd-head"><span class="tbd-name">Wall-search feedback model</span><span class="tbd-status st-lock">lock before build</span></div><div class="tbd-body">Bumping walls to find the seam dies without escalating feedback. Needs a hot/cold signal — tracer pulsing faster, rising audio tone, or a faint shimmer on the right stretch of wall.</div><div class="tbd-rec"><strong>Recommendation:</strong> lock a feedback model before this beat is prototyped.</div></div>
+
+    <div class="tbd"><div class="tbd-head"><span class="tbd-name">Safe room clock</span><span class="tbd-status st-decide">decide</span></div><div class="tbd-body">Confirm the day/night clock keeps ticking while inside the safe room, so camping costs a dangerous night walk home (anti-camp guardrail).</div><div class="tbd-rec"><strong>Recommendation:</strong> yes — keep the clock running inside.</div></div>
+
+    <div class="tbd"><div class="tbd-head"><span class="tbd-name">Procgen connectivity guarantee</span><span class="tbd-status st-lock">lock before build</span></div><div class="tbd-body">The "wrong turn, wrap around" fantasy only works if the map has loops and alternate routes, not dead-end trees. From anywhere, there must be more than one way to anywhere. A hard requirement on the map generator from day one.</div></div>
+
+    <div class="tbd"><div class="tbd-head"><span class="tbd-name">2D / 3D minigame ratio</span><span class="tbd-status st-lock">lock before build</span></div><div class="tbd-body">A real budget fork. 3D diegetic tasks (drill, acid cut) are the immersive "wow" but expensive (physics, rigs, animation); 2D overlays are fast and easy to balance.</div><div class="tbd-rec"><strong>Recommendation:</strong> ship a core of 3–4 solid 2D overlays first, reserve 1–2 hero 3D tasks for high tiers. Don't make everything 3D.</div></div>
+
+    <div class="tbd"><div class="tbd-head"><span class="tbd-name">Tool-gated "come back later" consistency</span><span class="tbd-status st-lock">lock before build</span></div><div class="tbd-body">Blue-tape doors reset on sleep, so you can't return to a specific gated vault once geared.</div><div class="tbd-rec"><strong>Recommendation:</strong> tool-gated content reappears via the daily job rotation — "come back later" means "when this job type spawns again, geared up," not "preserve this exact door."</div></div>
+
+    <div class="tbd"><div class="tbd-head"><span class="tbd-name">Supply failure draining bank money</span><span class="tbd-status st-decide">decide</span></div><div class="tbd-body">The one mechanic that breaks "banked money is safe." Confirm it's intentional, and decide whether the penalty is capped or can drive you negative (which feeds a debt spiral with Razor / the cartel).</div></div>
+
+    <div class="tbd"><div class="tbd-head"><span class="tbd-name">Unified relationship framework</span><span class="tbd-status st-decide">decide</span></div><div class="tbd-body">Razor's trust, supplier rep, and Independent Network standing are all the same kind of system. Worth treating as one "standing" framework under the hood for consistency and a single laptop view.</div></div>
+
+    <div class="tbd"><div class="tbd-head"><span class="tbd-name">Tracer multi-target (future)</span><span class="tbd-status st-decide">decide</span></div><div class="tbd-body">One job at a time for now. A future option: let veterans see all taken jobs and plan an efficient route between them. Adds skill expression but also UI and balancing complexity. Revisit when jobs-per-day is finalised.</div></div>
+
+    <div class="tbd"><div class="tbd-head"><span class="tbd-name">Concrete numbers</span><span class="tbd-status st-decide">decide</span></div><div class="tbd-body">Inventory capacity, timer lengths, fine amounts, payout values, jobs runnable per day vs offered, and whether a heist and supply run can be mixed in one outing — all need tuning values once systems are prototyped.</div></div>
+  </section>
+
+  <!-- ============ NEXT STEPS ============ -->
+  <section class="section" id="snext">
+    <div class="section-label">Next Steps</div>
+    <div class="section-title">Where This Goes Next</div>
+    <div class="section-body">
+      <p>The skeleton is complete: world, loop, navigation, vaults, supply runs, economy, relationships, fail states. The remaining big pieces (entities, endgame, crime catalogue) all hang off this skeleton rather than adding new structural machinery.</p>
+      <p>Your stated next directions, with how this doc supports them:</p>
+    </div>
+    <div class="grid">
+      <div class="card"><div class="card-name">MVP planning</div><div class="card-desc">The flywheel (systems map, steps 1–6) is the MVP target — one job tier, one safe-room asset, the tracer, a couple of 2D minigame tasks, sell/bank, sleep. Prove the loop is fun before layering entities or supply runs.</div></div>
+      <div class="card"><div class="card-name">Art direction</div><div class="card-desc">Two visual registers to nail: the constant Backrooms (Kane Pixels liminal — yellow rooms, fluorescent dread) and the night-time instability (glitch anomalies). The safe-room asset is the single most-reused art piece — invest there.</div></div>
+      <div class="card"><div class="card-name">Platform &amp; tech</div><div class="card-desc">Key technical pillars from the TBD register: procgen with a connectivity guarantee, the heading-only tracer, blue-tape door persistence, and the 2D/3D minigame split. These shape the engine choice.</div></div>
+    </div>
+  </section>
+
+  <div class="footer">
+    NO CLIP — Game Design Document v0.3 (consolidated) · Lore &amp; Systems Bible · Working draft for cleanup &amp; MVP planning
+  </div>
+
+</div>
+</body>
+</html>

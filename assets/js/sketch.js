@@ -7,7 +7,7 @@ function setup() {
 
 function draw() {
     background(0) // clear
-    draw_flower()
+    draw_flower(FLOWER_CONFIG)
     render_buffer()
     post_process()
 }
