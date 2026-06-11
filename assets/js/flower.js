@@ -31,46 +31,113 @@ function draw_flower(config) {
         define_petal_layer(all_petals, np, len, wid, tilt, off, r, g, b, config)
     }
 
-    // center layers
-    let center_bloom = constrain((bloom - config.center_bloom_start) / (1 - config.center_bloom_start), 0, 1)
-    for (let cl = 0; cl < config.center_layers; cl++) {
-        let clr  = cl / config.center_layers
+    // center — either disc or petal layers depending on config
+    let center_bloom = constrain(
+        (bloom - config.center_bloom_start) / (1 - config.center_bloom_start),
+        0, 1
+    )
 
-        let tilt = lerp(config.center_tilt.inner, config.center_tilt.outer, clr)
-        let len  = lerp(config.center_len.min,    config.center_len.max,    clr) * center_bloom * flower_scale
-        let wid  = lerp(config.center_wid.min,    config.center_wid.max,    clr) * center_bloom * flower_scale
-        let np   = floor(lerp(5, 8, clr))
-        let off  = cl * 0.5
+    if (config.center_type === 'disc') {
+        define_disc(all_petals, flower_scale, config, center_bloom)
+    } else {
+        for (let cl = 0; cl < config.center_layers; cl++) {
+            let clr  = cl / config.center_layers
+            let tilt = lerp(config.center_tilt.inner, config.center_tilt.outer, clr)
+            let len  = lerp(config.center_len.min,    config.center_len.max,    clr) * center_bloom * flower_scale
+            let wid  = lerp(config.center_wid.min,    config.center_wid.max,    clr) * center_bloom * flower_scale
+            let np   = floor(lerp(5, 8, clr))
+            let off  = cl * 0.5
+            let r = lerp(config.center_color.inner[0], config.center_color.outer[0], clr)
+            let g = lerp(config.center_color.inner[1], config.center_color.outer[1], clr)
+            let b = lerp(config.center_color.inner[2], config.center_color.outer[2], clr)
+            define_petal_layer(all_petals, np, len, wid, tilt, off, r, g, b, config)
+        }
 
-        let r = lerp(config.center_color.inner[0], config.center_color.outer[0], clr)
-        let g = lerp(config.center_color.inner[1], config.center_color.outer[1], clr)
-        let b = lerp(config.center_color.inner[2], config.center_color.outer[2], clr)
-
-        define_petal_layer(all_petals, np, len, wid, tilt, off, r, g, b, config)
-    }
-
-    // center dot
-    let center_alpha = constrain((bloom - 0.6) / 0.4, 0, 1)
-    if (center_alpha > 0) {
-        let cp = project_stem_point(0, -10 * flower_scale, 0)
-        all_petals.push({
-            type:  'center',
-            x:     cp.x,
-            y:     cp.y,
-            z:     cp.z - 1,
-            r:     config.center_dot_color[0],
-            g:     config.center_dot_color[1],
-            b:     config.center_dot_color[2],
-            size:  config.center_dot_size * flower_scale * center_alpha
-        })
+        // center dot for petal-type centers
+        let center_alpha = constrain((bloom - 0.6) / 0.4, 0, 1)
+        if (center_alpha > 0) {
+            let cp = project_stem_point(0, -10 * flower_scale, 0)
+            all_petals.push({
+                type:  'center',
+                x:     cp.x,
+                y:     cp.y,
+                z:     cp.z - 1,
+                r:     config.center_dot_color[0],
+                g:     config.center_dot_color[1],
+                b:     config.center_dot_color[2],
+                size:  config.center_dot_size * flower_scale * center_alpha
+            })
+        }
     }
 
     let stem_bloom = constrain(bloom / 0.3, 0, 1)
     define_stem(all_petals, flower_scale, config, stem_bloom)
     all_petals.sort((a, b) => b.z - a.z)
     draw_all(all_petals)
-
     rendering_buffer.loadPixels()
+}
+
+function define_disc(all_petals, flower_scale, config, center_bloom) {
+    if (center_bloom <= 0) return
+
+    let disc_r    = config.disc_radius   * flower_scale * center_bloom
+    let disc_h    = config.disc_height   * flower_scale
+    let rings     = config.disc_rings    // concentric rings of quads
+    let segments  = config.disc_segments // segments around each ring
+    let dc        = config.disc_color
+    let ec        = config.disc_edge_color
+
+    // build disc as a flat grid of triangles from center outward
+    // each ring is a band of quads at increasing radius
+    for (let ring = 0; ring < rings; ring++) {
+        let r0 = (ring     / rings) * disc_r
+        let r1 = ((ring+1) / rings) * disc_r
+
+        // slight dome — center higher than edges
+        let h0 = config.disc_offset * flower_scale - disc_h * (1 - pow(ring / rings, 2))
+        let h1 = config.disc_offset * flower_scale - disc_h * (1 - pow((ring+1) / rings, 2))
+
+        // color lerps from center to edge
+        let t  = ring / rings
+        let pr = lerp(dc[0], ec[0], t)
+        let pg = lerp(dc[1], ec[1], t)
+        let pb = lerp(dc[2], ec[2], t)
+
+        for (let s = 0; s < segments; s++) {
+            let a0 = (TWO_PI / segments) * s
+            let a1 = (TWO_PI / segments) * (s + 1)
+
+            // 4 corners of quad
+            let p00 = project_stem_point(cos(a0)*r0, h0, sin(a0)*r0)
+            let p10 = project_stem_point(cos(a1)*r0, h0, sin(a1)*r0)
+            let p01 = project_stem_point(cos(a0)*r1, h1, sin(a0)*r1)
+            let p11 = project_stem_point(cos(a1)*r1, h1, sin(a1)*r1)
+
+            // normal points upward for disc face
+            let nx = 0, ny = -1, nz = 0
+
+            // rotate normal
+            let nx_y     = nx * cos(rotY) + nz * sin(rotY)
+            let nz_y     = -nx * sin(rotY) + nz * cos(rotY)
+            let ny_final = ny * cos(rotX) - nz_y * sin(rotX)
+            let nz_final = ny * sin(rotX) + nz_y * cos(rotX)
+
+            // backface cull
+            if (nz_final > 0.3) continue
+
+            let light = calculate_lighting(nx_y, ny_final, nz_final)
+            let avgZ  = (p00.z + p10.z + p01.z + p11.z) / 4
+
+            all_petals.push({
+                type: 'quad',
+                p00, p10, p01, p11,
+                z:    avgZ,
+                r:    constrain(pr * light, 0, 255),
+                g:    constrain(pg * light, 0, 255),
+                b:    constrain(pb * light, 0, 255)
+            })
+        }
+    }
 }
 
 function draw_all(all_petals) {
@@ -130,7 +197,7 @@ function define_petal_layer(petal_arr, num_petals, length, width, tilt, layer_of
     for (let i = 0; i < num_petals; i++) {
         let base_angle = (TWO_PI / num_petals) * i + layer_offset
         let angle      = base_angle + rotY
-        let dist       = length * 0.4
+        let dist       = length * (config.dist_factor || 0.4)
 
         let x3 = cos(angle) * dist * cos(tilt)
         let y3 = -sin(tilt) * dist
@@ -247,7 +314,7 @@ function define_stem(all_petals, flower_scale, config, stem_bloom) {
     }
 }
 
-    function project_stem_point(x3, y3, z3) {
+function project_stem_point(x3, y3, z3) {
     let rx  = x3 * cos(rotY) + z3 * sin(rotY)
     let rz  = -x3 * sin(rotY) + z3 * cos(rotY)
     let ry4 = y3 * cos(rotX) - rz * sin(rotX)

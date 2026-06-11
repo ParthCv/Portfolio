@@ -13,6 +13,8 @@ const FLOWER_CONFIG = {
     petal_shape: null,
 
     // center
+    center_type:   'petal',
+    disc_offset: 0,
     layer_stagger: 0.4,
     center_layers: 5,
     center_len: { min: 15, max: 35 },
@@ -61,7 +63,9 @@ const LOTUS_CONFIG = {
     petal_shape: lotus_petal_shape,
 
     // center — prominent seed pod
+    center_type:   'petal',
     layer_stagger: 0.4,
+    disc_offset: 0,
     center_layers:       3,
     center_len:          { min: 20, max: 45 },
     center_wid:          { min: 10, max: 22 },
@@ -110,6 +114,8 @@ const ROSE_CONFIG = {
     petal_shape: rose_petal_shape,
 
     // center — tight closed bud center
+    center_type:   'petal',
+    disc_offset: 0,
     layer_stagger: 1.2,
     center_layers:       6,
     center_len:          { min: 20, max: 45 },
@@ -136,4 +142,60 @@ const ROSE_CONFIG = {
     // bloom
     bloom_speed:  0.002,
     bloom_delay:  0.35,  // more stagger for rose unfurling effect
+}
+
+function gerbera_petal_shape(tt, length, width) {
+    return pow(sin(tt * PI), 0.8) * width  // rounder, no notch
+}
+
+const GERBERA_CONFIG = {
+    // single dense layer of long thin petals
+    total_layers:     3,
+    petals_per_layer: { min: 28, max: 34 },
+
+    len: { min: 160, max: 200 },
+    wid: { min: 12,   max: 18  },
+
+    // nearly flat — gerbera is a flat flower
+    tilt:          { inner: 0.15, outer: 0.02 },
+    ruffle_amt:    0,
+    petal_shape:   gerbera_petal_shape,
+    layer_stagger: 0.15,  // slight stagger between rows
+
+    // disc center
+    center_type:        'disc',
+    center_bloom_start: 0.3,
+    disc_radius:        65,
+    disc_height:        8,
+    disc_rings:         8,
+    dist_factor: 0.2,
+    disc_offset: -15,
+    disc_segments:      24,
+    disc_color:         [180, 120, 20],   // golden yellow center
+    disc_edge_color:    [100, 60,  10],   // darker edge
+
+    // unused for disc type but needed to avoid errors
+    center_layers:    0,
+    center_len:       { min: 0, max: 0 },
+    center_wid:       { min: 0, max: 0 },
+    center_tilt:      { inner: 0, outer: 0 },
+    center_dot_size:  0,
+    center_dot_color: [0, 0, 0],
+    center_color:     { inner: [0,0,0], outer: [0,0,0] },
+
+    // colors — classic orange gerbera
+    petal_color:  { inner: [255, 100, 20], outer: [255, 140, 40] },
+
+    // stem — straight and tall
+    stem_len:        320,
+    stem_radius:     14,
+    stem_color:      [50, 85, 40],
+    stem_sides:      8,
+    stem_segments:   40,
+    stem_curve_amp:  6,
+    stem_curve_freq: 0.2,
+    stem_taper:      0.8,
+
+    bloom_speed:  0.003,
+    bloom_delay:  0.1,  // all petals open at once, barely staggered
 }
