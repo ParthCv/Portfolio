@@ -7,7 +7,7 @@ function setup() {
 
 function draw() {
     background(0) // clear
-    draw_flower(GERBERA_CONFIG)
+    draw_flower(SUNFLOWER_CONFIG)
     render_buffer()
     post_process()
 }
