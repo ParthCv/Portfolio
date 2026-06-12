@@ -558,13 +558,14 @@ const LILY_CONFIG = {
 
     center_type:        'disc',
     center_bloom_start: 0.35,
-    disc_radius:        10,
+    disc_radius:        28,
     disc_height:        3,
-    disc_rings:         2,
+    disc_rings:         4,
     disc_segments:      10,
     disc_color:         [255, 240, 200],
     disc_edge_color:    [220, 200, 150],
     disc_offset:        0,
+    dist_factor:        0.08,
 
     center_layers:    0,
     center_len:       { min: 0, max: 0 },
@@ -578,11 +579,11 @@ const LILY_CONFIG = {
     stamen: {
         type:      'filaments',
         count:     6,
-        length:    70,
-        spread:    18,
+        length:    80,
+        spread:    24,   // was 18, spreads out more to fill gap
         radius:    1.5,
         color:     [200, 180, 120],
-        tip_color: [60, 30, 5],    // dark brown anthers
+        tip_color: [60, 30, 5],
         tip_size:  7,
     },
 
