@@ -337,3 +337,276 @@ const SUNFLOWER_CONFIG = {
     bloom_speed:  0.003,
     bloom_delay:  0.05,
 }
+
+function calibrachoa_petal_shape(tt, length, width) {
+    // wide at base, narrows toward tip, slight flare at very end
+    let base_width = sin(tt * PI * 0.7) * width * 1.3
+    let flare      = tt > 0.8 ? (tt - 0.8) * 5 * width * 0.3 : 0
+    return base_width + flare
+}
+
+const CALIBRACHOA_CONFIG = {
+    total_layers:     4,
+    petals_per_layer: { min: 5, max: 5 },  // always 5 petals
+
+    len: { min: 60,  max: 90  },
+    wid: { min: 25,  max: 38  },
+
+    tilt:          { inner: 1.2, outer: 0.4 },
+    ruffle_amt:    3,
+    petal_shape:   calibrachoa_petal_shape,
+    layer_stagger: 0.63,  // TWO_PI/5 * 0.5 so petals interleave
+    dist_factor:   0.25,
+
+    center_type:        'disc',
+    center_bloom_start: 0.4,
+    disc_radius:        18,
+    disc_height:        6,
+    disc_rings:         4,
+    disc_segments:      16,
+    disc_color:         [255, 240, 100],
+    disc_edge_color:    [200, 160, 40],
+    disc_offset:        0,
+
+    center_layers:    0,
+    center_len:       { min: 0, max: 0 },
+    center_wid:       { min: 0, max: 0 },
+    center_tilt:      { inner: 0, outer: 0 },
+    center_dot_size:  0,
+    center_dot_color: [0, 0, 0],
+    center_color:     { inner: [0,0,0], outer: [0,0,0] },
+
+    // hot pink
+    petal_color:  { inner: [220, 30, 120], outer: [255, 80, 160] },
+    petal_gradient: null,
+
+    stem_len:        180,
+    stem_radius:     6,
+    stem_color:      [55, 85, 40],
+    stem_sides:      6,
+    stem_segments:   30,
+    stem_curve_amp:  20,
+    stem_curve_freq: 0.4,
+    stem_taper:      0.5,
+
+    stem_leaf_color: [50, 90, 35],
+    stem_leaves: [
+        { t: 0.3, side:  1, size: 0.6 },
+        { t: 0.6, side: -1, size: 0.55 },
+    ],
+    stem_thorns: [],
+
+    bloom_speed:  0.003,
+    bloom_delay:  0.15,
+}
+
+function pericallis_petal_shape(tt, length, width) {
+    // wide oval with notch at tip
+    let base   = pow(sin(tt * PI), 0.75) * width
+    let notch  = tt > 0.88 ? pow((tt - 0.88) / 0.12, 2) * width * 0.4 : 0
+    return base - notch
+}
+
+const PERICALLIS_CONFIG = {
+    total_layers:     3,
+    petals_per_layer: { min: 18, max: 22 },
+
+    len: { min: 90,  max: 120 },
+    wid: { min: 14,  max: 20  },
+
+    tilt:          { inner: 0.2, outer: 0.04 },
+    ruffle_amt:    0,
+    petal_shape:   pericallis_petal_shape,
+    layer_stagger: 0.18,
+    dist_factor:   0.22,
+
+    center_type:        'disc',
+    center_bloom_start: 0.3,
+    disc_radius:        30,
+    disc_height:        6,
+    disc_rings:         6,
+    disc_segments:      20,
+    disc_color:         [255, 220, 60],
+    disc_edge_color:    [180, 140, 20],
+    disc_offset:        0,
+
+    center_layers:    0,
+    center_len:       { min: 0, max: 0 },
+    center_wid:       { min: 0, max: 0 },
+    center_tilt:      { inner: 0, outer: 0 },
+    center_dot_size:  0,
+    center_dot_color: [0, 0, 0],
+    center_color:     { inner: [0,0,0], outer: [0,0,0] },
+
+    // purple/white bicolor — inner petals white, outer purple
+    petal_color:  { inner: [220, 220, 255], outer: [100, 40, 200] },
+    petal_gradient: null,
+
+    stem_len:        220,
+    stem_radius:     7,
+    stem_color:      [55, 85, 40],
+    stem_sides:      6,
+    stem_segments:   30,
+    stem_curve_amp:  14,
+    stem_curve_freq: 0.3,
+    stem_taper:      0.6,
+
+    stem_leaf_color: [50, 90, 35],
+    stem_leaves: [
+        { t: 0.25, side:  1, size: 0.8 },
+        { t: 0.55, side: -1, size: 0.7 },
+    ],
+    stem_thorns: [],
+
+    bloom_speed:  0.003,
+    bloom_delay:  0.1,
+}
+
+function hibiscus_petal_shape(tt, length, width) {
+    // broad fan shape — wide in middle, tapers at both ends
+    // slight waviness near the tip
+    let base  = pow(sin(tt * PI), 0.65) * width
+    let wave  = tt > 0.5 ? sin(tt * 12) * width * 0.04 : 0
+    return base + wave
+}
+
+const HIBISCUS_CONFIG = {
+    // 5 large petals, single layer
+    total_layers:     3,
+    petals_per_layer: { min: 5, max: 5 },
+
+    len: { min: 120, max: 180 },
+    wid: { min: 55,  max: 75  },
+
+    tilt:          { inner: 0.5, outer: 0.15 },
+    ruffle_amt:    4,
+    petal_shape:   hibiscus_petal_shape,
+    layer_stagger: 0.63,  // TWO_PI/5 * 0.5
+    dist_factor:   0.18,
+
+    // no petal center layers — stamen handles it
+    center_type:        'disc',
+    center_bloom_start: 0.3,
+    disc_radius:        12,
+    disc_height:        4,
+    disc_rings:         3,
+    disc_segments:      12,
+    disc_color:         [180, 20, 60],
+    disc_edge_color:    [140, 10, 40],
+    disc_offset:        0,
+
+    center_layers:    0,
+    center_len:       { min: 0, max: 0 },
+    center_wid:       { min: 0, max: 0 },
+    center_tilt:      { inner: 0, outer: 0 },
+    center_dot_size:  0,
+    center_dot_color: [0, 0, 0],
+    center_color:     { inner: [0,0,0], outer: [0,0,0] },
+
+    // stamen column
+    stamen: {
+        length:    90,
+        radius:    4,
+        color:     [200, 30, 80],
+        tip_color: [255, 220, 50],
+    },
+
+    // classic red hibiscus
+    petal_color:  { inner: [180, 10, 40], outer: [240, 60, 80] },
+    petal_gradient: null,
+
+    stem_len:        280,
+    stem_radius:     12,
+    stem_color:      [50, 85, 38],
+    stem_sides:      8,
+    stem_segments:   40,
+    stem_curve_amp:  14,
+    stem_curve_freq: 0.28,
+    stem_taper:      0.7,
+
+    stem_leaf_color: [45, 90, 32],
+    stem_leaves: [
+        { t: 0.25, side:  1, size: 1.1 },
+        { t: 0.50, side: -1, size: 0.95 },
+        { t: 0.38, side:  1, size: 0.8  },
+    ],
+    stem_thorns: [],
+
+    bloom_speed:  0.0025,
+    bloom_delay:  0.2,
+}
+
+function lily_petal_shape(tt, length, width) {
+    let base   = pow(sin(tt * PI), 0.75) * width
+    let reflex = tt > 0.75 ? (tt - 0.75) / 0.25 * width * 0.18 : 0
+    return base - reflex
+}
+
+const LILY_CONFIG = {
+    // two alternating whorls of 3 = 6 petals total
+    total_layers:     2,
+    petals_per_layer: { min: 3, max: 3 },
+
+    len: { min: 150, max: 190 },
+    wid: { min: 40,  max: 50  },
+
+    tilt:          { inner: 0.4, outer: 0.2 },
+    ruffle_amt:    1,
+    petal_shape:   lily_petal_shape,
+    layer_stagger: Math.PI / 3,  // 60 degrees so whorls alternate
+    dist_factor:   0.15,
+
+    center_type:        'disc',
+    center_bloom_start: 0.35,
+    disc_radius:        10,
+    disc_height:        3,
+    disc_rings:         2,
+    disc_segments:      10,
+    disc_color:         [255, 240, 200],
+    disc_edge_color:    [220, 200, 150],
+    disc_offset:        0,
+
+    center_layers:    0,
+    center_len:       { min: 0, max: 0 },
+    center_wid:       { min: 0, max: 0 },
+    center_tilt:      { inner: 0, outer: 0 },
+    center_dot_size:  0,
+    center_dot_color: [0, 0, 0],
+    center_color:     { inner: [0,0,0], outer: [0,0,0] },
+
+    // 6 individual filament stamens
+    stamen: {
+        type:      'filaments',
+        count:     6,
+        length:    70,
+        spread:    18,
+        radius:    1.5,
+        color:     [200, 180, 120],
+        tip_color: [60, 30, 5],    // dark brown anthers
+        tip_size:  7,
+    },
+
+    // classic orange tiger lily
+    petal_color:  { inner: [210, 70, 10], outer: [255, 120, 30] },
+    petal_gradient: null,
+
+    stem_len:        300,
+    stem_radius:     10,
+    stem_color:      [50, 85, 38],
+    stem_sides:      8,
+    stem_segments:   40,
+    stem_curve_amp:  10,
+    stem_curve_freq: 0.25,
+    stem_taper:      0.75,
+
+    stem_leaf_color: [45, 90, 32],
+    stem_leaves: [
+        { t: 0.2,  side:  1, size: 0.65 },
+        { t: 0.4,  side: -1, size: 0.75 },
+        { t: 0.6,  side:  1, size: 0.6  },
+    ],
+    stem_thorns: [],
+
+    bloom_speed:  0.02,
+    bloom_delay:  0.2,
+}

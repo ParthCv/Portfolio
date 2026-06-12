@@ -77,6 +77,8 @@ function draw_flower(config) {
     define_leaves(all_petals, flower_scale, config, stem_growth)
     define_thorns(all_petals, flower_scale, config, stem_growth)
 
+    if (config.stamen) define_stamen(all_petals, flower_scale, config, center_bloom)
+
     all_petals.sort((a, b) => b.z - a.z)
     draw_all(all_petals)
     rendering_buffer.loadPixels()
@@ -218,7 +220,7 @@ function draw_all(all_petals) {
 
         if (p.type === 'thorn') {
             rendering_buffer.stroke(p.r, p.g, p.b)
-            rendering_buffer.strokeWeight(1.5)
+            rendering_buffer.strokeWeight(2)
             rendering_buffer.line(p.base.x, p.base.y, p.tip.x, p.tip.y)
             rendering_buffer.noStroke()
             continue
@@ -416,50 +418,214 @@ function define_leaves(all_petals, flower_scale, config, stem_growth) {
 function define_thorns(all_petals, flower_scale, config, stem_growth) {
     if (!config.stem_thorns || config.stem_thorns.length === 0) return
 
+    // generate thorn positions once
+    if (!thorns_generated) {
+        cached_thorns = []
+        let stem_len = config.stem_len
+
+        for (let zone of config.stem_thorns) {
+            let steps = floor((zone.t_end - zone.t_start) / 0.04)
+            for (let i = 0; i < steps; i++) {
+                if (random() > zone.density) continue
+                let t = zone.t_start + (i / steps) * (zone.t_end - zone.t_start)
+                cached_thorns.push({
+                    t,
+                    angle:      random(TWO_PI),
+                    thorn_len:  random(6, 10)  // smaller than before
+                })
+            }
+        }
+        thorns_generated = true
+    }
+
     let stem_len = config.stem_len * flower_scale
 
-    for (let zone of config.stem_thorns) {
-        let steps = floor((zone.t_end - zone.t_start) / 0.04)
+    for (let thorn of cached_thorns) {
+        if (thorn.t > stem_growth) continue
 
-        for (let i = 0; i < steps; i++) {
-            if (random() > zone.density) continue
+        let t          = thorn.t
+        let y3         = t * stem_len
+        let cx         = sin(t * PI * config.stem_curve_freq) * config.stem_curve_amp * flower_scale +
+                         sin(t * PI * 0.8) * 6 * flower_scale
+        let radius     = config.stem_radius * flower_scale
+        let thorn_len  = thorn.thorn_len * flower_scale
+        let angle      = thorn.angle
 
-            let t  = zone.t_start + (i / steps) * (zone.t_end - zone.t_start)
-            if (t > stem_growth) continue
+        let bx = cx + cos(angle) * radius
+        let bz = sin(angle) * radius
+        let tx = bx + cos(angle) * thorn_len
+        let ty = y3 - thorn_len * 0.4
+        let tz = bz + sin(angle) * thorn_len
 
-            let y3 = t * stem_len
-            let cx = sin(t * PI * config.stem_curve_freq) * config.stem_curve_amp * flower_scale +
-                     sin(t * PI * 0.8) * 6 * flower_scale
+        let base = project_stem_point(bx, y3, bz)
+        let tip  = project_stem_point(tx, ty, tz)
 
-            let angle  = random(TWO_PI)
-            let radius = config.stem_radius * flower_scale
-            let thorn_len = random(6, 14) * flower_scale
+        let nz_y     = -cos(angle) * sin(rotY) + sin(angle) * cos(rotY)
+        let nz_final = nz_y * cos(rotX)
+        if (nz_final > 0) continue
 
-            // base of thorn on stem surface
-            let bx = cx + cos(angle) * radius
-            let bz = sin(angle) * radius
+        all_petals.push({
+            type: 'thorn',
+            base, tip,
+            z:    (base.z + tip.z) / 2,
+            r: 45, g: 70, b: 30
+        })
+    }
+}
 
-            // tip points outward and slightly upward
-            let tx = bx + cos(angle) * thorn_len
-            let ty = y3 - thorn_len * 0.4
-            let tz = bz + sin(angle) * thorn_len
+function define_stamen(all_petals, flower_scale, config, center_bloom) {
+    if (!config.stamen || center_bloom <= 0) return
 
-            let base = project_stem_point(bx, y3, bz)
-            let tip  = project_stem_point(tx, ty, tz)
+    if (config.stamen.type === 'filaments') {
+        define_filament_stamens(all_petals, flower_scale, config.stamen, center_bloom)
+    } else {
+        define_column_stamen(all_petals, flower_scale, config.stamen, center_bloom)
+    }
+}
 
-            // check if facing camera
-            let nx_y     = cos(angle) * cos(rotY) + sin(angle) * sin(rotY)
-            let nz_y     = -cos(angle) * sin(rotY) + sin(angle) * cos(rotY)
-            let ny_final = 0
-            let nz_final = 0 * sin(rotX) + nz_y * cos(rotX)
+// rename existing stamen body to this
+function define_column_stamen(all_petals, flower_scale, sc, center_bloom) {
+    let sides    = 6
+    let segments = 20
+    let radius   = sc.radius * flower_scale * center_bloom
+    let length   = sc.length * flower_scale * center_bloom
+    let color    = sc.color
+
+    for (let seg = 0; seg < segments; seg++) {
+        let t0 = seg       / segments
+        let t1 = (seg + 1) / segments
+        let y0 = -t0 * length
+        let y1 = -t1 * length
+        let r0 = lerp(radius, radius * 0.4, t0)
+        let r1 = lerp(radius, radius * 0.4, t1)
+
+        for (let s = 0; s < sides; s++) {
+            let a0 = (TWO_PI / sides) * s
+            let a1 = (TWO_PI / sides) * (s + 1)
+
+            let p00 = project_stem_point(cos(a0)*r0, y0, sin(a0)*r0)
+            let p10 = project_stem_point(cos(a1)*r0, y0, sin(a1)*r0)
+            let p01 = project_stem_point(cos(a0)*r1, y1, sin(a0)*r1)
+            let p11 = project_stem_point(cos(a1)*r1, y1, sin(a1)*r1)
+
+            let midA     = (a0 + a1) / 2
+            let nx       = cos(midA)
+            let ny       = 0
+            let nz       = sin(midA)
+            let nx_y     = nx * cos(rotY) + nz * sin(rotY)
+            let nz_y     = -nx * sin(rotY) + nz * cos(rotY)
+            let ny_final = ny * cos(rotX) - nz_y * sin(rotX)
+            let nz_final = ny * sin(rotX) + nz_y * cos(rotX)
 
             if (nz_final > 0) continue
 
+            let light = calculate_lighting(nx_y, ny_final, nz_final)
+
             all_petals.push({
-                type: 'thorn',
-                base, tip,
-                z:    (base.z + tip.z) / 2,
-                r:    45, g: 70, b: 30
+                type: 'quad',
+                p00, p10, p01, p11,
+                z:    (p00.z + p10.z + p01.z + p11.z) / 4,
+                r:    constrain(color[0] * light, 0, 255),
+                g:    constrain(color[1] * light, 0, 255),
+                b:    constrain(color[2] * light, 0, 255)
+            })
+        }
+    }
+
+    if (center_bloom > 0.7) {
+        let tip_alpha = constrain((center_bloom - 0.7) / 0.3, 0, 1)
+        let num_tips  = 8
+        let tip_spread = sc.radius * 3 * flower_scale
+
+        for (let i = 0; i < num_tips; i++) {
+            let a  = (TWO_PI / num_tips) * i
+            let tp = project_stem_point(cos(a)*tip_spread, -length, sin(a)*tip_spread)
+            all_petals.push({
+                type: 'center',
+                x: tp.x, y: tp.y, z: tp.z - 1,
+                r: sc.tip_color[0], g: sc.tip_color[1], b: sc.tip_color[2],
+                size: 5 * flower_scale * tip_alpha
+            })
+        }
+    }
+}
+
+function define_filament_stamens(all_petals, flower_scale, sc, center_bloom) {
+    let count   = sc.count
+    let length  = sc.length * flower_scale * center_bloom
+    let spread  = sc.spread * flower_scale * center_bloom
+    let radius  = sc.radius * flower_scale
+    let color   = sc.color
+    let sides   = 5
+    let segments = 12
+
+    for (let fi = 0; fi < count; fi++) {
+        let angle = (TWO_PI / count) * fi
+
+        for (let seg = 0; seg < segments; seg++) {
+            let t0 = seg       / segments
+            let t1 = (seg + 1) / segments
+
+            // filament curves outward and upward
+            let x0 = cos(angle) * spread * t0
+            let y0 = -length * t0
+            let z0 = sin(angle) * spread * t0
+
+            let x1 = cos(angle) * spread * t1
+            let y1 = -length * t1
+            let z1 = sin(angle) * spread * t1
+
+            let r0 = radius * (1 - t0 * 0.5)
+            let r1 = radius * (1 - t1 * 0.5)
+
+            for (let s = 0; s < sides; s++) {
+                let a0 = (TWO_PI / sides) * s
+                let a1 = (TWO_PI / sides) * (s + 1)
+
+                let p00 = project_stem_point(x0 + cos(a0)*r0, y0, z0 + sin(a0)*r0)
+                let p10 = project_stem_point(x0 + cos(a1)*r0, y0, z0 + sin(a1)*r0)
+                let p01 = project_stem_point(x1 + cos(a0)*r1, y1, z1 + sin(a0)*r1)
+                let p11 = project_stem_point(x1 + cos(a1)*r1, y1, z1 + sin(a1)*r1)
+
+                let midA     = (a0 + a1) / 2
+                let nx       = cos(midA)
+                let ny       = 0
+                let nz       = sin(midA)
+                let nx_y     = nx * cos(rotY) + nz * sin(rotY)
+                let nz_y     = -nx * sin(rotY) + nz * cos(rotY)
+                let ny_final = ny * cos(rotX) - nz_y * sin(rotX)
+                let nz_final = ny * sin(rotX) + nz_y * cos(rotX)
+
+                if (nz_final > 0) continue
+
+                let light = calculate_lighting(nx_y, ny_final, nz_final)
+
+                all_petals.push({
+                    type: 'quad',
+                    p00, p10, p01, p11,
+                    z:    (p00.z + p10.z + p01.z + p11.z) / 4,
+                    r:    constrain(color[0] * light, 0, 255),
+                    g:    constrain(color[1] * light, 0, 255),
+                    b:    constrain(color[2] * light, 0, 255)
+                })
+            }
+        }
+
+        // anther at tip
+        if (center_bloom > 0.5) {
+            let tip_alpha = constrain((center_bloom - 0.5) / 0.5, 0, 1)
+            let tx = cos(angle) * spread
+            let ty = -length
+            let tz = sin(angle) * spread
+            let tp = project_stem_point(tx, ty, tz)
+
+            all_petals.push({
+                type: 'center',
+                x:    tp.x, y: tp.y, z: tp.z - 1,
+                r:    sc.tip_color[0],
+                g:    sc.tip_color[1],
+                b:    sc.tip_color[2],
+                size: sc.tip_size * flower_scale * tip_alpha
             })
         }
     }
