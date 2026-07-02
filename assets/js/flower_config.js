@@ -608,6 +608,6 @@ const LILY_CONFIG = {
     ],
     stem_thorns: [],
 
-    bloom_speed:  0.02,
+    bloom_speed:  0.005,
     bloom_delay:  0.2,
 }
