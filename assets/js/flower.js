@@ -1,8 +1,22 @@
 function draw_flower(config) {
-    rendering_buffer.background(0)
+    rendering_buffer.background(canvas_bg_color[0], canvas_bg_color[1], canvas_bg_color[2])
     rendering_buffer.resetMatrix()
     rendering_buffer.translate(buffer_width/2, buffer_height/2)
-    rotY += 0.005
+
+
+    const dt = deltaTime / 1000
+    rot_t += 0.016
+
+    rot_ease_in = min(1, rot_ease_in + dt * 0.08)
+    const re = rot_ease_in < 0.5 ? 4*rot_ease_in*rot_ease_in*rot_ease_in : 1 - pow(-2*rot_ease_in+2, 3) / 2
+
+    auto_rotY += dt * (window._portfolio_rot || 0.3) * re
+    auto_rotX += dt * 0.12 * sin(rot_t * 0.15) * re
+
+    if (!dragging) {
+        rotY = auto_rotY
+        rotX = auto_rotX
+    }
 
     let flower_scale = buffer_width / 800
     let all_petals   = []
@@ -21,8 +35,8 @@ function draw_flower(config) {
         )
 
         let tilt = lerp(config.tilt.inner, config.tilt.outer, lr)
-        let len  = lerp(config.len.min,    config.len.max,    lr) * layer_bloom * flower_scale
-        let wid  = lerp(config.wid.min,    config.wid.max,    lr) * layer_bloom * flower_scale
+        let len = lerp(config.len.min, config.len.max, lr) * layer_bloom * flower_scale
+        let wid = lerp(config.wid.min, config.wid.max, lr) * layer_bloom * flower_scale
         let np   = floor(lerp(config.petals_per_layer.min, config.petals_per_layer.max, lr))
         let off  = layer * config.layer_stagger
 
@@ -230,12 +244,24 @@ function draw_all(all_petals) {
 
 function define_petal_layer(petal_arr, num_petals, length, width, tilt, layer_offset, R, G, B, config) {
     for (let i = 0; i < num_petals; i++) {
+        const petal_hash  = ((i * 73 + Math.round(tilt * 137)) & 0xFF) / 255
+        const lr_approx   = 1 - constrain(tilt / 1.3, 0, 1) // 0=inner 1=outer
+
+        // outer petals fall first
+        if (wilt > 0.1 && petal_hash < (wilt - 0.1) * 1.3) continue
+
+        // how far this layer has fallen (0=fresh 1=fully fallen)
+        const layer_fall = constrain((wilt * 1.4 - (1 - lr_approx) * 0.4) / 0.6, 0, 1)
+        if (layer_fall > 0.9) continue
+
+        const droop_amt = layer_fall * 0.5 * (0.4 + lr_approx * 0.6)
+
         let base_angle = (TWO_PI / num_petals) * i + layer_offset
         let angle      = base_angle + rotY
         let dist       = length * (config.dist_factor || 0.4)
 
         let x3 = cos(angle) * dist * cos(tilt)
-        let y3 = -sin(tilt) * dist
+        let y3 = -sin(tilt) * dist + droop_amt * 28   // same scale as original
         let z3 = sin(angle) * dist * cos(tilt)
 
         let y4 = y3 * cos(rotX) - z3 * sin(rotX)
@@ -253,6 +279,19 @@ function define_petal_layer(petal_arr, num_petals, length, width, tilt, layer_of
         let light = calculate_lighting(nx, ny, nz)
         let scale = focal / (focal + z4)
 
+        // base color from lighting
+        let r = constrain(R * light, 0, 255)
+        let g = constrain(G * light, 0, 255)
+        let b = constrain(B * light, 0, 255)
+
+        // wilt color shift — petals turn brown as they fall
+        if (wilt > 0) {
+            const wf = min(1, layer_fall * 1.3)
+            r = lerp(r, r * 0.5 + 55, wf)
+            g = lerp(g, g * 0.28 + 22, wf)
+            b = lerp(b, b * 0.12 + 6,  wf)
+        }
+
         petal_arr.push({
             type:         'petal',
             x2:           x3 * scale,
@@ -261,9 +300,9 @@ function define_petal_layer(petal_arr, num_petals, length, width, tilt, layer_of
             angle,
             length:       length * scale,
             width:        width  * scale,
-            r:            constrain(R * light, 0, 255),
-            g:            constrain(G * light, 0, 255),
-            b:            constrain(B * light, 0, 255),
+            r:            constrain(r, 0, 255),
+            g:            constrain(g, 0, 255),
+            b:            constrain(b, 0, 255),
             tilt,
             viewAngle:    atan2(y4, x3),
             ruffle_amt:   config.ruffle_amt,

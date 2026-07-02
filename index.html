@@ -1,663 +1,1613 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-mode="digital">
 
 <head>
-  <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Parth Chaturvedi — Graphics Programmer</title>
+  <meta name="description"
+    content="Graphics programmer and software engineer. Previously at Huawei Technologies Canada.">
 
-  <title>ParthCV</title>
-  <meta content="" name="description">
-  <meta content="" name="keywords">
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-  <!-- Favicons -->
-  <link href="assets/img/favicon.ico" rel="icon">
-  <link href="assets/img/favicon.ico" rel="apple-touch-icon">
+  <!-- Fonts: Playfair Display + DM Sans | Space Mono | Barlow Condensed + DM Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,400&family=DM+Sans:wght@300;400&family=Space+Mono:wght@400;700&family=Barlow+Condensed:wght@700&family=DM+Mono:wght@300;400&display=swap"
+    rel="stylesheet">
 
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-  <!-- Vendor CSS Files -->
-  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-  <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
-  <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
-  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+    html,
+    body {
+      height: 100%;
+      overflow: hidden;
+    }
 
-  <!-- Template Main CSS File -->
-  <link href="assets/css/style.css" rel="stylesheet">
+    /* ── Mode tokens ─────────────────────────────────────────── */
+    :root {
+      /* ORGANIC — warm light / botanical */
+      --bg: #f2ede4;
+      --surface: rgba(242, 237, 228, 0.93);
+      --text: #1a1512;
+      --muted: #8c7b6e;
+      --accent: #7a4e2c;
+      --accent-dim: rgba(122, 78, 44, 0.08);
+      --border: rgba(122, 78, 44, 0.16);
+      --f-display: 'Playfair Display', Georgia, serif;
+      --f-body: 'DM Sans', sans-serif;
+      --f-mono: 'DM Mono', monospace;
+      --ls-h: 0.02em;
+      --ls-nav: 0.14em;
+      --nav-case: none;
+      --w-display: 600;
+      --name-size: clamp(52px, 7vw, 96px);
+      --canvas-bg: 242, 237, 228;
+    }
+
+    [data-mode="digital"] {
+      /* DIGITAL — dark terminal */
+      --bg: #04050f;
+      --surface: rgba(4, 5, 15, 0.91);
+      --text: #c8cce8;
+      --muted: #7880b8;
+      --accent: #7b6fff;
+      --accent-dim: rgba(123, 111, 255, 0.1);
+      --border: rgba(123, 111, 255, 0.22);
+      --f-display: 'Space Mono', monospace;
+      --f-body: 'Space Mono', monospace;
+      --f-mono: 'Space Mono', monospace;
+      --ls-h: -0.01em;
+      --ls-nav: 0.05em;
+      --nav-case: none;
+      --w-display: 700;
+      --name-size: clamp(32px, 4vw, 58px);
+      --canvas-bg: 4, 5, 15;
+    }
+
+    [data-mode="wire"] {
+      /* WIRE — architectural black/white */
+      --bg: #000;
+      --surface: rgba(0, 0, 0, 0.91);
+      --text: #fff;
+      --muted: #888;
+      --accent: #fff;
+      --accent-dim: rgba(255, 255, 255, 0.06);
+      --border: rgba(255, 255, 255, 0.26);
+      --f-display: 'Barlow Condensed', sans-serif;
+      --f-body: 'DM Mono', monospace;
+      --f-mono: 'DM Mono', monospace;
+      --ls-h: 0.06em;
+      --ls-nav: 0.22em;
+      --nav-case: uppercase;
+      --w-display: 700;
+      --name-size: clamp(72px, 10vw, 140px);
+      --canvas-bg: 0, 0, 0;
+    }
+
+    /* ── Base ────────────────────────────────────────────────── */
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--f-body);
+      font-size: 15px;
+      line-height: 1.7;
+      transition: background 0.7s ease, color 0.5s ease;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* ── Canvas ──────────────────────────────────────────────── */
+    #canvas-container {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* ── Nav ─────────────────────────────────────────────────── */
+    #nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 44px;
+      background: linear-gradient(to bottom, var(--bg) 0%, transparent 100%);
+      transition: background 0.7s;
+    }
+
+    .nav-wordmark {
+      font-family: var(--f-mono);
+      font-size: 10px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--muted);
+      transition: font-family 0.4s, color 0.4s;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+    }
+
+    .nav-link {
+      font-family: var(--f-body);
+      font-size: 12px;
+      letter-spacing: var(--ls-nav);
+      text-transform: var(--nav-case);
+      color: var(--muted);
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 0;
+      transition: color 0.2s, font-family 0.4s, letter-spacing 0.4s;
+    }
+
+    .nav-link.active,
+    .nav-link:hover {
+      color: var(--text);
+    }
+
+    /* ── Sections ────────────────────────────────────────────── */
+    .section {
+      position: fixed;
+      inset: 0;
+      z-index: 10;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+
+    .section.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    /* ── Home ────────────────────────────────────────────────── */
+    #home {
+      display: flex;
+      align-items: center;
+    }
+
+    .home-curtain {
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 58%;
+      background: linear-gradient(to right, var(--bg) 55%, transparent 100%);
+      pointer-events: none;
+      transition: background 0.7s;
+      z-index: 1;
+    }
+
+    .home-inner {
+      position: relative;
+      z-index: 2;
+      padding: 0 0 0 8vw;
+      max-width: 500px;
+    }
+
+    .home-eyebrow {
+      font-family: var(--f-mono);
+      font-size: 10px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 20px;
+      transition: color 0.4s, font-family 0.4s;
+    }
+
+    .home-name {
+      font-family: var(--f-display);
+      font-size: var(--name-size);
+      font-weight: var(--w-display);
+      letter-spacing: var(--ls-h);
+      line-height: 0.92;
+      color: var(--text);
+      margin-bottom: 28px;
+      transition: font-family 0.4s, font-size 0.4s, color 0.4s;
+    }
+
+    [data-mode="digital"] .home-name {
+      font-style: normal;
+    }
+
+    :root .home-name {
+      font-style: italic;
+    }
+
+    [data-mode="wire"] .home-name {
+      font-style: normal;
+    }
+
+    .home-sub {
+      font-size: 13px;
+      line-height: 1.8;
+      color: var(--muted);
+      max-width: 360px;
+      margin-bottom: 36px;
+      transition: color 0.4s;
+    }
+
+    .home-sub em {
+      color: var(--text);
+      font-style: normal;
+    }
+
+    .home-actions {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .home-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--f-mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 3px;
+      cursor: pointer;
+      background: none;
+      border-top: none;
+      border-left: none;
+      border-right: none;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .home-link:hover {
+      color: var(--text);
+      border-color: var(--text);
+    }
+
+    /* ── Content sections ────────────────────────────────────── */
+    #about,
+    #resume,
+    #projects {
+      background: var(--surface);
+      overflow-y: auto;
+      transition: background 0.6s;
+    }
+
+    #about::-webkit-scrollbar,
+    #resume::-webkit-scrollbar,
+    #projects::-webkit-scrollbar {
+      width: 3px;
+    }
+
+    #about::-webkit-scrollbar-thumb,
+    #resume::-webkit-scrollbar-thumb,
+    #projects::-webkit-scrollbar-thumb {
+      background: var(--border);
+    }
+
+    .sc {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 84px 44px 120px;
+    }
+
+    .sc-label {
+      font-family: var(--f-mono);
+      font-size: 9px;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+      transition: color 0.4s, font-family 0.4s;
+    }
+
+    .sc-heading {
+      font-family: var(--f-display);
+      font-size: clamp(34px, 5vw, 58px);
+      font-weight: var(--w-display);
+      letter-spacing: var(--ls-h);
+      line-height: 1;
+      color: var(--text);
+      margin-bottom: 48px;
+      transition: font-family 0.4s, font-size 0.4s, color 0.4s;
+    }
+
+    hr.rule {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 44px 0;
+      transition: border-color 0.4s;
+    }
+
+    /* ── About ───────────────────────────────────────────────── */
+    .bio {
+      font-size: 14px;
+      line-height: 1.85;
+      color: var(--muted);
+      max-width: 620px;
+      margin-bottom: 20px;
+    }
+
+    .bio strong {
+      color: var(--text);
+      font-weight: 400;
+    }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px 44px;
+      margin-top: 44px;
+    }
+
+    .sg-label {
+      font-family: var(--f-mono);
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 8px;
+      transition: color 0.4s, font-family 0.4s;
+    }
+
+    .sg-items {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 2;
+    }
+
+    .sg-items em {
+      color: var(--text);
+      font-style: normal;
+    }
+
+    .contact-row {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+      margin-top: 44px;
+    }
+
+    .contact-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--f-mono);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .contact-link:hover {
+      color: var(--accent);
+    }
+
+    /* ── Resume ──────────────────────────────────────────────── */
+    .exp-item {
+      margin-bottom: 40px;
+      padding-bottom: 40px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .exp-item:last-of-type {
+      border-bottom: none;
+    }
+
+    .exp-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+
+    .exp-title {
+      font-family: var(--f-display);
+      font-size: clamp(18px, 2.5vw, 24px);
+      font-weight: var(--w-display);
+      letter-spacing: var(--ls-h);
+      color: var(--text);
+      transition: font-family 0.4s, color 0.4s;
+    }
+
+    .exp-date {
+      font-family: var(--f-mono);
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+    }
+
+    .exp-co {
+      font-family: var(--f-mono);
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+
+    .exp-body {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.8;
+      max-width: 580px;
+    }
+
+    .exp-body strong {
+      color: var(--text);
+      font-weight: 400;
+    }
+
+    .edu-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .edu-card {
+      border: 1px solid var(--border);
+      padding: 18px 20px;
+      transition: border-color 0.4s;
+    }
+
+    .edu-deg {
+      font-family: var(--f-display);
+      font-size: 16px;
+      font-weight: var(--w-display);
+      color: var(--text);
+      margin-bottom: 5px;
+    }
+
+    .edu-school {
+      font-family: var(--f-mono);
+      font-size: 9px;
+      letter-spacing: 0.14em;
+      color: var(--accent);
+      margin-bottom: 5px;
+    }
+
+    .edu-note {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .award-item {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      font-size: 13px;
+      color: var(--muted);
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .award-item strong {
+      color: var(--text);
+      font-weight: 400;
+    }
+
+    .pdf-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--f-mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      text-decoration: none;
+      border: 1px solid var(--border);
+      padding: 10px 22px;
+      margin-top: 40px;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+
+    .pdf-btn:hover {
+      background: var(--accent);
+      color: var(--bg);
+      border-color: var(--accent);
+    }
+
+    /* ── Projects ────────────────────────────────────────────── */
+    .filter-row {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+      margin-bottom: 36px;
+    }
+
+    .f-btn {
+      font-family: var(--f-mono);
+      font-size: 9px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+      background: none;
+      border: 1px solid var(--border);
+      padding: 7px 16px;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s, border-color 0.2s, font-family 0.4s;
+    }
+
+    .f-btn.active,
+    .f-btn:hover {
+      background: var(--accent);
+      color: var(--bg);
+      border-color: var(--accent);
+    }
+
+    /* Card grid */
+    .proj-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 16px;
+    }
+
+    .proj-card {
+      border: 1px solid var(--border);
+      overflow: hidden;
+      cursor: pointer;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .proj-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .proj-card.hidden {
+      display: none;
+    }
+
+    .proj-card-img {
+      width: 100%;
+      height: 150px;
+      overflow: hidden;
+      position: relative;
+      background: var(--accent-dim);
+    }
+
+    .proj-card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .proj-card-img-ph {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--f-mono);
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      padding: 0 16px;
+      text-align: center;
+    }
+
+    .proj-card-body {
+      padding: 16px 18px;
+    }
+
+    .proj-card-sub {
+      font-family: var(--f-mono);
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+
+    .proj-card-title {
+      font-family: var(--f-display);
+      font-size: 18px;
+      font-weight: var(--w-display);
+      letter-spacing: var(--ls-h);
+      color: var(--text);
+      margin-bottom: 8px;
+      line-height: 1.1;
+      transition: font-family 0.4s;
+    }
+
+    .proj-card-desc {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.65;
+      margin-bottom: 12px;
+    }
+
+    .proj-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    .proj-tag {
+      font-family: var(--f-mono);
+      font-size: 9px;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      padding: 2px 8px;
+    }
+
+    /* ── Modal ───────────────────────────────────────────────── */
+    #modal {
+      position: fixed;
+      inset: 0;
+      z-index: 500;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    #modal.open {
+      display: flex;
+    }
+
+    .modal-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(8px);
+    }
+
+    .modal-box {
+      position: relative;
+      z-index: 1;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      max-width: 820px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      transition: background 0.4s;
+    }
+
+    .modal-media {
+      position: relative;
+      background: #000;
+      min-height: 280px;
+    }
+
+    .modal-media img,
+    .modal-media iframe {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .modal-media iframe {
+      border: none;
+      min-height: 320px;
+    }
+
+    .modal-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      padding: 0 10px;
+      pointer-events: none;
+    }
+
+    .modal-nav-btn {
+      pointer-events: all;
+      width: 32px;
+      height: 32px;
+      background: rgba(0, 0, 0, 0.6);
+      border: none;
+      cursor: pointer;
+      color: #fff;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+
+    .modal-nav-btn:hover {
+      background: rgba(0, 0, 0, 0.9);
+    }
+
+    .modal-dots {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 6px;
+    }
+
+    .modal-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.4);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .modal-dot.active {
+      background: #fff;
+    }
+
+    .modal-info {
+      padding: 28px 28px 28px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      z-index: 2;
+      width: 28px;
+      height: 28px;
+      background: rgba(0, 0, 0, 0.5);
+      border: none;
+      cursor: pointer;
+      color: #fff;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-info-label {
+      font-family: var(--f-mono);
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+
+    .modal-info-title {
+      font-family: var(--f-display);
+      font-size: 26px;
+      font-weight: var(--w-display);
+      letter-spacing: var(--ls-h);
+      color: var(--text);
+      margin-bottom: 16px;
+      line-height: 1.1;
+    }
+
+    .modal-info-desc {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.8;
+      flex: 1;
+      margin-bottom: 20px;
+    }
+
+    .modal-info-desc strong {
+      color: var(--text);
+      font-weight: 400;
+    }
+
+    .modal-info-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-bottom: 20px;
+    }
+
+    .modal-links {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: auto;
+    }
+
+    .modal-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--f-mono);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      color: var(--accent);
+      text-decoration: none;
+      border: 1px solid var(--border);
+      padding: 8px 16px;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .modal-link:hover {
+      background: var(--accent);
+      color: var(--bg);
+    }
+
+    /* ── Mode bar ────────────────────────────────────────────── */
+    #mode-bar {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 200;
+      display: flex;
+      gap: 1px;
+      background: rgba(0, 0, 0, 0.45);
+      backdrop-filter: blur(16px);
+      padding: 4px;
+      border: 1px solid var(--border);
+      transition: border-color 0.5s;
+    }
+
+    .mode-btn {
+      font-family: var(--f-mono);
+      font-size: 9px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      background: none;
+      border: none;
+      padding: 8px 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      transition: color 0.2s, background 0.2s, font-family 0.4s;
+    }
+
+    .mode-btn:hover {
+      color: var(--text);
+    }
+
+    .mode-btn.active {
+      color: var(--bg);
+      background: var(--accent);
+    }
+
+    .mode-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: currentColor;
+      flex-shrink: 0;
+    }
+
+    /* ── Responsive ──────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .home-inner {
+        padding: 0 6vw;
+        max-width: 100%;
+      }
+
+      .home-curtain {
+        width: 100%;
+      }
+
+      .skills-grid,
+      .edu-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .proj-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .modal-box {
+        grid-template-columns: 1fr;
+        max-height: 85vh;
+      }
+
+      .sc {
+        padding: 80px 6vw 110px;
+      }
+
+      #nav {
+        padding: 0 20px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .proj-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .nav-wordmark {
+        display: none;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-  <!-- ======= Header ======= -->
-  <header id="header">
-    <div class="container">
-      <h1><a href="index.html">Parth Chaturvedi</a></h1>
-      <h2>I'm a <span>Software Developer</span> & <span>Game Developer</span></h2>
+  <div id="canvas-container"></div>
 
-      <nav id="navbar" class="navbar">
-        <ul>
-          <li><a class="nav-link active" href="#header">Home</a></li>
-          <li><a class="nav-link" href="#about">About</a></li>
-          <li><a class="nav-link" href="#resume">Resume</a></li>
-          <li><a class="nav-link" href="#portfolio">Portfolio</a></li>
-        </ul>
-        <i class="bi bi-list mobile-nav-toggle"></i>
-      </nav><!-- .navbar -->
-
-      <div class="social-links">
-        <a href="https://github.com/ParthCv" class="github"><i class="bi bi-github"></i></a>
-        <a href="https://www.linkedin.com/in/parth-chaturvedi/" class="linkedin"><i class="bi bi-linkedin"></i></a>
-      </div>
-
+  <!-- Nav -->
+  <nav id="nav">
+    <span class="nav-wordmark">ParthCV</span>
+    <div class="nav-links">
+      <button class="nav-link active" data-target="home">Home</button>
+      <button class="nav-link" data-target="about">About</button>
+      <button class="nav-link" data-target="resume">Resume</button>
+      <button class="nav-link" data-target="projects">Projects</button>
     </div>
-  </header><!-- End Header -->
+  </nav>
 
-  <!-- ======= About Section ======= -->
-  <section id="about" class="about">
-
-    <!-- ======= About Me ======= -->
-    <div class="about-me container">
-
-      <div class="section-title">
-        <h2>About</h2>
-        <p>Learn more about me</p>
+  <!-- ── HOME ─────────────────────────────────────────────────── -->
+  <section id="home" class="section active">
+    <div class="home-curtain"></div>
+    <div class="home-inner">
+      <div class="home-eyebrow">Vancouver, BC &nbsp;·&nbsp; Graphics Programmer</div>
+      <h1 class="home-name">Parth<br>Chaturvedi</h1>
+      <p class="home-sub">
+        Building <em>Going Down</em> — a solo UE5 psychological horror game.<br>
+        Previously shipped shader optimizations live in <em>Honkai: Star Rail</em> at Huawei.
+      </p>
+      <div class="home-actions">
+        <a href="https://github.com/ParthCv" target="_blank" class="home-link">
+          <i class="bi bi-github"></i> GitHub
+        </a>
+        <a href="https://linkedin.com/in/parth-chaturvedi" target="_blank" class="home-link">
+          <i class="bi bi-linkedin"></i> LinkedIn
+        </a>
+        <button class="home-link" data-target="projects">
+          Work <i class="bi bi-arrow-down"></i>
+        </button>
+        <button class="home-link" data-target="resume">
+          Resume <i class="bi bi-file-person"></i>
+        </button>
       </div>
-
-      <div class="row">
-        <div class="col-lg-10 pt-lg-10 content" data-aos="fade-left">
-          <h3>Computer Science Student</h3>
-          <p class="fst-italic">
-            I am fourth-year Computer Science student at British Columbia Institute of Technology who is interested in Software Development, Game Development and Predictive Analytics.
-          </p>
-          <div class="row">
-            <div class="col-lg-6">
-              <ul>
-                <li><i class="bi bi-chevron-right"></i> <strong>Linkedin:</strong> <span> <a
-                      href="https://www.linkedin.com/in/parth-chaturvedi/">
-                      https://www.linkedin.com/in/parth-chaturvedi/ </a> </span></li>
-                <li><i class="bi bi-chevron-right"></i> <strong>Email:</strong> <span>pchaturvedi@my.bcit.ca</span></li>
-              </ul>
-            </div>
-            <div class="col-lg-6">
-              <ul>
-                <li><i class="bi bi-chevron-right"></i> <strong>Github:</strong> <span> <a href="https://github.com/ParthCv"> https://github.com/ParthCv </a></span></li>
-                <li><i class="bi bi-chevron-right"></i> <strong>Degree:</strong> <span>Bachelor's of Science in Applied Computer Scinece</span></li>
-              </ul>
-            </div>
-          </div>          
-        </div>
-      </div>
-
-    </div><!-- End About Me -->
-
-    <!-- ======= Skills ======= -->
-    <div class="interests container">
-
-      <div class="section-title">
-        <h2>Skils</h2>
-      </div>
-
-      <div class="row">
-        <div class="col-lg-3 col-md-4">
-          <div class="icon-box">
-            <i class="bi-controller" style="color: #ffbb2c;"></i>
-            <h3>Unity</h3>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 mt-4 mt-md-0">
-          <div class="icon-box">
-            <i class="bi-code-slash" style="color: #5578ff;"></i>
-            <h3>React JS</h3>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 mt-4 mt-md-0">
-          <div class="icon-box">
-            <i class="bi-badge-3d" style="color: #e80368;"></i>
-            <h3>Blender</h3>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 mt-4 mt-lg-0">
-          <div class="icon-box">
-            <i class="ri-codepen-line" style="color: #e361ff;"></i>
-            <h3>C#</h3>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 mt-4">
-          <div class="icon-box">
-            <i class="ri-robot-2-line" style="color: #47aeff;"></i>
-            <h3>Tensorflow</h3>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 mt-4">
-          <div class="icon-box">
-            <i class="ri-database-2-line" style="color: #ffa76e;"></i>
-            <h3>SQL</h3>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 mt-4">
-          <div class="icon-box">
-            <i class="bi-controller" style="color: #11dbcf;"></i>
-            <h3>Unreal Engine</h3>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 mt-4">
-          <div class="icon-box">
-            <i class="ri-codepen-line" style="color: #4233ff;"></i>
-            <h3>C++</h3>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 mt-4">
-          <div class="icon-box">
-            <i class="ri-codepen-line" style="color: #b2904f;"></i>
-            <h3>C</h3>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 mt-4">
-          <div class="icon-box">
-            <i class="ri-disc-line" style="color: #b20969;"></i>
-            <h3>OpenCV</h3>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 mt-4">
-          <div class="icon-box">
-            <i class="ri-base-station-line" style="color: #ff5828;"></i>
-            <h3>Laravel 8</h3>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 mt-4">
-          <div class="icon-box">
-            <i class="bi-controller" style="color: #29cc61;"></i>
-            <h3>Scenekit</h3>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 mt-4">
-          <div class="icon-box">
-            <i class="ri-codepen-line" style="color: #131acf;"></i>
-            <h3>Python</h3>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 mt-4">
-          <div class="icon-box">
-            <i class="bi-controller" style="color: #19cf19;"></i>
-            <h3>OpenGL</h3>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 mt-4">
-          <div class="icon-box">
-            <i class="bi-code-slash" style="color: #c9da12;"></i>
-            <h3>NodeJS</h3>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 mt-4">
-          <div class="icon-box">
-            <i class="ri-pages-line" style="color: #cc29b4;"></i>
-            <h3>Shopify Development</h3>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 mt-4">
-          <div class="icon-box">
-            <i class="ri-database-2-line" style="color: #25c982;"></i>
-            <h3>MongoDB</h3>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 mt-4">
-          <div class="icon-box">
-            <i class="ri-codepen-line" style="color: #329ebc;"></i>
-            <h3>Java</h3>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 mt-4">
-          <div class="icon-box">
-            <i class="ri-base-station-line" style="color: #e06898;"></i>
-            <h3>Android</h3>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 mt-4">
-          <div class="icon-box">
-            <i class="bi-controller" style="color: #c477ed;"></i>
-            <h3>SDL2</h3>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 mt-4">
-          <div class="icon-box">
-            <i class="bi-controller" style="color: #db5252;"></i>
-            <h3>SpriteKit</h3>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 mt-4">
-          <div class="icon-box">
-            <i class="bi-controller" style="color: #5032d2;"></i>
-            <h3>ThreeJS</h3>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 mt-4">
-          <div class="icon-box">
-            <i class="ri-codepen-line" style="color: #f1e723;"></i>
-            <h3>PHP</h3>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 mt-4">
-          <div class="icon-box">
-            <i class="ri-codepen-line" style="color: #5be81a;"></i>
-            <h3>Swift</h3>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 mt-4">
-          <div class="icon-box">
-            <i class="ri-edit-2-line" style="color: #b00e0e;"></i>
-            <h3>Figma</h3>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 mt-4">
-          <div class="icon-box">
-            <i class="bi-code-slash" style="color: #df89ba;"></i>
-            <h3>ExpressJS</h3>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 mt-4">
-          <div class="icon-box">
-            <i class="ri-database-2-line" style="color: #4ebe32;"></i>
-            <h3>Firebase</h3>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-4 mt-4">
-          <div class="icon-box">
-            <i class="ri-codepen-line" style="color: #edafda;"></i>
-            <h3>Javascript</h3>
-          </div>
-        </div>
-      </div>
-    </div><!-- End Interests -->
-
-  </section><!-- End About Section -->
-
-  <!-- ======= Resume Section ======= -->
-  <section id="resume" class="resume">
-    <div class="container">
-
-      <div class="section-title">
-        <h2>Resume</h2>
-        <p>ParthCV</p>
-      </div>
-
-      <div class="row">
-        <div class="col-lg-6">
-          <h3 class="resume-title">Sumary</h3>
-          <div class="resume-item pb-0">
-            <h4>Parth Chaturvedi</h4>
-            <p><em>
-              Enthusiastic and dedicated third-year Computer Science student with a strong foundation in Software Development, Game Development, and Predictive Analytics. Possessing hands-on experience with a diverse range of languages including Java, Python, C#, C, C++, JS and Swift.
-            </em></p>
-          </div>
-
-          <h3 class="resume-title">Education</h3>
-          <div class="resume-item">
-            <h4>Bachelor's of Science in Applied Computer Science</h4>
-            <h5>Sep 2023 - April 2025</h5>
-            <p><em>British Columbia Institute of Technology, BC</em></p>
-            <p>
-              <ul>
-                <li>Maintained a 92.5 GPA while studying Game Development as an option and completed courses in Linear Algebra, Game Development and Design, Advanced Algorithms, and Software Engineering.</li>
-                <li>Developed multiple game projects, demonstrating practical application of coursework and participated in hackathons, showcasing problem-solving skills and innovation.</li>
-                <li>Gained a strong foundation in both theoretical and practical aspects of computer science and game development.</li>
-              </ul>
-            </p>
-          </div>
-          <div class="resume-item">
-            <h4>Computer Systems Technology Diploma</h4>
-            <h5>Jan 201 - Dec 2022</h5>
-            <p><em>British Columbia Institute of Technology, BC</em></p>
-              <ul>
-                <li>Achieved an 87 GPA with a minor in Predictive Analytics.</li>
-                <li>Completed foundational computer science courses including Web Development, Object-Oriented Programming (OOP), UI/UX Design, Functional Programming, Android Development, Operating Systems, Concurrency, and AI/ML.</li>
-                <li>Worked on group projects and industry projects, gaining practical experience and teamwork skills.</li>
-                <li>Volunteered as a peer mentor, providing guidance and support to fellow students.</li>
-              </ul>
-          </div>
-        </div>
-        <div class="col-lg-6">
-          <h3 class="resume-title">Professional Experience</h3>
-          <div class="resume-item">
-            <h4>Software Developer Intern</h4>
-            <h5>Jun - Aug 2022</h5>
-            <p><em>Precisely, Delhi</em></p>
-            <p>
-              <ul>
-                <li>Worked on developing a tool for parsing 3D data for cities to integrate with MapInfo Pro, addressing the challenge of visualizing 3D city models.</li>
-                <li>Conducted research on processing XML and JSON files containing GML data for 3D rendering.</li>
-                <li>Utilized Python and VTK’s 3D rendering capabilities to convert file data into a 3D city model displayed in a PyQT window.</li>
-                <li>Integrated the solution into MapInfo Pro by writing MapBasic code to create a ribbon and buttons for tool functionality.</li>
-                <li>Received and incorporated valuable code reviews from senior developers, enhancing the tool's performance and reliability.</li>
-                <li> Successfully delivered high-quality code under tight deadlines, demonstrating strong technical and time management skills.</li>
-              </ul>
-            </p>
-          </div>
-          <div class="resume-item">
-            <h4>Web Developer</h4>
-            <h5>Jun - Aug 2021</h5>
-            <p><em>Droid7 Technolabs, Delhi</em></p>
-            <p>
-            <ul>
-              <li>Coded the frontend using ReactJS based on wireframes provided by designers for a freelance job posting website.</li>
-              <li>Worked on creating the authentication backend and frontend logic.</li>
-              <li>Integrated hooks to facilitate all CRUD operations for authentication and the search page.</li>
-              <li>Utilized the Laravel 8 API to ensure seamless interaction between the frontend and backend.</li>
-              <li>Developed strong communication and collaboration skills through close team interaction and project coordination.</li>
-            </ul>
-            </p>
-          </div>
-        </div>
-      </div>
-
     </div>
-  </section><!-- End Resume Section -->
+  </section>
 
-  <!-- ======= Portfolio Section ======= -->
-  <section id="portfolio" class="portfolio">
-    <div class="container">
+  <!-- ── ABOUT ─────────────────────────────────────────────────── -->
+  <section id="about" class="section">
+    <div class="sc">
+      <div class="sc-label">About</div>
+      <h2 class="sc-heading">Who I am</h2>
 
-      <div class="section-title">
-        <h2>Portfolio</h2>
-        <p>My Projects</p>
-      </div>
+      <p class="bio">
+        I'm a <strong>graphics programmer and software engineer</strong> based in Vancouver, BC.
+        BCIT graduate with a BSc in Applied Computer Science (Games Development, GPA 88%)
+        and a CST Diploma in Predictive Analytics (GPA 86%).
+      </p>
+      <p class="bio">
+        From September 2024 to March 2026 I worked at <strong>Huawei Technologies Canada</strong>
+        building an automated shader optimization platform that delivered a
+        <strong>5.5% GPU performance gain</strong> and 12% reduction in per-frame instruction
+        segments at 0.999 SSIM — shipped live in Honkai: Star Rail.
+      </p>
+      <p class="bio">
+        I'm currently developing <strong>Going Down</strong>, a first-person psychological horror
+        puzzle game in UE5, and looking for my next role in graphics programming or game development.
+      </p>
 
-      <div class="row">
-        <div class="col-lg-12 d-flex justify-content-center">
-          <ul id="portfolio-flters">
-            <li data-filter="*" class="filter-active">All</li>
-            <li data-filter=".filter-app">Software Dev</li>
-            <li data-filter=".filter-web">Web</li>
-            <li data-filter=".filter-game">Game</li>
-          </ul>
+      <hr class="rule">
+
+      <div class="skills-grid">
+        <div>
+          <div class="sg-label">Graphics & Rendering</div>
+          <div class="sg-items">
+            <em>OpenGL</em> · <em>Vulkan</em> · <em>Deferred PBR</em><br>
+            Cook-Torrance BRDF · IBL<br>
+            <em>GLSL</em> · Shader Optimization · RenderDoc
+          </div>
+        </div>
+        <div>
+          <div class="sg-label">Game Engines</div>
+          <div class="sg-items">
+            <em>Unreal Engine 5</em> · <em>Unity</em><br>
+            SceneKit · SpriteKit · SDL2
+          </div>
+        </div>
+        <div>
+          <div class="sg-label">Languages</div>
+          <div class="sg-items">
+            <em>C++</em> · <em>C#</em> · <em>Python</em> · <em>GLSL</em><br>
+            JavaScript · Swift · Java · C
+          </div>
+        </div>
+        <div>
+          <div class="sg-label">AI & ML</div>
+          <div class="sg-items">
+            PyTorch Geometric · TensorFlow<br>
+            YOLO · GNN · LLM Pipelines
+          </div>
+        </div>
+        <div>
+          <div class="sg-label">Tools & Pipeline</div>
+          <div class="sg-items">
+            Git · Perforce · Docker · Jenkins<br>
+            Linux · Blender · RenderDoc
+          </div>
+        </div>
+        <div>
+          <div class="sg-label">Frameworks</div>
+          <div class="sg-items">
+            ReactJS · ExpressJS · Laravel<br>
+            Android · Flutter
+          </div>
         </div>
       </div>
 
-      <div class="row portfolio-container">
-        <!-- 3d raster Scetion -->
-        <!-- <div class="col-lg-4 col-md-6 portfolio-item filter-app filter-game">
-          <div class="portfolio-wrap">
-            <img src="assets/img/portfolio/portfolio-1.jpg" class="img-fluid" alt="">
-            <div class="portfolio-info">
-              <h4>3D Rasterizer from scratch</h4>
-              <p>SDL2 Project</p>
-              <div class="portfolio-links">
-                <a href="assets/img/portfolio/portfolio-1.jpg" data-gallery="portfolioGallery"
-                  class="portfolio-lightbox" title="Gay"><i class="bx bx-plus"></i></a>
-                <a href="/portfolio-project-detail-cards/portfolio-details copy.html"
-                  data-gallery="portfolioDetailsGallery" data-glightbox="type: external"
-                  class="portfolio-details-lightbox" title="Portfolio Details"><i class="bx bx-link"></i></a>
-              </div>
-            </div>
-          </div>
-        </div> -->
-
-        <!-- Solarium Scetion -->
-        <div class="col-lg-4 col-md-6 portfolio-item filter-game filter-app">
-          <div class="portfolio-wrap">
-            <img src="assets/img/portfolio/Solarium/main.png" class="img-fluid" alt="">
-            <div class="portfolio-info">
-              <h4>Solarium</h4>
-              <p>Game Project</p>
-              <div class="portfolio-links">
-                
-                <a href="/portfolio-project-detail-cards/portfolio-details-solarium.html"
-                  data-gallery="portfolioDetailsGallery" data-glightbox="type: external"
-                  class="portfolio-details-lightbox" title="Portfolio Details"><i class="bx bx-link"></i></a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- YVR Hackathon Scetion -->
-        <div class="col-lg-4 col-md-6 portfolio-item filter-app">
-          <div class="portfolio-wrap">
-            <img src="assets/img/portfolio/YVR_Hackathon/detect.png" class="img-fluid" alt="">
-            <div class="portfolio-info">
-              <h4>Birds Nest</h4>
-              <p>Hackathon</p>
-              <div class="portfolio-links">
-                <a href="/portfolio-project-detail-cards/portfolio-details-yvr.html"
-                  data-gallery="portfolioDetailsGallery" data-glightbox="type: external"
-                  class="portfolio-details-lightbox" title="Portfolio Details"><i class="bx bx-link"></i></a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Arknoid Scetion -->
-        <!-- <div class="col-lg-4 col-md-6 portfolio-item filter-game">
-          <div class="portfolio-wrap">
-            <img src="assets/img/portfolio/portfolio-1.jpg" class="img-fluid" alt="">
-            <div class="portfolio-info">
-              <h4>Arakanoid</h4>
-              <p>Game Project</p>
-              <div class="portfolio-links">
-                <a href="assets/img/portfolio/portfolio-1.jpg" data-gallery="portfolioGallery"
-                  class="portfolio-lightbox" title="App 1"><i class="bx bx-plus"></i></a>
-                <a href="/portfolio-project-detail-cards/portfolio-details copy.html"
-                  data-gallery="portfolioDetailsGallery" data-glightbox="type: external"
-                  class="portfolio-details-lightbox" title="Portfolio Details"><i class="bx bx-link"></i></a>
-              </div>
-            </div>
-          </div>
-        </div> -->
-
-        <!-- PintOS Scetion -->
-        <div class="col-lg-4 col-md-6 portfolio-item filter-app">
-          <div class="portfolio-wrap">
-            <img src="assets/img/portfolio/PintOs/res.png" class="img-fluid" alt="">
-            <div class="portfolio-info">
-              <h4>Pint Os</h4>
-              <p>Kernel Hacking</p>
-              <div class="portfolio-links">
-                
-                <a href="/portfolio-project-detail-cards/portfolio-details-pintos.html"
-                  data-gallery="portfolioDetailsGallery" data-glightbox="type: external"
-                  class="portfolio-details-lightbox" title="Portfolio Details"><i class="bx bx-link"></i></a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Shadow Dancers Scetion -->
-        <div class="col-lg-4 col-md-6 portfolio-item filter-game">
-          <div class="portfolio-wrap">
-            <img src="assets/img/portfolio/ShadowDancers/hell.png" class="img-fluid" alt="">
-            <div class="portfolio-info">
-              <h4>Shadow Dancers</h4>
-              <p>Game Project</p>
-              <div class="portfolio-links">
-                <a href="/portfolio-project-detail-cards/portfolio-details-shadow.html"
-                  data-gallery="portfolioDetailsGallery" data-glightbox="type: external"
-                  class="portfolio-details-lightbox" title="Portfolio Details"><i class="bx bx-link"></i></a>
-              </div>
-            </div>
-          </div>
-        </div>
-      
-        <!-- Outpost Z Scetion -->
-        <div class="col-lg-4 col-md-6 portfolio-item filter-game">
-          <div class="portfolio-wrap">
-            <img src="assets/img/portfolio/OutpostZ/shoot.png" class="img-fluid" alt="">
-            <div class="portfolio-info">
-              <h4>Outpost Z</h4>
-              <p>Game Project</p>
-              <div class="portfolio-links">
-                <a href="/portfolio-project-detail-cards/portfolio-details-outpostz.html"
-                  data-gallery="portfolioDetailsGallery" data-glightbox="type: external"
-                  class="portfolio-details-lightbox" title="Portfolio Details"><i class="bx bx-link"></i></a>
-              </div>
-            </div>
-          </div>
-        </div>
-  
-         <!-- Pong 3d Scetion -->
-         <div class="col-lg-4 col-md-6 portfolio-item filter-game">
-           <div class="portfolio-wrap">
-             <img src="assets/img/portfolio/Pong/main.png" class="img-fluid" alt="">
-             <div class="portfolio-info">
-               <h4>Pong</h4>
-               <p>Game Project</p>
-               <div class="portfolio-links">
-                 <a href="/portfolio-project-detail-cards/portfolio-details-pong.html"
-                   data-gallery="portfolioDetailsGallery" data-glightbox="type: external"
-                   class="portfolio-details-lightbox" title="Portfolio Details"><i class="bx bx-link"></i></a>
-               </div>
-             </div>
-           </div>
-         </div>
-
-        <!-- 3D Maze Scetion -->
-        <div class="col-lg-4 col-md-6 portfolio-item filter-game">
-          <div class="portfolio-wrap">
-            <img src="assets/img/portfolio/Maze/day.png" class="img-fluid" alt="">
-            <div class="portfolio-info">
-              <h4>Backrooms Maze</h4>
-              <p>Game Project</p>
-              <div class="portfolio-links">
-                <a href="/portfolio-project-detail-cards/portfolio-details-maze.html"
-                  data-gallery="portfolioDetailsGallery" data-glightbox="type: external"
-                  class="portfolio-details-lightbox" title="Portfolio Details"><i class="bx bx-link"></i></a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- SHopify Scetion -->
-        <div class="col-lg-4 col-md-6 portfolio-item filter-web">
-          <div class="portfolio-wrap">
-            <img src="assets/img/portfolio/Shopify/home.png" class="img-fluid" alt="">
-            <div class="portfolio-info">
-              <h4>SV Real Estate</h4>
-              <p>Shopify Freelance</p>
-              <div class="portfolio-links">
-                <a href="/portfolio-project-detail-cards/portfolio-details-shopify.html"
-                  data-gallery="portfolioDetailsGallery" data-glightbox="type: external"
-                  class="portfolio-details-lightbox" title="Portfolio Details"><i class="bx bx-link"></i></a>
-              </div>
-            </div>
-          </div>
-        </div>
-  
-        <!-- Oooh Scetion -->
-        <div class="col-lg-4 col-md-6 portfolio-item filter-game filter-app filter-web">
-          <div class="portfolio-wrap">
-            <img src="assets/img/portfolio/Ooh/bg.png" class="img-fluid" alt="">
-            <div class="portfolio-info">
-              <h4>Tap It</h4>
-              <p>industry Project</p>
-              <div class="portfolio-links">
-                <a href="/portfolio-project-detail-cards/portfolio-details-oooh.html"
-                  data-gallery="portfolioDetailsGallery" data-glightbox="type: external"
-                  class="portfolio-details-lightbox" title="Portfolio Details"><i class="bx bx-link"></i></a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Precisley Scetion -->
-        <div class="col-lg-4 col-md-6 portfolio-item filter-app">
-          <div class="portfolio-wrap">
-            <img src="assets/img/portfolio/Precisely/big_city.png" class="img-fluid" alt="">
-            <div class="portfolio-info">
-              <h4>3D City Renderer for GIS</h4>
-              <p>3D Renderer Project for Intership</p>
-              <div class="portfolio-links">
-                
-                <a href="/portfolio-project-detail-cards/portfolio-details-precisely.html"
-                  data-gallery="portfolioDetailsGallery" data-glightbox="type: external"
-                  class="portfolio-details-lightbox" title="Portfolio Details"><i class="bx bx-link"></i></a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Genuity Scetion -->
-        <div class="col-lg-4 col-md-6 portfolio-item filter-app">
-          <div class="portfolio-wrap">
-            <img src="assets/img/portfolio/Genuity/bg.png" class="img-fluid" alt="">
-            <div class="portfolio-info">
-              <h4>Genuity</h4>
-              <p>Android App Project</p>
-              <div class="portfolio-links">
-                
-                <a href="/portfolio-project-detail-cards/portfolio-details-genuity.html"
-                  data-gallery="portfolioDetailsGallery" data-glightbox="type: external"
-                  class="portfolio-details-lightbox" title="Portfolio Details"><i class="bx bx-link"></i></a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- HEAL Scetion -->
-        <div class="col-lg-4 col-md-6 portfolio-item filter-web">
-          <div class="portfolio-wrap">
-            <img src="assets/img/portfolio/Heal/bg.png" class="img-fluid" alt="">
-            <div class="portfolio-info">
-              <h4>HEAL Web Portal Redesign</h4>
-              <p>industry Project</p>
-              <div class="portfolio-links">                
-                <a href="/portfolio-project-detail-cards/portfolio-details-heal.html"
-                  data-gallery="portfolioDetailsGallery" data-glightbox="type: external"
-                  class="portfolio-details-lightbox" title="Portfolio Details"><i class="bx bx-link"></i></a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Winter Hacks Scetion -->
-        <div class="col-lg-4 col-md-6 portfolio-item filter-web">
-          <div class="portfolio-wrap">
-            <img src="assets/img/portfolio/Trackerly/bg.png" class="img-fluid" alt="">
-            <div class="portfolio-info">
-              <h4>Trackerly</h4>
-              <p>BCIT Winter Hacks</p>
-              <div class="portfolio-links">
-                
-                <a href="/portfolio-project-detail-cards/portfolio-details-winterhacks.html"
-                  data-gallery="portfolioDetailsGallery" data-glightbox="type: external"
-                  class="portfolio-details-lightbox" title="Portfolio Details"><i class="bx bx-link"></i></a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Vocab War Scetion -->
-        <div class="col-lg-4 col-md-6 portfolio-item filter-game filter-web">
-          <div class="portfolio-wrap">
-            <img src="assets/img/portfolio/VocabWar/bg.png" class="img-fluid" alt="">
-            <div class="portfolio-info">
-              <h4>Vocab War</h4>
-              <p>Web Game Project</p>
-              <div class="portfolio-links">
-                
-                <a href="/portfolio-project-detail-cards/portfolio-details-vocabwar.html"
-                  data-gallery="portfolioDetailsGallery" data-glightbox="type: external"
-                  class="portfolio-details-lightbox" title="Portfolio Details"><i class="bx bx-link"></i></a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>  
+      <div class="contact-row">
+        <a href="mailto:parthcv0101@gmail.com" class="contact-link">
+          <i class="bi bi-envelope"></i> parthcv0101@gmail.com
+        </a>
+        <a href="https://github.com/ParthCv" target="_blank" class="contact-link">
+          <i class="bi bi-github"></i> github.com/ParthCv
+        </a>
+        <a href="https://linkedin.com/in/parth-chaturvedi" target="_blank" class="contact-link">
+          <i class="bi bi-linkedin"></i> parth-chaturvedi
+        </a>
+      </div>
     </div>
-  </section><!-- End Portfolio Section -->
+  </section>
 
+  <!-- ── RESUME ─────────────────────────────────────────────────── -->
+  <section id="resume" class="section">
+    <div class="sc">
+      <div class="sc-label">Experience</div>
+      <h2 class="sc-heading">Resume</h2>
 
+      <div class="exp-item">
+        <div class="exp-top">
+          <div class="exp-title">Graphics Programmer</div>
+          <div class="exp-date">Sep 2024 — Mar 2026</div>
+        </div>
+        <div class="exp-co">Huawei Technologies Canada · Vancouver, BC</div>
+        <div class="exp-body">
+          Built an automated shader optimization platform targeting top mobile titles —
+          <strong>Genshin Impact</strong> and <strong>Honkai: Star Rail</strong>.
+          Delivered <strong>5.5% GPU performance gain</strong> and 12% reduction in
+          per-frame instruction segments at 0.999 SSIM. Shipped live in Honkai: Star Rail.
+          Built GNN-based algorithm classification (PyTorch Geometric), LLM optimization
+          pipelines, automated RenderDoc profiling, and custom tree-sitter GLSL grammar
+          extensions. Led a 3-person team, mentored 2 new hires.
+        </div>
+      </div>
 
-  <!-- Vendor JS Files -->
-  <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
-  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
-  <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
-  <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
-  <script src="assets/vendor/waypoints/noframework.waypoints.js"></script>
-  <script src="assets/vendor/php-email-form/validate.js"></script>
+      <div class="exp-item">
+        <div class="exp-top">
+          <div class="exp-title">Software Developer Intern</div>
+          <div class="exp-date">Jun — Aug 2022</div>
+        </div>
+        <div class="exp-co">Precisely · Delhi</div>
+        <div class="exp-body">
+          Built a Python/VTK tool to parse GML and JSON 3D city data and render
+          <strong>3D city models integrated into MapInfo Pro</strong>. Capable of
+          rendering thousands of buildings at multiple LODs with texture data.
+        </div>
+      </div>
 
-  <!-- Template Main JS File -->
-  <script src="assets/js/main.js"></script>
+      <div class="exp-item">
+        <div class="exp-top">
+          <div class="exp-title">Web Developer Intern</div>
+          <div class="exp-date">Jun — Aug 2021</div>
+        </div>
+        <div class="exp-co">Droid7 Technolabs · Delhi</div>
+        <div class="exp-body">
+          Built ReactJS frontend for a freelance job posting platform.
+          Integrated Laravel 8 API for auth and full CRUD operations.
+        </div>
+      </div>
+
+      <hr class="rule">
+      <div class="sc-label">Education</div>
+      <div class="edu-grid">
+        <div class="edu-card">
+          <div class="edu-deg">BSc Applied Computer Science</div>
+          <div class="edu-school">BCIT · Sep 2023 – Apr 2026</div>
+          <div class="edu-note">Games Development · GPA 88%</div>
+        </div>
+        <div class="edu-card">
+          <div class="edu-deg">CST Diploma</div>
+          <div class="edu-school">BCIT · Jan 2021 – Dec 2022</div>
+          <div class="edu-note">Predictive Analytics · GPA 86%</div>
+        </div>
+      </div>
+
+      <div style="margin-top: 40px;">
+        <div class="sc-label" style="margin-bottom: 12px;">Awards</div>
+        <div class="award-item">
+          <span><strong>YVR Hackathon 2024</strong> — Best Technical Implementation</span>
+          <span>4th overall</span>
+        </div>
+        <div class="award-item">
+          <strong>BCIT WinterHacks 2021</strong> — Best Visuals
+        </div>
+      </div>
+
+      <a href="assets/resume.pdf" target="_blank" class="pdf-btn">
+        <i class="bi bi-download"></i> Download Resume PDF
+      </a>
+    </div>
+  </section>
+
+  <!-- ── PROJECTS ───────────────────────────────────────────────── -->
+  <section id="projects" class="section">
+    <div class="sc">
+      <div class="sc-label">Projects</div>
+      <h2 class="sc-heading">Work</h2>
+
+      <div class="filter-row">
+        <button class="f-btn active" data-filter="all">All</button>
+        <button class="f-btn" data-filter="graphics">Graphics</button>
+        <button class="f-btn" data-filter="game">Game</button>
+        <button class="f-btn" data-filter="systems">Systems</button>
+        <button class="f-btn" data-filter="web">Web</button>
+      </div>
+
+      <div class="proj-grid">
+
+        <div class="proj-card" data-cat="game graphics" data-id="going-down">
+          <div class="proj-card-img">
+            <div class="proj-card-img-ph">Going Down</div>
+          </div>
+          <div class="proj-card-body">
+            <div class="proj-card-sub">UE5 · Solo · In Dev</div>
+            <div class="proj-card-title">Going Down</div>
+            <div class="proj-card-desc">Psychological horror. Shadows kill. Light saves.</div>
+            <div class="proj-tags">
+              <span class="proj-tag">UE5</span>
+              <span class="proj-tag">Horror</span>
+              <span class="proj-tag">Solo</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="proj-card" data-cat="graphics" data-id="duck-hunt">
+          <div class="proj-card-img">
+            <div class="proj-card-img-ph">Duck Hunt 3DF</div>
+          </div>
+          <div class="proj-card-body">
+            <div class="proj-card-sub">C++ / OpenGL · Team</div>
+            <div class="proj-card-title">Duck Hunt 3DF</div>
+            <div class="proj-card-desc">3D engine from scratch. Deferred PBR, IBL, ECS.</div>
+            <div class="proj-tags">
+              <span class="proj-tag">C++</span>
+              <span class="proj-tag">OpenGL</span>
+              <span class="proj-tag">PBR</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="proj-card" data-cat="graphics game" data-id="peonia">
+          <div class="proj-card-img">
+            <div class="proj-card-img-ph">Peonia</div>
+          </div>
+          <div class="proj-card-body">
+            <div class="proj-card-sub">p5.js · Solo · This site</div>
+            <div class="proj-card-title">Peonia</div>
+            <div class="proj-card-desc">11 procedural flowers. You're looking at it.</div>
+            <div class="proj-tags">
+              <span class="proj-tag">p5.js</span>
+              <span class="proj-tag">3D Projection</span>
+              <span class="proj-tag">Generative</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="proj-card" data-cat="game" data-id="solarium">
+          <div class="proj-card-img">
+            <img src="assets/img/portfolio/Solarium/main.png" alt="Solarium" loading="lazy">
+          </div>
+          <div class="proj-card-body">
+            <div class="proj-card-sub">Swift / SceneKit · Team</div>
+            <div class="proj-card-title">Solarium</div>
+            <div class="proj-card-desc">Solarpunk iOS isometric puzzle game.</div>
+            <div class="proj-tags">
+              <span class="proj-tag">Swift</span>
+              <span class="proj-tag">SceneKit</span>
+              <span class="proj-tag">iOS</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="proj-card" data-cat="game" data-id="shadow-dancers">
+          <div class="proj-card-img">
+            <img src="assets/img/portfolio/ShadowDancers/hell.png" alt="Shadow Dancers" loading="lazy">
+          </div>
+          <div class="proj-card-body">
+            <div class="proj-card-sub">Unity · Team</div>
+            <div class="proj-card-title">Shadow Dancers</div>
+            <div class="proj-card-desc">Survival stealth horror. Enemy AI with light/sound detection.</div>
+            <div class="proj-tags">
+              <span class="proj-tag">Unity</span>
+              <span class="proj-tag">C#</span>
+              <span class="proj-tag">AI</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="proj-card" data-cat="systems" data-id="yvr">
+          <div class="proj-card-img">
+            <img src="assets/img/portfolio/YVR_Hackathon/detect.png" alt="YVR Hackathon" loading="lazy">
+          </div>
+          <div class="proj-card-body">
+            <div class="proj-card-sub">Python · Award Winner</div>
+            <div class="proj-card-title">YVR Hackathon</div>
+            <div class="proj-card-desc">Real-time airport monitoring. YOLOv7 on Raspberry Pi.</div>
+            <div class="proj-tags">
+              <span class="proj-tag">YOLOv7</span>
+              <span class="proj-tag">Python</span>
+              <span class="proj-tag">Award</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="proj-card" data-cat="systems" data-id="pintos">
+          <div class="proj-card-img">
+            <img src="assets/img/portfolio/PintOs/res.png" alt="PintOS" loading="lazy">
+          </div>
+          <div class="proj-card-body">
+            <div class="proj-card-sub">C · OS Kernel</div>
+            <div class="proj-card-title">PintOS</div>
+            <div class="proj-card-desc">MLFQ scheduler replacing round-robin in an educational OS.</div>
+            <div class="proj-tags">
+              <span class="proj-tag">C</span>
+              <span class="proj-tag">OS</span>
+              <span class="proj-tag">Scheduler</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="proj-card" data-cat="web" data-id="vocab-war">
+          <div class="proj-card-img">
+            <img src="assets/img/portfolio/VocabWar/bg.png" alt="Vocab War" loading="lazy">
+          </div>
+          <div class="proj-card-body">
+            <div class="proj-card-sub">React / Firebase</div>
+            <div class="proj-card-title">Vocab War</div>
+            <div class="proj-card-desc">Real-time multiplayer word game with Firebase lobby.</div>
+            <div class="proj-tags">
+              <span class="proj-tag">React</span>
+              <span class="proj-tag">Firebase</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="proj-card" data-cat="web" data-id="tap-it">
+          <div class="proj-card-img">
+            <img src="assets/img/portfolio/Ooh/bg.png" alt="Tap It" loading="lazy">
+          </div>
+          <div class="proj-card-body">
+            <div class="proj-card-sub">JS · Industry Project</div>
+            <div class="proj-card-title">Tap It</div>
+            <div class="proj-card-desc">Competitive tapping game for the Oooh iOS platform.</div>
+            <div class="proj-tags">
+              <span class="proj-tag">JavaScript</span>
+              <span class="proj-tag">Industry</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── MODAL ──────────────────────────────────────────────────── -->
+  <div id="modal">
+    <div class="modal-overlay" id="modal-overlay"></div>
+    <div class="modal-box">
+      <button class="modal-close" id="modal-close"><i class="bi bi-x-lg"></i></button>
+
+      <div class="modal-media" id="modal-media">
+        <img id="modal-img" src="" alt="">
+        <div class="modal-nav" id="modal-nav">
+          <button class="modal-nav-btn" id="modal-prev"><i class="bi bi-chevron-left"></i></button>
+          <button class="modal-nav-btn" id="modal-next"><i class="bi bi-chevron-right"></i></button>
+        </div>
+        <div class="modal-dots" id="modal-dots"></div>
+      </div>
+
+      <div class="modal-info">
+        <div class="modal-info-label" id="modal-label"></div>
+        <div class="modal-info-title" id="modal-title"></div>
+        <div class="modal-info-desc" id="modal-desc"></div>
+        <div class="modal-info-tags proj-tags" id="modal-tags"></div>
+        <div class="modal-links" id="modal-links"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── MODE BAR ───────────────────────────────────────────────── -->
+  <div id="mode-bar">
+    <button class="mode-btn" data-mode="organic">
+      <span class="mode-dot"></span><span>Organic</span>
+    </button>
+    <button class="mode-btn active" data-mode="digital">
+      <span class="mode-dot"></span><span>Digital</span>
+    </button>
+    <button class="mode-btn" data-mode="wire">
+      <span class="mode-dot"></span><span>Wire</span>
+    </button>
+  </div>
+
+  <!-- Flower scripts -->
+  <script src="/assets/js/p5.min.js"> </script>
+  <script src="/assets/js/constants.js"></script>
+  <script src="/assets/js/globals.js"></script>
+  <script src="/assets/js/lighting.js"></script>
+  <script src="/assets/js/flower_config.js"></script>
+  <script src="/assets/js/flower.js"></script>
+  <script src="/assets/js/rendering.js"></script>
+  <script src="/assets/js/post_process.js"></script>
+  <script src="/assets/js/sketch.js"></script>
+  <script src="/assets/js/portfolio.js"></script>
+
+  <!-- Project data + portfolio logic -->
+  <script>
+    // ── Project data (add your images here) ────────────────────
+    const PROJECT_DATA = {
+      'going-down': {
+        label: 'UE5 · Solo · In Development',
+        title: 'Going Down',
+        desc: 'First-person psychological horror puzzle game. <strong>Shadows kill you. Light is safety.</strong> Six interconnected puzzle systems, dynamic shadow/light AI detection, chase sequence, cutscenes, original narrative pipeline. Built entirely solo in UE5.',
+        tags: ['UE5', 'Blueprints', 'Horror', 'Solo'],
+        images: [], // add: ['assets/img/portfolio/GoingDown/1.jpg', ...]
+        video: null, // add: 'https://www.youtube.com/embed/YOUR_ID'
+        links: [{
+          label: 'In Development',
+          url: null
+        }]
+      },
+      'duck-hunt': {
+        label: 'C++ / OpenGL · Team',
+        title: 'Duck Hunt 3DF',
+        desc: '3D game engine built from scratch. <strong>Deferred PBR rendering</strong>, Cook-Torrance BRDF, image-based lighting, HDR skybox, full entity-component-system architecture. Shipped Duck Hunt as the flagship demo.',
+        tags: ['C++', 'OpenGL', 'PBR', 'ECS', 'IBL'],
+        images: [],
+        video: null,
+        links: [{
+          label: 'GitHub',
+          url: 'https://github.com/ParthCv',
+          icon: 'bi-github'
+        }]
+      },
+      'peonia': {
+        label: 'p5.js · Solo · This site',
+        title: 'Peonia',
+        desc: 'Generative flower system — <strong>11 procedural species</strong> with fake 3D projection, diffuse/specular/rim lighting, configurable stems, leaves, and stamen. Nine render modes with a full post-processing pipeline. The background you\'re looking at.',
+        tags: ['p5.js', '3D Projection', 'Shading', 'Generative', 'Post-Processing'],
+        images: [],
+        video: null,
+        links: [{
+          label: 'GitHub',
+          url: 'https://github.com/ParthCv',
+          icon: 'bi-github'
+        }]
+      },
+      'solarium': {
+        label: 'Swift / SceneKit · Team',
+        title: 'Solarium',
+        desc: 'Solarpunk-themed iOS isometric puzzle game in Swift. Led architecture, puzzle system design, and mobile performance optimization. Custom Blender assets. Sequential puzzle gameplay with 5-puzzle demo.',
+        tags: ['Swift', 'SceneKit', 'SpriteKit', 'iOS', 'Blender'],
+        images: ['assets/img/portfolio/Solarium/main.png', 'assets/img/portfolio/Solarium/ball.png',
+          'assets/img/portfolio/Solarium/lift.png', 'assets/img/portfolio/Solarium/threetubes.png'
+        ],
+        video: null,
+        links: [{
+          label: 'GitHub',
+          url: 'https://github.com/ParthCv/Solarium',
+          icon: 'bi-github'
+        }]
+      },
+      'shadow-dancers': {
+        label: 'Unity · Team',
+        title: 'Shadow Dancers',
+        desc: 'Survival stealth horror game. Built enemy AI with <strong>dynamic waypoint/path system</strong>, sound detection, and light detection mechanics. Published in BCIT games showcase.',
+        tags: ['Unity', 'C#', 'AI', 'URP', 'Perforce'],
+        images: ['assets/img/portfolio/ShadowDancers/hell.png', 'assets/img/portfolio/ShadowDancers/main.png',
+          'assets/img/portfolio/ShadowDancers/light.png', 'assets/img/portfolio/ShadowDancers/detect.png'
+        ],
+        video: null,
+        links: [{
+          label: 'Showcase',
+          url: 'https://commons.bcit.ca/news/2024/02/the-power-of-play-be-part-of-the-gaming-industry/',
+          icon: 'bi-box-arrow-up-right'
+        }]
+      },
+      'yvr': {
+        label: 'Python · Hackathon · Award',
+        title: 'YVR Hackathon',
+        desc: 'Real-time airport monitoring on Raspberry Pi. Custom <strong>YOLOv7 model</strong> trained on YVR camera data detecting unattended bags, people, and debris. FTP server pipeline to live dashboard. <strong>Best Technical Implementation</strong>, 4th place overall.',
+        tags: ['Python', 'YOLOv7', 'Raspberry Pi', 'PyTorch', 'Award'],
+        images: ['assets/img/portfolio/YVR_Hackathon/detect.png', 'assets/img/portfolio/YVR_Hackathon/main.jpg'],
+        video: null,
+        links: [{
+          label: 'Article',
+          url: 'https://commons.bcit.ca/news/2024/05/yvr-hackathon-2024/',
+          icon: 'bi-newspaper'
+        }]
+      },
+      'pintos': {
+        label: 'C · OS Kernel',
+        title: 'PintOS',
+        desc: 'Replaced round-robin with a <strong>multi-level feedback queue scheduler</strong> in the PintOS educational OS. Modified synchronization primitives for dynamic process priority.',
+        tags: ['C', 'OS', 'Scheduler', 'Concurrency'],
+        images: ['assets/img/portfolio/PintOs/res.png', 'assets/img/portfolio/PintOs/mlfqs.png'],
+        video: null,
+        links: [{
+          label: 'GitHub',
+          url: 'https://github.com/normanlim/pintOS',
+          icon: 'bi-github'
+        }]
+      },
+      'vocab-war': {
+        label: 'React / Firebase · Team',
+        title: 'Vocab War',
+        desc: 'Multiplayer word game with real-time Firebase database and lobby system. Players compete to form words from shared letters.',
+        tags: ['React', 'Firebase', 'Multiplayer', 'Figma'],
+        images: ['assets/img/portfolio/VocabWar/bg.png', 'assets/img/portfolio/VocabWar/home-page.png',
+          'assets/img/portfolio/VocabWar/game-page.png'
+        ],
+        video: null,
+        links: [{
+            label: 'Play',
+            url: 'https://vocabwar.netlify.app/',
+            icon: 'bi-play-circle'
+          },
+          {
+            label: 'GitHub',
+            url: 'https://github.com/ParthCv/VocabWar',
+            icon: 'bi-github'
+          }
+        ]
+      },
+      'tap-it': {
+        label: 'JavaScript · Industry Project',
+        title: 'Tap It',
+        desc: 'Competitive tapping game for the Oooh iOS social media platform. Players compete through stages for high scores. Integrated into their app with in-app score and reaction storage.',
+        tags: ['JavaScript', 'Oooh3', 'Docker', 'Industry'],
+        images: ['assets/img/portfolio/Ooh/bg.png', 'assets/img/portfolio/Ooh/home.png',
+          'assets/img/portfolio/Ooh/game.png'
+        ],
+        video: null,
+        links: [{
+          label: 'GitHub',
+          url: 'https://github.com/ParthCv/Tap-It-Oooh-ISSP',
+          icon: 'bi-github'
+        }]
+      }
+    }
+
+    // ── Modal logic ─────────────────────────────────────────────
+    let modal_images = []
+    let modal_img_idx = 0
+
+    function openModal(id) {
+      const p = PROJECT_DATA[id]
+      if (!p) return
+
+      modal_images = p.images || []
+      modal_img_idx = 0
+
+      document.getElementById('modal-label').textContent = p.label
+      document.getElementById('modal-title').innerHTML = p.title
+      document.getElementById('modal-desc').innerHTML = p.desc
+
+      const tagsEl = document.getElementById('modal-tags')
+      tagsEl.innerHTML = p.tags.map(t => `<span class="proj-tag">${t}</span>`).join('')
+
+      const linksEl = document.getElementById('modal-links')
+      linksEl.innerHTML = p.links.map(l => l.url ?
+        `<a href="${l.url}" target="_blank" class="modal-link"><i class="bi ${l.icon || 'bi-arrow-up-right'}"></i> ${l.label}</a>` :
+        `<span class="modal-link" style="opacity:0.5; cursor:default"><i class="bi bi-clock"></i> ${l.label}</span>`
+      ).join('')
+
+      // Media: video takes priority
+      const mediaEl = document.getElementById('modal-media')
+      const imgEl = document.getElementById('modal-img')
+      const navEl = document.getElementById('modal-nav')
+      const dotsEl = document.getElementById('modal-dots')
+
+      if (p.video) {
+        imgEl.style.display = 'none'
+        navEl.style.display = 'none'
+        dotsEl.innerHTML = ''
+        let iframe = mediaEl.querySelector('iframe')
+        if (!iframe) {
+          iframe = document.createElement('iframe')
+          iframe.allow = 'autoplay; encrypted-media'
+          iframe.allowFullscreen = true
+          mediaEl.appendChild(iframe)
+        }
+        iframe.style.display = 'block'
+        iframe.src = p.video
+      } else if (modal_images.length > 0) {
+        const iframe = mediaEl.querySelector('iframe')
+        if (iframe) {
+          iframe.style.display = 'none';
+          iframe.src = '';
+        }
+        imgEl.style.display = 'block'
+        navEl.style.display = modal_images.length > 1 ? 'flex' : 'none'
+        updateModalImg()
+      } else {
+        const iframe = mediaEl.querySelector('iframe')
+        if (iframe) {
+          iframe.style.display = 'none';
+        }
+        imgEl.style.display = 'none'
+        navEl.style.display = 'none'
+        dotsEl.innerHTML = ''
+        mediaEl.style.background = 'var(--accent-dim)'
+      }
+
+      document.getElementById('modal').classList.add('open')
+    }
+
+    function updateModalImg() {
+      if (!modal_images.length) return
+      document.getElementById('modal-img').src = modal_images[modal_img_idx]
+      const dotsEl = document.getElementById('modal-dots')
+      dotsEl.innerHTML = modal_images.map((_, i) =>
+        `<div class="modal-dot ${i === modal_img_idx ? 'active' : ''}" onclick="goToImg(${i})"></div>`
+      ).join('')
+    }
+
+    function goToImg(i) {
+      modal_img_idx = i;
+      updateModalImg();
+    }
+
+    document.getElementById('modal-prev').onclick = () => {
+      if (!modal_images.length) return
+      modal_img_idx = (modal_img_idx - 1 + modal_images.length) % modal_images.length
+      updateModalImg()
+    }
+    document.getElementById('modal-next').onclick = () => {
+      if (!modal_images.length) return
+      modal_img_idx = (modal_img_idx + 1) % modal_images.length
+      updateModalImg()
+    }
+
+    function closeModal() {
+      document.getElementById('modal').classList.remove('open')
+      const iframe = document.querySelector('#modal-media iframe')
+      if (iframe) iframe.src = ''
+    }
+
+    document.getElementById('modal-close').onclick = closeModal
+    document.getElementById('modal-overlay').onclick = closeModal
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeModal()
+      if (e.key === 'ArrowLeft') document.getElementById('modal-prev').click()
+      if (e.key === 'ArrowRight') document.getElementById('modal-next').click()
+    })
+
+    // Wire up cards
+    document.querySelectorAll('.proj-card').forEach(card => {
+      card.addEventListener('click', () => openModal(card.dataset.id))
+    })
+  </script>
 
 </body>
 
