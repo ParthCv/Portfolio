@@ -3,20 +3,30 @@ function draw_flower(config) {
     rendering_buffer.resetMatrix()
     rendering_buffer.translate(buffer_width/2, buffer_height/2)
 
-
     const dt = deltaTime / 1000
     rot_t += 0.016
 
-    rot_ease_in = min(1, rot_ease_in + dt * 0.08)
-    const re = rot_ease_in < 0.5 ? 4*rot_ease_in*rot_ease_in*rot_ease_in : 1 - pow(-2*rot_ease_in+2, 3) / 2
+    // yaw: slow constant spin on the flower's own axis
+    const YAW_SPEED = 0.005                 // rad/sec — raise for a faster spin
+    auto_rotY += dt * YAW_SPEED
 
-    auto_rotY += dt * (window._portfolio_rot || 0.3) * re
-    auto_rotX += dt * 0.12 * sin(rot_t * 0.15) * re
+    // pitch: sine sway from side view → top view, never flips
+    const PITCH_MIN   = 0.15               // 9  (nearer side/edge view)
+    const PITCH_MAX   = 1.15               // 66 (nearer top view) — keep under ~1.4
+    const PITCH_SPEED = 0.5
+    auto_rotX = map(sin(rot_t * PITCH_SPEED), -1, 1, PITCH_MIN, PITCH_MAX)
+
+    // roll: gentle 20 tilt left & right
+    const ROLL_AMP   = radians(10)
+    const ROLL_SPEED = 0.25
+    const roll = ROLL_AMP * sin(rot_t * ROLL_SPEED)
 
     if (!dragging) {
         rotY = auto_rotY
         rotX = auto_rotX
     }
+
+    rendering_buffer.rotate(roll)
 
     let flower_scale = buffer_width / 800
     let all_petals   = []
