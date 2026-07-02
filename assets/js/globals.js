@@ -1,12 +1,20 @@
 let rotY = 0
 let rotX = 0
 
+let auto_rotX   = 0
+let auto_rotY   = 0
+let rot_ease_in = 0
+let rot_t       = 0
+
 let bloom = 0
 const focal = 400
 
 let dragging = false
 let last_mouseX = 0
 let last_mouseY = 0
+
+let wilt            = 0      // 0=fresh 1=wilted, animated by portfolio.js
+let canvas_bg_color = [0, 0, 0]  // changes per mode (organic=cream, etc)
 
 let rendering_buffer // for rendering the flower
 let final_buffer // final image with post process 

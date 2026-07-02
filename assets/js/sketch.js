@@ -6,7 +6,7 @@ function setup() {
 }
 
 function draw() {
-    background(0)
+    background(canvas_bg_color[0], canvas_bg_color[1], canvas_bg_color[2])
 
     let configs = {
         peony:        FLOWER_CONFIG,
@@ -29,6 +29,7 @@ function draw() {
 
 function mousePressed() {
     //bloom = 0
+    if (window._portfolio_mode) return
     dragging = true
     last_mouseX = mouseX
     last_mouseY = mouseY
@@ -50,12 +51,4 @@ function mouseDragged() {
 function windowResized() {
     resizeCanvas(windowWidth, windowHeight)
 }
-
-function keyPressed() {
-    if (key === ' ') {
-        flower_index = (flower_index + 1) % FLOWER_LIST.length
-        bloom = 0  // only reset bloom, not stem
-        thorns_generated  = false
-        cached_thorns     = []
-    }
-}
+``
