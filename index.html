@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Parth Chaturvedi — Graphics Programmer</title>
+  <title>Parth Chaturvedi - Graphics Programmer</title>
   <meta name="description"
     content="Graphics programmer and software engineer. Previously at Huawei Technologies Canada.">
 
@@ -15,946 +15,7 @@
     href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,400&family=DM+Sans:wght@300;400&family=Space+Mono:wght@400;700&family=Barlow+Condensed:wght@700&family=DM+Mono:wght@300;400&display=swap"
     rel="stylesheet">
 
-  <!-- ALL YOUR ORIGINAL CSS UNCHANGED -->
-  <style>
-    *,
-    *::before,
-    *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0
-    }
-
-    html,
-    body {
-      height: 100%;
-      overflow: hidden
-    }
-
-    :root {
-      --bg: #f2ede4;
-      --surface: rgba(242, 237, 228, 0.93);
-      --text: #1a1512;
-      --muted: #8c7b6e;
-      --accent: #7a4e2c;
-      --accent-dim: rgba(122, 78, 44, 0.08);
-      --border: rgba(122, 78, 44, 0.16);
-      --f-display: 'Playfair Display', Georgia, serif;
-      --f-body: 'DM Sans', sans-serif;
-      --f-mono: 'DM Mono', monospace;
-      --ls-h: 0.02em;
-      --ls-nav: 0.14em;
-      --nav-case: none;
-      --w-display: 600;
-      --name-size: clamp(52px, 7vw, 96px);
-      --canvas-bg: 242, 237, 228
-    }
-
-    [data-mode="digital"] {
-      --bg: #04050f;
-      --surface: rgba(4, 5, 15, 0.91);
-      --text: #c8cce8;
-      --muted: #7880b8;
-      --accent: #7b6fff;
-      --accent-dim: rgba(123, 111, 255, 0.1);
-      --border: rgba(123, 111, 255, 0.22);
-      --f-display: 'Space Mono', monospace;
-      --f-body: 'Space Mono', monospace;
-      --f-mono: 'Space Mono', monospace;
-      --ls-h: -0.01em;
-      --ls-nav: 0.05em;
-      --nav-case: none;
-      --w-display: 700;
-      --name-size: clamp(32px, 4vw, 58px);
-      --canvas-bg: 4, 5, 15
-    }
-
-    [data-mode="wire"] {
-      --bg: #000;
-      --surface: rgba(0, 0, 0, 0.91);
-      --text: #fff;
-      --muted: #888;
-      --accent: #fff;
-      --accent-dim: rgba(255, 255, 255, 0.06);
-      --border: rgba(255, 255, 255, 0.26);
-      --f-display: 'Barlow Condensed', sans-serif;
-      --f-body: 'DM Mono', monospace;
-      --f-mono: 'DM Mono', monospace;
-      --ls-h: 0.06em;
-      --ls-nav: 0.22em;
-      --nav-case: uppercase;
-      --w-display: 700;
-      --name-size: clamp(72px, 10vw, 140px);
-      --canvas-bg: 0, 0, 0
-    }
-
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: var(--f-body);
-      font-size: 15px;
-      line-height: 1.7;
-      transition: background 0.7s ease, color 0.5s ease
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none
-    }
-
-    #canvas-container {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1)
-    }
-
-    #nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 100;
-      height: 56px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 44px;
-      background: linear-gradient(to bottom, var(--bg) 0%, transparent 100%);
-      transition: background 0.7s
-    }
-
-    .nav-wordmark {
-      font-family: var(--f-mono);
-      font-size: 10px;
-      letter-spacing: 0.28em;
-      text-transform: uppercase;
-      color: var(--muted);
-      transition: font-family 0.4s, color 0.4s
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 32px
-    }
-
-    .nav-link {
-      font-family: var(--f-body);
-      font-size: 12px;
-      letter-spacing: var(--ls-nav);
-      text-transform: var(--nav-case);
-      color: var(--muted);
-      cursor: pointer;
-      background: none;
-      border: none;
-      padding: 0;
-      transition: color 0.2s, font-family 0.4s, letter-spacing 0.4s
-    }
-
-    .nav-link.active,
-    .nav-link:hover {
-      color: var(--text)
-    }
-
-    .section {
-      position: fixed;
-      inset: 0;
-      z-index: 10;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.4s ease
-    }
-
-    .section.active {
-      opacity: 1;
-      pointer-events: all
-    }
-
-    #home {
-      display: flex;
-      align-items: center
-    }
-
-    .home-curtain {
-      position: absolute;
-      top: 0;
-      left: 0;
-      bottom: 0;
-      width: 58%;
-      background: linear-gradient(to right, var(--bg) 55%, transparent 100%);
-      pointer-events: none;
-      transition: background 0.7s;
-      z-index: 1
-    }
-
-    .home-inner {
-      position: relative;
-      z-index: 2;
-      padding: 0 0 0 8vw;
-      max-width: 500px
-    }
-
-    .home-eyebrow {
-      font-family: var(--f-mono);
-      font-size: 10px;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 20px;
-      transition: color 0.4s, font-family 0.4s
-    }
-
-    .home-name {
-      font-family: var(--f-display);
-      font-size: var(--name-size);
-      font-weight: var(--w-display);
-      letter-spacing: var(--ls-h);
-      line-height: 0.92;
-      color: var(--text);
-      margin-bottom: 28px;
-      transition: font-family 0.4s, font-size 0.4s, color 0.4s
-    }
-
-    [data-mode="digital"] .home-name {
-      font-style: normal
-    }
-
-    :root .home-name {
-      font-style: italic
-    }
-
-    [data-mode="wire"] .home-name {
-      font-style: normal
-    }
-
-    .home-sub {
-      font-size: 13px;
-      line-height: 1.8;
-      color: var(--muted);
-      max-width: 360px;
-      margin-bottom: 36px;
-      transition: color 0.4s
-    }
-
-    .home-sub em {
-      color: var(--text);
-      font-style: normal
-    }
-
-    .home-actions {
-      display: flex;
-      gap: 20px;
-      flex-wrap: wrap
-    }
-
-    .home-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-family: var(--f-mono);
-      font-size: 10px;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--accent);
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 3px;
-      cursor: pointer;
-      background: none;
-      border-top: none;
-      border-left: none;
-      border-right: none;
-      transition: color 0.2s, border-color 0.2s
-    }
-
-    .home-link:hover {
-      color: var(--text);
-      border-color: var(--text)
-    }
-
-    #about,
-    #resume,
-    #projects {
-      background: var(--surface);
-      overflow-y: auto;
-      transition: background 0.6s
-    }
-
-    #about::-webkit-scrollbar,
-    #resume::-webkit-scrollbar,
-    #projects::-webkit-scrollbar {
-      width: 3px
-    }
-
-    #about::-webkit-scrollbar-thumb,
-    #resume::-webkit-scrollbar-thumb,
-    #projects::-webkit-scrollbar-thumb {
-      background: var(--border)
-    }
-
-    .sc {
-      max-width: 760px;
-      margin: 0 auto;
-      padding: 84px 44px 120px
-    }
-
-    .sc-label {
-      font-family: var(--f-mono);
-      font-size: 9px;
-      letter-spacing: 0.26em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 12px;
-      transition: color 0.4s, font-family 0.4s
-    }
-
-    .sc-heading {
-      font-family: var(--f-display);
-      font-size: clamp(34px, 5vw, 58px);
-      font-weight: var(--w-display);
-      letter-spacing: var(--ls-h);
-      line-height: 1;
-      color: var(--text);
-      margin-bottom: 48px;
-      transition: font-family 0.4s, font-size 0.4s, color 0.4s
-    }
-
-    hr.rule {
-      border: none;
-      border-top: 1px solid var(--border);
-      margin: 44px 0;
-      transition: border-color 0.4s
-    }
-
-    .bio {
-      font-size: 14px;
-      line-height: 1.85;
-      color: var(--muted);
-      max-width: 620px;
-      margin-bottom: 20px
-    }
-
-    .bio strong {
-      color: var(--text);
-      font-weight: 400
-    }
-
-    .skills-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 32px 44px;
-      margin-top: 44px
-    }
-
-    .sg-label {
-      font-family: var(--f-mono);
-      font-size: 9px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 8px;
-      transition: color 0.4s, font-family 0.4s
-    }
-
-    .sg-items {
-      font-size: 13px;
-      color: var(--muted);
-      line-height: 2
-    }
-
-    .sg-items em {
-      color: var(--text);
-      font-style: normal
-    }
-
-    .contact-row {
-      display: flex;
-      gap: 24px;
-      flex-wrap: wrap;
-      margin-top: 44px
-    }
-
-    .contact-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-family: var(--f-mono);
-      font-size: 11px;
-      letter-spacing: 0.1em;
-      color: var(--muted);
-      text-decoration: none;
-      transition: color 0.2s
-    }
-
-    .contact-link:hover {
-      color: var(--accent)
-    }
-
-    .exp-item {
-      margin-bottom: 40px;
-      padding-bottom: 40px;
-      border-bottom: 1px solid var(--border)
-    }
-
-    .exp-item:last-of-type {
-      border-bottom: none
-    }
-
-    .exp-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 4px
-    }
-
-    .exp-title {
-      font-family: var(--f-display);
-      font-size: clamp(18px, 2.5vw, 24px);
-      font-weight: var(--w-display);
-      letter-spacing: var(--ls-h);
-      color: var(--text);
-      transition: font-family 0.4s, color 0.4s
-    }
-
-    .exp-date {
-      font-family: var(--f-mono);
-      font-size: 10px;
-      letter-spacing: 0.08em;
-      color: var(--muted)
-    }
-
-    .exp-co {
-      font-family: var(--f-mono);
-      font-size: 10px;
-      letter-spacing: 0.1em;
-      color: var(--accent);
-      margin-bottom: 12px
-    }
-
-    .exp-body {
-      font-size: 13px;
-      color: var(--muted);
-      line-height: 1.8;
-      max-width: 580px
-    }
-
-    .exp-body strong {
-      color: var(--text);
-      font-weight: 400
-    }
-
-    .exp-bullets {
-      font-size: 13px;
-      color: var(--muted);
-      line-height: 1.8;
-      max-width: 580px;
-      padding-left: 0;
-      list-style: none;
-      margin-top: 10px
-    }
-
-    .exp-bullets li {
-      padding: 3px 0 3px 14px;
-      position: relative
-    }
-
-    .exp-bullets li::before {
-      content: '—';
-      position: absolute;
-      left: 0;
-      color: var(--accent)
-    }
-
-    .exp-bullets li strong {
-      color: var(--text);
-      font-weight: 400
-    }
-
-    .edu-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px
-    }
-
-    .edu-card {
-      border: 1px solid var(--border);
-      padding: 18px 20px;
-      transition: border-color 0.4s
-    }
-
-    .edu-deg {
-      font-family: var(--f-display);
-      font-size: 16px;
-      font-weight: var(--w-display);
-      color: var(--text);
-      margin-bottom: 5px
-    }
-
-    .edu-school {
-      font-family: var(--f-mono);
-      font-size: 9px;
-      letter-spacing: 0.14em;
-      color: var(--accent);
-      margin-bottom: 5px
-    }
-
-    .edu-note {
-      font-size: 12px;
-      color: var(--muted)
-    }
-
-    .award-item {
-      display: flex;
-      justify-content: space-between;
-      gap: 16px;
-      font-size: 13px;
-      color: var(--muted);
-      padding: 10px 0;
-      border-bottom: 1px solid var(--border)
-    }
-
-    .award-item strong {
-      color: var(--text);
-      font-weight: 400
-    }
-
-    .pdf-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      font-family: var(--f-mono);
-      font-size: 10px;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--accent);
-      text-decoration: none;
-      border: 1px solid var(--border);
-      padding: 10px 22px;
-      margin-top: 40px;
-      margin-right: 12px;
-      transition: background 0.2s, color 0.2s, border-color 0.2s
-    }
-
-    .pdf-btn:hover {
-      background: var(--accent);
-      color: var(--bg);
-      border-color: var(--accent)
-    }
-
-    .filter-row {
-      display: flex;
-      gap: 4px;
-      flex-wrap: wrap;
-      margin-bottom: 36px
-    }
-
-    .f-btn {
-      font-family: var(--f-mono);
-      font-size: 9px;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--muted);
-      background: none;
-      border: 1px solid var(--border);
-      padding: 7px 16px;
-      cursor: pointer;
-      transition: background 0.2s, color 0.2s, border-color 0.2s, font-family 0.4s
-    }
-
-    .f-btn.active,
-    .f-btn:hover {
-      background: var(--accent);
-      color: var(--bg);
-      border-color: var(--accent)
-    }
-
-    .proj-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 16px
-    }
-
-    .proj-card {
-      border: 1px solid var(--border);
-      overflow: hidden;
-      cursor: pointer;
-      transition: border-color 0.2s, transform 0.2s
-    }
-
-    .proj-card:hover {
-      border-color: var(--accent);
-      transform: translateY(-2px)
-    }
-
-    .proj-card.hidden {
-      display: none
-    }
-
-    .proj-card-img {
-      width: 100%;
-      height: 150px;
-      overflow: hidden;
-      position: relative;
-      background: var(--accent-dim)
-    }
-
-    .proj-card-img img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block
-    }
-
-    .proj-card-img-ph {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: var(--f-mono);
-      font-size: 9px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--accent);
-      padding: 0 16px;
-      text-align: center
-    }
-
-    .proj-card-body {
-      padding: 16px 18px
-    }
-
-    .proj-card-sub {
-      font-family: var(--f-mono);
-      font-size: 9px;
-      letter-spacing: 0.1em;
-      color: var(--accent);
-      margin-bottom: 6px
-    }
-
-    .proj-card-title {
-      font-family: var(--f-display);
-      font-size: 18px;
-      font-weight: var(--w-display);
-      letter-spacing: var(--ls-h);
-      color: var(--text);
-      margin-bottom: 8px;
-      line-height: 1.1;
-      transition: font-family 0.4s
-    }
-
-    .proj-card-desc {
-      font-size: 12px;
-      color: var(--muted);
-      line-height: 1.65;
-      margin-bottom: 12px
-    }
-
-    .proj-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 4px
-    }
-
-    .proj-tag {
-      font-family: var(--f-mono);
-      font-size: 9px;
-      color: var(--muted);
-      border: 1px solid var(--border);
-      padding: 2px 8px
-    }
-
-    #modal {
-      position: fixed;
-      inset: 0;
-      z-index: 500;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 20px
-    }
-
-    #modal.open {
-      display: flex
-    }
-
-    .modal-overlay {
-      position: absolute;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.75);
-      backdrop-filter: blur(8px)
-    }
-
-    .modal-box {
-      position: relative;
-      z-index: 1;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      max-width: 820px;
-      width: 100%;
-      max-height: 90vh;
-      overflow-y: auto;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      transition: background 0.4s
-    }
-
-    .modal-media {
-      position: relative;
-      background: #000;
-      min-height: 280px
-    }
-
-    .modal-media img,
-    .modal-media iframe {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block
-    }
-
-    .modal-media iframe {
-      border: none;
-      min-height: 320px
-    }
-
-    .modal-nav {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      display: flex;
-      justify-content: space-between;
-      width: 100%;
-      padding: 0 10px;
-      pointer-events: none
-    }
-
-    .modal-nav-btn {
-      pointer-events: all;
-      width: 32px;
-      height: 32px;
-      background: rgba(0, 0, 0, 0.6);
-      border: none;
-      cursor: pointer;
-      color: #fff;
-      font-size: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background 0.2s
-    }
-
-    .modal-nav-btn:hover {
-      background: rgba(0, 0, 0, 0.9)
-    }
-
-    .modal-dots {
-      position: absolute;
-      bottom: 10px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      gap: 6px
-    }
-
-    .modal-dot {
-      width: 5px;
-      height: 5px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.4);
-      cursor: pointer;
-      transition: background 0.2s
-    }
-
-    .modal-dot.active {
-      background: #fff
-    }
-
-    .modal-info {
-      padding: 28px;
-      display: flex;
-      flex-direction: column
-    }
-
-    .modal-close {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      z-index: 2;
-      width: 28px;
-      height: 28px;
-      background: rgba(0, 0, 0, 0.5);
-      border: none;
-      cursor: pointer;
-      color: #fff;
-      font-size: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: center
-    }
-
-    .modal-info-label {
-      font-family: var(--f-mono);
-      font-size: 9px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 8px
-    }
-
-    .modal-info-title {
-      font-family: var(--f-display);
-      font-size: 26px;
-      font-weight: var(--w-display);
-      letter-spacing: var(--ls-h);
-      color: var(--text);
-      margin-bottom: 16px;
-      line-height: 1.1
-    }
-
-    .modal-info-desc {
-      font-size: 13px;
-      color: var(--muted);
-      line-height: 1.8;
-      flex: 1;
-      margin-bottom: 20px
-    }
-
-    .modal-info-desc strong {
-      color: var(--text);
-      font-weight: 400
-    }
-
-    .modal-info-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 4px;
-      margin-bottom: 20px
-    }
-
-    .modal-links {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-top: auto
-    }
-
-    .modal-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-family: var(--f-mono);
-      font-size: 10px;
-      letter-spacing: 0.12em;
-      color: var(--accent);
-      text-decoration: none;
-      border: 1px solid var(--border);
-      padding: 8px 16px;
-      transition: background 0.2s, color 0.2s
-    }
-
-    .modal-link:hover {
-      background: var(--accent);
-      color: var(--bg)
-    }
-
-    #mode-bar {
-      position: fixed;
-      bottom: 24px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 200;
-      display: flex;
-      gap: 1px;
-      background: rgba(0, 0, 0, 0.45);
-      backdrop-filter: blur(16px);
-      padding: 4px;
-      border: 1px solid var(--border);
-      transition: border-color 0.5s
-    }
-
-    .mode-btn {
-      font-family: var(--f-mono);
-      font-size: 9px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--muted);
-      background: none;
-      border: none;
-      padding: 8px 20px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      transition: color 0.2s, background 0.2s, font-family 0.4s
-    }
-
-    .mode-btn:hover {
-      color: var(--text)
-    }
-
-    .mode-btn.active {
-      color: var(--bg);
-      background: var(--accent)
-    }
-
-    .mode-dot {
-      width: 5px;
-      height: 5px;
-      border-radius: 50%;
-      background: currentColor;
-      flex-shrink: 0
-    }
-
-    @media(max-width:768px) {
-      .home-inner {
-        padding: 0 6vw;
-        max-width: 100%
-      }
-
-      .home-curtain {
-        width: 100%
-      }
-
-      .skills-grid,
-      .edu-grid {
-        grid-template-columns: 1fr
-      }
-
-      .proj-grid {
-        grid-template-columns: 1fr 1fr
-      }
-
-      .modal-box {
-        grid-template-columns: 1fr;
-        max-height: 85vh
-      }
-
-      .sc {
-        padding: 80px 6vw 110px
-      }
-
-      #nav {
-        padding: 0 20px
-      }
-
-      .home-curtain {
-        width: 100%;
-        background: linear-gradient(to top, var(--bg) 30%, transparent 85%)
-      }
-    }
-
-    @media(max-width:480px) {
-      .proj-grid {
-        grid-template-columns: 1fr
-      }
-
-      .nav-wordmark {
-        display: none
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="./assets/css/style.css"/>
 </head>
 
 <body>
@@ -978,7 +39,7 @@
       <h1 class="home-name">Parth<br>Chaturvedi</h1>
       <p class="home-sub">
         Shipped shader optimizations live in <em>Honkai: Star Rail</em> at Huawei.<br>
-        Now building <em>Going Down</em> — a solo UE5 horror game where light is your only weapon.
+        Now building <em>Going Down</em> - a solo UE5 horror game where light is your only weapon.
       </p>
       <div class="home-actions">
         <a href="https://github.com/ParthCv" target="_blank" class="home-link">
@@ -1004,25 +65,25 @@
       <h2 class="sc-heading">Background</h2>
 
       <p class="bio">
-        I'm a <strong>graphics programmer</strong> based in Vancouver. I care about what happens between the CPU
-        submitting a draw call and a pixel appearing on screen — the pipeline, the math, the tradeoffs. That's the part
+        I was a <strong>graphics programmer</strong> based in Vancouver. I care about what happens between the CPU
+        submitting a draw call and a pixel appearing on screen, the pipeline, the math, the tradeoffs. That's the part
         that pulls me in.
       </p>
       <p class="bio">
         From 2024 to 2026 I was at <strong>Huawei Technologies Canada</strong> building tooling to automatically
         optimize shaders in production mobile games. The platform combined a custom GLSL parser, a GNN for algorithm
-        detection, and an LLM-driven pipeline to find and apply optimizations — delivering a <strong>5.5% GPU
+        detection, and an LLM-driven pipeline to find and apply optimizations, delivering a <strong>5.5% GPU
           performance gain</strong> at 0.999 SSIM, shipped into Honkai: Star Rail. I also cut the manual performance
         testing process from 30 minutes to 9 per capture.
       </p>
       <p class="bio">
-        Outside work I've been building <strong>Going Down</strong> solo in UE5 for about 8 months — a psychological
+        Outside work I've been building <strong>Going Down</strong> solo in UE5 for about 8 months, a psychological
         horror puzzle game where shadows kill you and the only safe thing is light. Six puzzle systems, a chase
         sequence, cutscenes, a full narrative pipeline. It's the most sustained thing I've built on my own and I'm not
         done yet.
       </p>
       <p class="bio">
-        I also built a 3D engine from scratch with a team — deferred PBR, Cook-Torrance BRDF, IBL, full ECS — and
+        I also built a 3D engine from scratch with a team: deferred PBR, Cook-Torrance BRDF, IBL, full ECS and
         shipped Duck Hunt in it as a demo. The generative flower system running behind this site
         (<strong>Peonia</strong>) is another solo project: 11 procedural species, fake 3D projection,
         diffuse/specular/rim lighting, nine render modes.
@@ -1100,23 +161,23 @@
       <div class="exp-item">
         <div class="exp-top">
           <div class="exp-title">Graphics Programmer</div>
-          <div class="exp-date">Sep 2024 — Mar 2026</div>
+          <div class="exp-date">Sep 2024 - Mar 2026</div>
         </div>
         <div class="exp-co">Huawei Technologies Canada · Vancouver, BC</div>
         <ul class="exp-bullets">
           <li>Built an automated shader optimization platform in Python targeting <strong>Genshin Impact</strong> and
-            <strong>Honkai: Star Rail</strong> — delivered <strong>5.5% GPU performance gain</strong> and 12% reduction
+            <strong>Honkai: Star Rail</strong> - delivered <strong>5.5% GPU performance gain</strong> and 12% reduction
             in per-frame instruction segments at 0.999 SSIM. Shipped live in Honkai: Star Rail.</li>
           <li>Engineered a CLI tool in Python/Bash that cut per-capture performance testing from <strong>30 minutes to
               9</strong>, enabling overnight batch runs with automatic result logging and visual diff output.</li>
           <li>Developed a custom GLSL parser using tree-sitter to generate ASTs, enabling automated algorithm detection,
             precision reduction, and lighting model simplification across fragment and compute shaders.</li>
-          <li>Built a <strong>GNN (PyTorch Geometric)</strong> for shader algorithm classification — integrated with an
+          <li>Built a <strong>GNN (PyTorch Geometric)</strong> for shader algorithm classification - integrated with an
             LLM pipeline to surface optimization strategies from detected patterns.</li>
           <li>Designed an LLM-driven evaluation pipeline that analyzed automated performance and visual quality metrics
             (artifacts, clarity, frame interactions) as feedback signal for iterative optimization decisions.</li>
           <li>Researched emerging mobile graphics techniques including <strong>Gaussian Splatting, NeRFs, ReSTIR, and
-              MegaLights</strong> — evaluating applicability to mobile GPU constraints.</li>
+              MegaLights</strong> - evaluating applicability to mobile GPU constraints.</li>
           <li>Onboarded and mentored 2 new hires. Led technical delivery across a 3-person team.</li>
         </ul>
       </div>
@@ -1124,12 +185,12 @@
       <div class="exp-item">
         <div class="exp-top">
           <div class="exp-title">Software Developer Intern</div>
-          <div class="exp-date">Jun — Aug 2022</div>
+          <div class="exp-date">Jun - Aug 2022</div>
         </div>
         <div class="exp-co">Precisely · Delhi</div>
         <ul class="exp-bullets">
           <li>Built a Python/VTK tool to parse GML and JSON 3D city data and render <strong>full 3D city models
-              integrated into MapInfo Pro</strong> — capable of handling thousands of buildings at multiple LODs with
+              integrated into MapInfo Pro</strong> - capable of handling thousands of buildings at multiple LODs with
             texture support.</li>
           <li>Built the UI in PyQt and integrated the tool as a standalone feature within the existing Mapbasic
             workflow.</li>
@@ -1139,11 +200,11 @@
       <div class="exp-item">
         <div class="exp-top">
           <div class="exp-title">Web Developer Intern</div>
-          <div class="exp-date">Jun — Aug 2021</div>
+          <div class="exp-date">Jun - Aug 2021</div>
         </div>
         <div class="exp-co">Droid7 Technolabs · Delhi</div>
         <ul class="exp-bullets">
-          <li>Built the ReactJS frontend for a freelance job posting platform from designer wireframes — implemented
+          <li>Built the ReactJS frontend for a freelance job posting platform from designer wireframes - implemented
             auth flows and search with full CRUD via hooks.</li>
           <li>Integrated Laravel 8 API for seamless frontend-backend communication.</li>
         </ul>
@@ -1167,16 +228,16 @@
       <div style="margin-top:40px;">
         <div class="sc-label" style="margin-bottom:12px;">Awards</div>
         <div class="award-item">
-          <span><strong>YVR Hackathon 2024</strong> — Best Technical Implementation</span>
+          <span><strong>YVR Hackathon 2024</strong> - Best Technical Implementation</span>
           <span>4th overall</span>
         </div>
         <div class="award-item">
-          <span><strong>BCIT WinterHacks 2021</strong> — Best Visuals</span>
+          <span><strong>BCIT WinterHacks 2021</strong> - Best Visuals</span>
         </div>
       </div>
 
       <div style="margin-top:40px;">
-        <a href="assets/files/Resume_GameDev_Parth_Chaturvedi.pdf" target="_blank" class="pdf-btn">
+        <a href="assets/files/Resume_GameDev_Full_Parth_Chaturvedi.pdf" target="_blank" class="pdf-btn">
           <i class="bi bi-download"></i> Game Dev Resume
         </a>
         <a href="assets/files/Resume_SWE_Parth_Chaturvedi.pdf" target="_blank" class="pdf-btn">
@@ -1204,7 +265,7 @@
 
         <div class="proj-card" data-cat="game graphics" data-id="going-down">
           <div class="proj-card-img">
-            <div class="proj-card-img-ph">Going Down</div>
+            <img src="assets/img/portfolio/GoingDown/prof.png" alt="Going_Down" loading="lazy">
           </div>
           <div class="proj-card-body">
             <div class="proj-card-sub">UE5 · Solo · In Dev</div>
@@ -1218,7 +279,7 @@
 
         <div class="proj-card" data-cat="graphics" data-id="duck-hunt">
           <div class="proj-card-img">
-            <div class="proj-card-img-ph">Duck Hunt 3DF</div>
+            <img src="assets/img/portfolio/DuckHunt/duck_hunt_1.png" alt="Duck Hunt 3D" loading="lazy">
           </div>
           <div class="proj-card-body">
             <div class="proj-card-sub">C++ / OpenGL · Team</div>
@@ -1277,7 +338,7 @@
 
         <div class="proj-card" data-cat="game" data-id="color-theory">
           <div class="proj-card-img">
-            <div class="proj-card-img-ph">Color Theory</div>
+            <img src="assets/img/portfolio/ColorTheory/ct1.png" alt="ColorTheory" loading="lazy">
           </div>
           <div class="proj-card-body">
             <div class="proj-card-sub">Unity 2D · Game Jam · Team of 3</div>
@@ -1359,6 +420,7 @@
       <button class="modal-close" id="modal-close"><i class="bi bi-x-lg"></i></button>
       <div class="modal-media" id="modal-media">
         <img id="modal-img" src="" alt="">
+        <video id="modal-video" controls playsinline preload="metadata" style="display:none"></video>
         <div class="modal-nav" id="modal-nav">
           <button class="modal-nav-btn" id="modal-prev"><i class="bi bi-chevron-left"></i></button>
           <button class="modal-nav-btn" id="modal-next"><i class="bi bi-chevron-right"></i></button>
@@ -1382,7 +444,7 @@
     <button class="mode-btn" data-mode="wire"><span class="mode-dot"></span><span>Wire</span></button>
   </div>
 
-  <!-- Flower scripts — unchanged -->
+  <!-- Flower scripts - unchanged -->
   <script src="/assets/js/p5.min.js"></script>
   <script src="/assets/js/constants.js"></script>
   <script src="/assets/js/globals.js"></script>
@@ -1399,50 +461,54 @@
       'going-down': {
         label: 'UE5 · Solo · In Development',
         title: 'Going Down',
-        desc: 'A first-person psychological horror puzzle game built entirely solo in UE5 over 8 months. The premise: <strong>shadows will kill you. Light is the only safe thing.</strong> The whole game is built around that tension.\n\nSix interconnected puzzle systems — lock and door, pattern keypad, generator, electric switch, picture rotation, and contextual interaction hints. A dynamic shadow and light detection system drives the enemy AI awareness. There\'s a scripted chase sequence, cutscenes, environmental storytelling, and a full narrative pipeline. Still in active development toward a full milestone.',
+        desc: 'A first-person psychological horror puzzle game built entirely solo in UE5 over 8 months. The premise: <strong>shadows will kill you. Light is the only safe thing.</strong> The whole game is built around that tension.\n\nSix interconnected puzzle systems - lock and door, pattern keypad, generator, electric switch, picture rotation, and contextual interaction hints. A dynamic shadow and light detection system drives the enemy AI awareness. There\'s a scripted chase sequence, cutscenes, environmental storytelling, and a full narrative pipeline. Still in active development toward a full milestone.',
         tags: ['UE5', 'Blueprints', 'Horror', 'Puzzle', 'Solo', 'In Dev'],
-        images: [],
-        video: null,
+        images: ['assets/img/portfolio/GoingDown/gd1.png', 'assets/img/portfolio/GoingDown/gd2.png',
+        'assets/img/portfolio/GoingDown/gd3.png', 'assets/img/portfolio/GoingDown/gd4.png',],
+        video: 'assets/videos/Going_Down.mp4',
         links: [{
-          label: 'In Development',
-          url: null
+          label: 'GDD',
+          url: "assets/files/Going Down - Game Design Document.pdf",
+          icon: 'bi-box-arrow-up-right'
         }]
       },
       'duck-hunt': {
         label: 'C++ / OpenGL · Team of 6 · Sep–Dec 2024',
         title: 'Duck Hunt 3DF',
-        desc: 'We built a 3D game engine from scratch in C++ and shipped Duck Hunt in it as the flagship demo. I led all graphics programming.\n\n<strong>Deferred PBR rendering pipeline</strong> with Cook-Torrance BRDF, image-based lighting (IBL), and HDR skybox. Full entity-component-system architecture — we actually refactored to ECS mid-project when the scene graph started falling apart, which was painful but the right call. Physics integration, scene management, input system, the works.',
+        desc: 'We built a 3D game engine from scratch in C++ and shipped Duck Hunt in it as the flagship demo. I led all graphics programming.\n\n<strong>Deferred PBR rendering pipeline</strong> with Cook-Torrance BRDF, image-based lighting (IBL), and HDR skybox. Full entity-component-system architecture - we actually refactored to ECS mid-project when the scene graph started falling apart, which was painful but the right call. Physics integration, scene management, input system, the works.',
         tags: ['C++', 'OpenGL', 'PBR', 'IBL', 'ECS', 'Cook-Torrance'],
-        images: [],
-        video: null,
+        images: ['assets/img/portfolio/DuckHunt/duck_hunt_1.png', 'assets/img/portfolio/DuckHunt/duck_hunt_2.png',
+        'assets/img/portfolio/DuckHunt/duck_hunt_3.png', 'assets/img/portfolio/DuckHunt/duck_hunt_4.png'],
+        video: 'assets/videos/DuckHunt3D.mp4',
         links: [{
           label: 'GitHub',
-          url: 'https://github.com/ParthCv',
+          url: 'https://github.com/ParthCv/Duck-Engine',
           icon: 'bi-github'
         }]
       },
       'peonia': {
         label: 'p5.js · Solo · Running on this site',
         title: 'Peonia',
-        desc: 'The generative flower system running behind this page. <strong>11 procedural species</strong> — each one a different combination of petal geometry, stamen type, leaf structure, and bloom behavior. Fake 3D projection with diffuse, specular, and rim lighting per-petal. Nine render modes. Full post-processing pipeline including bloom, vignette, and chromatic aberration.\n\nThe three aesthetic modes (Organic, Digital, Wire) each change the color palette, typography, and flower rendering style simultaneously. The flowers you\'re seeing were never stored — they\'re computed fresh every frame.',
+        desc: 'The generative flower system running behind this page. <strong>11 procedural species</strong> - each one a different combination of petal geometry, stamen type, leaf structure, and bloom behavior. Fake 3D projection with diffuse, specular, and rim lighting per-petal. Nine render modes. Full post-processing pipeline including bloom, vignette, and chromatic aberration.\n\nThe three aesthetic modes (Organic, Digital, Wire) each change the color palette, typography, and flower rendering style simultaneously. The flowers you\'re seeing were never stored - they\'re computed fresh every frame.',
         tags: ['p5.js', '3D Projection', 'Generative Art', 'Shading', 'Post-Processing', 'Solo'],
-        images: [],
+        images: ['assets/img/portfolio/GoingDown/gd1.png', 'assets/img/portfolio/GoingDown/gd2.png',
+        'assets/img/portfolio/GoingDown/gd3.png', 'assets/img/portfolio/GoingDown/gd4.png',],
         video: null,
         links: [{
-          label: 'GitHub',
-          url: 'https://github.com/ParthCv',
-          icon: 'bi-github'
+          label: 'GDD',
+          url: "assets/files/Going Down - Game Design Document.pdf",
+          icon: 'bi-box-arrow-up-right'
         }]
       },
       'solarium': {
         label: 'Swift / SceneKit / SpriteKit · Team · Jan–Apr 2024',
         title: 'Solarium',
-        desc: 'An isometric puzzle game for iPhone with a Solarpunk theme — plants, light, and mechanisms. I led the architecture: player class, animation system, puzzle framework. Built a sequential puzzle system for the 5-puzzle demo and focused on mobile performance throughout.\n\nCustom Blender assets for the visual identity. The world was inspired by Unreal Engine aesthetics applied to a mobile constraint set, which was a fun problem.',
+        desc: 'An isometric puzzle game for iPhone with a Solarpunk theme - plants, light, and mechanisms. I led the architecture: player class, animation system, puzzle framework. Built a sequential puzzle system for the 5-puzzle demo and focused on mobile performance throughout.\n\nCustom Blender assets for the visual identity. The world was inspired by Unreal Engine aesthetics applied to a mobile constraint set, which was a fun problem.',
         tags: ['Swift', 'SceneKit', 'SpriteKit', 'iOS', 'Blender', 'Puzzles'],
         images: ['assets/img/portfolio/Solarium/main.png', 'assets/img/portfolio/Solarium/ball.png',
           'assets/img/portfolio/Solarium/lift.png', 'assets/img/portfolio/Solarium/threetubes.png'
         ],
-        video: null,
+        video: 'assets/videos/Solarium.mp4',
         links: [{
           label: 'GitHub',
           url: 'https://github.com/ParthCv/Solarium',
@@ -1452,12 +518,12 @@
       'shadow-dancers': {
         label: 'Unity · URP · Team · Sep–Dec 2023',
         title: 'Shadow Dancers',
-        desc: 'A survival stealth horror game — think Thief but smaller and meaner. I built the enemy AI: dynamic waypoint and path system, C# component for runtime stat modification, and the detection systems.\n\n<strong>Sound detection</strong> and <strong>light detection</strong> are separate systems that both feed into enemy awareness state. The light detection in particular — checking whether the player is in shadow or illuminated — was the interesting technical piece, and it ended up influencing what I wanted to build in Going Down.\n\nPublished in the BCIT annual games showcase.',
+        desc: 'A survival stealth horror game - think Thief but smaller and meaner. I built the enemy AI: dynamic waypoint and path system, C# component for runtime stat modification, and the detection systems.\n\n<strong>Sound detection</strong> and <strong>light detection</strong> are separate systems that both feed into enemy awareness state. The light detection in particular - checking whether the player is in shadow or illuminated - was the interesting technical piece, and it ended up influencing what I wanted to build in Going Down.\n\nPublished in the BCIT annual games showcase.',
         tags: ['Unity', 'C#', 'URP', 'AI', 'Stealth', 'Perforce'],
         images: ['assets/img/portfolio/ShadowDancers/hell.png', 'assets/img/portfolio/ShadowDancers/main.png',
           'assets/img/portfolio/ShadowDancers/light.png', 'assets/img/portfolio/ShadowDancers/detect.png'
         ],
-        video: null,
+        video: 'assets/videos/Shadow_Dancer.mp4',
         links: [{
           label: 'BCIT Showcase',
           url: 'https://commons.bcit.ca/news/2024/02/the-power-of-play-be-part-of-the-gaming-industry/',
@@ -1467,20 +533,21 @@
       'color-theory': {
         label: 'Unity 2D · Game Jam · Team of 3 · 2024',
         title: 'Color Theory',
-        desc: 'A web-playable puzzle game made in a game jam with two friends. The mechanic is color-swapping — enemies and hazards react differently depending on what color state you\'re in. We shipped it in the jam window and it got a surprisingly good reception from the community.\n\nEnemy detection, audio, level transitions, web build — all in the jam timeline.',
+        desc: 'A web-playable puzzle game made in a game jam with two friends. The mechanic is color-swapping - enemies and hazards react differently depending on what color state you\'re in. We shipped it in the jam window and it got a surprisingly good reception from the community.\n\nEnemy detection, audio, level transitions, web build - all in the jam timeline.',
         tags: ['Unity', 'C#', 'Game Jam', 'Web Build', '2D'],
-        images: [],
+        images: ['assets/img/portfolio/ColorTheory/ct1.png',
+        'assets/img/portfolio/ColorTheory/ct2.png', 'assets/img/portfolio/ColorTheory/ct3.png', 'assets/img/portfolio/ColorTheory/ct4.png',],
         video: null,
         links: [{
           label: 'Play (Web)',
-          url: null,
+          url: 'https://nathanrun1.itch.io/color-theory',
           icon: 'bi-play-circle'
         }]
       },
       'yvr': {
         label: 'Python · Raspberry Pi · Hackathon · Apr 2024',
         title: 'YVR Hackathon',
-        desc: 'A week-long hackathon at Vancouver International Airport. The problem was bird nests in aircraft engines — we pivoted to a broader airport monitoring solution.\n\nBuilt a pipeline on Raspberry Pi that pulled live camera feeds and sensor data via FTP server, ran them through a <strong>custom YOLOv7 model</strong> trained on images we captured from YVR cameras, and flagged unattended bags, people in restricted areas, and debris. Sensor logging via MQTT stored structured log files for review.\n\n<strong>Best Technical Implementation award. 4th place overall.</strong>',
+        desc: 'A week-long hackathon at Vancouver International Airport. The problem was bird nests in aircraft engines - we pivoted to a broader airport monitoring solution.\n\nBuilt a pipeline on Raspberry Pi that pulled live camera feeds and sensor data via FTP server, ran them through a <strong>custom YOLOv7 model</strong> trained on images we captured from YVR cameras, and flagged unattended bags, people in restricted areas, and debris. Sensor logging via MQTT stored structured log files for review.\n\n<strong>Best Technical Implementation award. 4th place overall.</strong>',
         tags: ['Python', 'YOLOv7', 'PyTorch', 'Raspberry Pi', 'MQTT', 'Award'],
         images: ['assets/img/portfolio/YVR_Hackathon/detect.png', 'assets/img/portfolio/YVR_Hackathon/main.jpg'],
         video: null,
@@ -1493,7 +560,7 @@
       'pintos': {
         label: 'C · OS Kernel · Jan–Apr 2024',
         title: 'PintOS',
-        desc: 'Replaced the basic round-robin scheduler in the PintOS educational OS with a <strong>multi-level feedback queue scheduler</strong> in C. Tasks get prioritized dynamically based on CPU usage history, which required modifying the synchronization primitives to handle changing process priorities without deadlock.\n\nLow-level OS internals work — the kind of thing that makes everything above it make more sense.',
+        desc: 'Replaced the basic round-robin scheduler in the PintOS educational OS with a <strong>multi-level feedback queue scheduler</strong> in C. Tasks get prioritized dynamically based on CPU usage history, which required modifying the synchronization primitives to handle changing process priorities without deadlock.\n\nLow-level OS internals work - the kind of thing that makes everything above it make more sense.',
         tags: ['C', 'Operating Systems', 'Scheduler', 'Concurrency', 'Synchronization'],
         images: ['assets/img/portfolio/PintOs/res.png', 'assets/img/portfolio/PintOs/mlfqs.png'],
         video: null,
@@ -1506,7 +573,7 @@
       'vocab-war': {
         label: 'React / Firebase · Team · May 2021',
         title: 'Vocab War',
-        desc: 'Multiplayer word game where players race to form words from a shared pool of letters. Built in a team of 4 over 5 weeks. Planned in Figma, built with ReactJS frontend and Firebase for real-time state and auth.\n\nPlayable live — the lobby system actually works.',
+        desc: 'Multiplayer word game where players race to form words from a shared pool of letters. Built in a team of 4 over 5 weeks. Planned in Figma, built with ReactJS frontend and Firebase for real-time state and auth.\n\nPlayable live - the lobby system actually works.',
         tags: ['React', 'Firebase', 'Multiplayer', 'Real-time', 'Figma'],
         images: ['assets/img/portfolio/VocabWar/bg.png', 'assets/img/portfolio/VocabWar/home-page.png',
           'assets/img/portfolio/VocabWar/game-page.png'
@@ -1527,7 +594,7 @@
       'tap-it': {
         label: 'JavaScript · Industry Project · Sep–Dec 2022',
         title: 'Tap It',
-        desc: 'Industry project for Oooh, a social media app with built-in games. We built TapIt — players compete against a host to tap through escalating stages for a high score. Reactions and scores stored in-app.\n\nBuilt in their custom Oooh3 JavaScript framework, integrated into their existing iOS platform. Collaborative team of four, running in Docker.',
+        desc: 'Industry project for Oooh, a social media app with built-in games. We built TapIt - players compete against a host to tap through escalating stages for a high score. Reactions and scores stored in-app.\n\nBuilt in their custom Oooh3 JavaScript framework, integrated into their existing iOS platform. Collaborative team of four, running in Docker.',
         tags: ['JavaScript', 'Oooh3', 'Docker', 'Industry', 'Team'],
         images: ['assets/img/portfolio/Ooh/bg.png', 'assets/img/portfolio/Ooh/home.png',
           'assets/img/portfolio/Ooh/game.png'
@@ -1541,92 +608,84 @@
       }
     }
 
-    // Modal logic — unchanged from your original
-    let modal_images = [],
-      modal_img_idx = 0
+    // Modal logic - unchanged from your original
+    let modal_media = [] // combined: video(s) first, then images
+    let modal_idx = 0
 
     function openModal(id) {
       const p = PROJECT_DATA[id]
       if (!p) return
-      modal_images = p.images || []
-      modal_img_idx = 0
+
+      // one carousel for both
+      modal_media = []
+      if (p.video) modal_media.push({ type: 'video', src: p.video })
+      ;(p.images || []).forEach(src => modal_media.push({ type: 'image', src }))
+      modal_idx = 0
+
       document.getElementById('modal-label').textContent = p.label
       document.getElementById('modal-title').innerHTML = p.title
       document.getElementById('modal-desc').innerHTML = p.desc.replace(/\n/g, '<br>')
-      const tagsEl = document.getElementById('modal-tags')
-      tagsEl.innerHTML = p.tags.map(t => `<span class="proj-tag">${t}</span>`).join('')
-      const linksEl = document.getElementById('modal-links')
-      linksEl.innerHTML = p.links.map(l => l.url ?
-        `<a href="${l.url}" target="_blank" class="modal-link"><i class="bi ${l.icon || 'bi-arrow-up-right'}"></i> ${l.label}</a>` :
+
+      document.getElementById('modal-tags').innerHTML =
+      p.tags.map(t => `<span class="proj-tag">${t}</span>`).join('')
+
+      document.getElementById('modal-links').innerHTML = p.links.map(l => l.url ?
+        `<a href="${l.url}" target="_blank" class="modal-link"><i class="bi ${l.icon || 'bi-arrow-up-right'}"></i>
+        ${l.label}</a>` :
         `<span class="modal-link" style="opacity:0.5;cursor:default"><i class="bi bi-clock"></i> ${l.label}</span>`
       ).join('')
-      const mediaEl = document.getElementById('modal-media')
-      const imgEl = document.getElementById('modal-img')
-      const navEl = document.getElementById('modal-nav')
-      const dotsEl = document.getElementById('modal-dots')
-      if (p.video) {
-        imgEl.style.display = 'none';
-        navEl.style.display = 'none';
-        dotsEl.innerHTML = ''
-        let iframe = mediaEl.querySelector('iframe')
-        if (!iframe) {
-          iframe = document.createElement('iframe');
-          iframe.allow = 'autoplay; encrypted-media';
-          iframe.allowFullscreen = true;
-          mediaEl.appendChild(iframe)
-        }
-        iframe.style.display = 'block';
-        iframe.src = p.video
-      } else if (modal_images.length > 0) {
-        const iframe = mediaEl.querySelector('iframe')
-        if (iframe) {
-          iframe.style.display = 'none';
-          iframe.src = ''
-        }
-        imgEl.style.display = 'block'
-        navEl.style.display = modal_images.length > 1 ? 'flex' : 'none'
-        updateModalImg()
+
+      document.getElementById('modal-nav').style.display = modal_media.length > 1 ? 'flex' : 'none'
+
+      if (modal_media.length) {
+        updateModalMedia()
       } else {
-        const iframe = mediaEl.querySelector('iframe')
-        if (iframe) {
-          iframe.style.display = 'none'
-        }
-        imgEl.style.display = 'none';
-        navEl.style.display = 'none';
-        dotsEl.innerHTML = ''
-        mediaEl.style.background = 'var(--accent-dim)'
+        document.getElementById('modal-img').style.display = 'none'
+        document.getElementById('modal-video').style.display = 'none'
+        document.getElementById('modal-dots').innerHTML = ''
       }
+
       document.getElementById('modal').classList.add('open')
     }
 
-    function updateModalImg() {
-      if (!modal_images.length) return
-      document.getElementById('modal-img').src = modal_images[modal_img_idx]
-      const dotsEl = document.getElementById('modal-dots')
-      dotsEl.innerHTML = modal_images.map((_, i) =>
-        `<div class="modal-dot ${i === modal_img_idx ? 'active' : ''}" onclick="goToImg(${i})"></div>`).join('')
+      function updateModalMedia() {
+      if (!modal_media.length) return
+      const item = modal_media[modal_idx]
+      const imgEl = document.getElementById('modal-img')
+      const vidEl = document.getElementById('modal-video')
+
+      if (item.type === 'video') {
+      imgEl.style.display = 'none'
+      vidEl.style.display = 'block'
+      if (!vidEl.src.endsWith(item.src)) vidEl.src = item.src // only reload if changed
+      } else {
+      vidEl.pause()
+      vidEl.style.display = 'none'
+      imgEl.style.display = 'block'
+      imgEl.src = item.src
+      }
+
+      document.getElementById('modal-dots').innerHTML = modal_media.map((m, i) =>
+      `<div class="modal-dot ${i === modal_idx ? 'active' : ''}" onclick="goToMedia(${i})"></div>`).join('')
     }
 
-    function goToImg(i) {
-      modal_img_idx = i;
-      updateModalImg()
-    }
+    function goToMedia(i) { modal_idx = i; updateModalMedia() }
 
     document.getElementById('modal-prev').onclick = () => {
-      if (!modal_images.length) return;
-      modal_img_idx = (modal_img_idx - 1 + modal_images.length) % modal_images.length;
-      updateModalImg()
+      if (!modal_media.length) return
+      modal_idx = (modal_idx - 1 + modal_media.length) % modal_media.length
+      updateModalMedia()
     }
     document.getElementById('modal-next').onclick = () => {
-      if (!modal_images.length) return;
-      modal_img_idx = (modal_img_idx + 1) % modal_images.length;
-      updateModalImg()
+      if (!modal_media.length) return
+      modal_idx = (modal_idx + 1) % modal_media.length
+      updateModalMedia()
     }
 
     function closeModal() {
       document.getElementById('modal').classList.remove('open')
-      const iframe = document.querySelector('#modal-media iframe')
-      if (iframe) iframe.src = ''
+      const vidEl = document.getElementById('modal-video')
+      if (vidEl) { vidEl.pause(); vidEl.removeAttribute('src'); vidEl.load() } // stop audio on close
     }
 
     document.getElementById('modal-close').onclick = closeModal
