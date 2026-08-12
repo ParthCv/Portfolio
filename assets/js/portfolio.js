@@ -19,7 +19,7 @@ const PORTFOLIO_MODES = {
   }
 }
 
-const FLOWER_INTERVAL   = 28000  // ms between flower switches
+const FLOWER_INTERVAL   = 10000  // ms between flower switches
 const WILT_DURATION     = 3500   // ms for wilt animation
 let   current_mode      = 'digital'
 let   current_section   = 'home'
@@ -146,7 +146,15 @@ function applyFlowerMode(mode) {
   const cfg = PORTFOLIO_MODES[mode]
 
   // Render mode — this mode's first/only render
-  if (typeof render_mode !== 'undefined') render_mode = cfg.renders[0]
+  if (typeof render_mode !== 'undefined') {
+    if (mode === 'digital') {
+      render_cycle_idx = Math.floor(Math.random() * cfg.renders.length)
+      render_mode = cfg.renders[render_cycle_idx]
+    } else {
+      render_cycle_idx = 0
+      render_mode = cfg.renders[0]
+    }
+  }
 
   // Rotation speed
   window._portfolio_rot = cfg.rotation
