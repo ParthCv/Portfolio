@@ -421,6 +421,8 @@
       <div class="modal-media" id="modal-media">
         <img id="modal-img" src="" alt="">
         <video id="modal-video" controls playsinline preload="metadata" style="display:none"></video>
+        <iframe id="modal-iframe" style="display:none" allow="autoplay; encrypted-media" allowfullscreen
+          frameborder="0"></iframe>
         <div class="modal-nav" id="modal-nav">
           <button class="modal-nav-btn" id="modal-prev"><i class="bi bi-chevron-left"></i></button>
           <button class="modal-nav-btn" id="modal-next"><i class="bi bi-chevron-right"></i></button>
@@ -465,7 +467,7 @@
         tags: ['UE5', 'Blueprints', 'Horror', 'Puzzle', 'Solo', 'In Dev'],
         images: ['assets/img/portfolio/GoingDown/gd1.png', 'assets/img/portfolio/GoingDown/gd2.png',
         'assets/img/portfolio/GoingDown/gd3.png', 'assets/img/portfolio/GoingDown/gd4.png',],
-        video: 'assets/videos/Going_Down.mp4',
+        video: 'https://www.youtube.com/embed/j9J-3M2Xk8s',
         links: [{
           label: 'GDD',
           url: "assets/files/Going Down - Game Design Document.pdf",
@@ -508,7 +510,7 @@
         images: ['assets/img/portfolio/Solarium/main.png', 'assets/img/portfolio/Solarium/ball.png',
           'assets/img/portfolio/Solarium/lift.png', 'assets/img/portfolio/Solarium/threetubes.png'
         ],
-        video: 'assets/videos/Solarium.mp4',
+        video: 'https://www.youtube.com/embed/t7WpAtMTbqc',
         links: [{
           label: 'GitHub',
           url: 'https://github.com/ParthCv/Solarium',
@@ -609,16 +611,18 @@
     }
 
     // Modal logic - unchanged from your original
-    let modal_media = [] // combined: video(s) first, then images
+    let modal_media = []
     let modal_idx = 0
 
     function openModal(id) {
       const p = PROJECT_DATA[id]
       if (!p) return
 
-      // one carousel for both
       modal_media = []
-      if (p.video) modal_media.push({ type: 'video', src: p.video })
+      if (p.video) {
+        const isYouTube = /youtube\.com|youtu\.be/.test(p.video)
+        modal_media.push({ type: isYouTube ? 'youtube' : 'video', src: p.video })
+      }
       ;(p.images || []).forEach(src => modal_media.push({ type: 'image', src }))
       modal_idx = 0
 
@@ -630,9 +634,9 @@
       p.tags.map(t => `<span class="proj-tag">${t}</span>`).join('')
 
       document.getElementById('modal-links').innerHTML = p.links.map(l => l.url ?
-        `<a href="${l.url}" target="_blank" class="modal-link"><i class="bi ${l.icon || 'bi-arrow-up-right'}"></i>
+      `<a href="${l.url}" target="_blank" class="modal-link"><i class="bi ${l.icon || 'bi-arrow-up-right'}"></i>
         ${l.label}</a>` :
-        `<span class="modal-link" style="opacity:0.5;cursor:default"><i class="bi bi-clock"></i> ${l.label}</span>`
+      `<span class="modal-link" style="opacity:0.5;cursor:default"><i class="bi bi-clock"></i> ${l.label}</span>`
       ).join('')
 
       document.getElementById('modal-nav').style.display = modal_media.length > 1 ? 'flex' : 'none'
@@ -642,27 +646,36 @@
       } else {
         document.getElementById('modal-img').style.display = 'none'
         document.getElementById('modal-video').style.display = 'none'
+        document.getElementById('modal-iframe').style.display = 'none'
         document.getElementById('modal-dots').innerHTML = ''
       }
 
       document.getElementById('modal').classList.add('open')
     }
 
-      function updateModalMedia() {
+    function updateModalMedia() {
       if (!modal_media.length) return
       const item = modal_media[modal_idx]
       const imgEl = document.getElementById('modal-img')
       const vidEl = document.getElementById('modal-video')
+      const ifrEl = document.getElementById('modal-iframe')
 
-      if (item.type === 'video') {
+      // hide all first
       imgEl.style.display = 'none'
-      vidEl.style.display = 'block'
-      if (!vidEl.src.endsWith(item.src)) vidEl.src = item.src // only reload if changed
-      } else {
-      vidEl.pause()
       vidEl.style.display = 'none'
-      imgEl.style.display = 'block'
-      imgEl.src = item.src
+      ifrEl.style.display = 'none'
+      vidEl.pause()
+
+      if (item.type === 'youtube') {
+        ifrEl.style.display = 'block'
+      if (ifrEl.src !== item.src) ifrEl.src = item.src
+      } else if (item.type === 'video') {
+        vidEl.style.display = 'block'
+      if (!vidEl.src.endsWith(item.src)) vidEl.src = item.src
+      } else {
+        ifrEl.src = '' // stop YouTube playback when moving to an image
+        imgEl.style.display = 'block'
+        imgEl.src = item.src
       }
 
       document.getElementById('modal-dots').innerHTML = modal_media.map((m, i) =>
@@ -685,7 +698,9 @@
     function closeModal() {
       document.getElementById('modal').classList.remove('open')
       const vidEl = document.getElementById('modal-video')
-      if (vidEl) { vidEl.pause(); vidEl.removeAttribute('src'); vidEl.load() } // stop audio on close
+      const ifrEl = document.getElementById('modal-iframe')
+      if (vidEl) { vidEl.pause(); vidEl.removeAttribute('src'); vidEl.load() }
+      if (ifrEl) ifrEl.src = '' // kills YouTube audio on close
     }
 
     document.getElementById('modal-close').onclick = closeModal
