@@ -8,33 +8,30 @@
   <meta name="description"
     content="Graphics programmer and software engineer. Previously at Huawei Technologies Canada.">
 
-  <!-- Icons -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-
-  <!-- Fonts: Playfair Display + DM Sans | Space Mono | Barlow Condensed + DM Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
     href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,400&family=DM+Sans:wght@300;400&family=Space+Mono:wght@400;700&family=Barlow+Condensed:wght@700&family=DM+Mono:wght@300;400&display=swap"
     rel="stylesheet">
 
+  <!-- ALL YOUR ORIGINAL CSS UNCHANGED -->
   <style>
     *,
     *::before,
     *::after {
       box-sizing: border-box;
       margin: 0;
-      padding: 0;
+      padding: 0
     }
 
     html,
     body {
       height: 100%;
-      overflow: hidden;
+      overflow: hidden
     }
 
     :root {
-      /* ORGANIC — warm light / botanical */
       --bg: #f2ede4;
       --surface: rgba(242, 237, 228, 0.93);
       --text: #1a1512;
@@ -50,11 +47,10 @@
       --nav-case: none;
       --w-display: 600;
       --name-size: clamp(52px, 7vw, 96px);
-      --canvas-bg: 242, 237, 228;
+      --canvas-bg: 242, 237, 228
     }
 
     [data-mode="digital"] {
-      /* DIGITAL — dark terminal */
       --bg: #04050f;
       --surface: rgba(4, 5, 15, 0.91);
       --text: #c8cce8;
@@ -70,11 +66,10 @@
       --nav-case: none;
       --w-display: 700;
       --name-size: clamp(32px, 4vw, 58px);
-      --canvas-bg: 4, 5, 15;
+      --canvas-bg: 4, 5, 15
     }
 
     [data-mode="wire"] {
-      /* WIRE — architectural black/white */
       --bg: #000;
       --surface: rgba(0, 0, 0, 0.91);
       --text: #fff;
@@ -90,7 +85,7 @@
       --nav-case: uppercase;
       --w-display: 700;
       --name-size: clamp(72px, 10vw, 140px);
-      --canvas-bg: 0, 0, 0;
+      --canvas-bg: 0, 0, 0
     }
 
     body {
@@ -99,19 +94,19 @@
       font-family: var(--f-body);
       font-size: 15px;
       line-height: 1.7;
-      transition: background 0.7s ease, color 0.5s ease;
+      transition: background 0.7s ease, color 0.5s ease
     }
 
     a {
       color: inherit;
-      text-decoration: none;
+      text-decoration: none
     }
 
     #canvas-container {
       position: fixed;
       inset: 0;
       z-index: 0;
-      transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1)
     }
 
     #nav {
@@ -126,7 +121,7 @@
       justify-content: space-between;
       padding: 0 44px;
       background: linear-gradient(to bottom, var(--bg) 0%, transparent 100%);
-      transition: background 0.7s;
+      transition: background 0.7s
     }
 
     .nav-wordmark {
@@ -135,12 +130,12 @@
       letter-spacing: 0.28em;
       text-transform: uppercase;
       color: var(--muted);
-      transition: font-family 0.4s, color 0.4s;
+      transition: font-family 0.4s, color 0.4s
     }
 
     .nav-links {
       display: flex;
-      gap: 32px;
+      gap: 32px
     }
 
     .nav-link {
@@ -153,12 +148,12 @@
       background: none;
       border: none;
       padding: 0;
-      transition: color 0.2s, font-family 0.4s, letter-spacing 0.4s;
+      transition: color 0.2s, font-family 0.4s, letter-spacing 0.4s
     }
 
     .nav-link.active,
     .nav-link:hover {
-      color: var(--text);
+      color: var(--text)
     }
 
     .section {
@@ -167,17 +162,17 @@
       z-index: 10;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.4s ease;
+      transition: opacity 0.4s ease
     }
 
     .section.active {
       opacity: 1;
-      pointer-events: all;
+      pointer-events: all
     }
 
     #home {
       display: flex;
-      align-items: center;
+      align-items: center
     }
 
     .home-curtain {
@@ -189,14 +184,14 @@
       background: linear-gradient(to right, var(--bg) 55%, transparent 100%);
       pointer-events: none;
       transition: background 0.7s;
-      z-index: 1;
+      z-index: 1
     }
 
     .home-inner {
       position: relative;
       z-index: 2;
       padding: 0 0 0 8vw;
-      max-width: 500px;
+      max-width: 500px
     }
 
     .home-eyebrow {
@@ -206,7 +201,7 @@
       text-transform: uppercase;
       color: var(--accent);
       margin-bottom: 20px;
-      transition: color 0.4s, font-family 0.4s;
+      transition: color 0.4s, font-family 0.4s
     }
 
     .home-name {
@@ -217,19 +212,19 @@
       line-height: 0.92;
       color: var(--text);
       margin-bottom: 28px;
-      transition: font-family 0.4s, font-size 0.4s, color 0.4s;
+      transition: font-family 0.4s, font-size 0.4s, color 0.4s
     }
 
     [data-mode="digital"] .home-name {
-      font-style: normal;
+      font-style: normal
     }
 
     :root .home-name {
-      font-style: italic;
+      font-style: italic
     }
 
     [data-mode="wire"] .home-name {
-      font-style: normal;
+      font-style: normal
     }
 
     .home-sub {
@@ -238,18 +233,18 @@
       color: var(--muted);
       max-width: 360px;
       margin-bottom: 36px;
-      transition: color 0.4s;
+      transition: color 0.4s
     }
 
     .home-sub em {
       color: var(--text);
-      font-style: normal;
+      font-style: normal
     }
 
     .home-actions {
       display: flex;
       gap: 20px;
-      flex-wrap: wrap;
+      flex-wrap: wrap
     }
 
     .home-link {
@@ -268,12 +263,12 @@
       border-top: none;
       border-left: none;
       border-right: none;
-      transition: color 0.2s, border-color 0.2s;
+      transition: color 0.2s, border-color 0.2s
     }
 
     .home-link:hover {
       color: var(--text);
-      border-color: var(--text);
+      border-color: var(--text)
     }
 
     #about,
@@ -281,25 +276,25 @@
     #projects {
       background: var(--surface);
       overflow-y: auto;
-      transition: background 0.6s;
+      transition: background 0.6s
     }
 
     #about::-webkit-scrollbar,
     #resume::-webkit-scrollbar,
     #projects::-webkit-scrollbar {
-      width: 3px;
+      width: 3px
     }
 
     #about::-webkit-scrollbar-thumb,
     #resume::-webkit-scrollbar-thumb,
     #projects::-webkit-scrollbar-thumb {
-      background: var(--border);
+      background: var(--border)
     }
 
     .sc {
       max-width: 760px;
       margin: 0 auto;
-      padding: 84px 44px 120px;
+      padding: 84px 44px 120px
     }
 
     .sc-label {
@@ -309,7 +304,7 @@
       text-transform: uppercase;
       color: var(--accent);
       margin-bottom: 12px;
-      transition: color 0.4s, font-family 0.4s;
+      transition: color 0.4s, font-family 0.4s
     }
 
     .sc-heading {
@@ -320,14 +315,14 @@
       line-height: 1;
       color: var(--text);
       margin-bottom: 48px;
-      transition: font-family 0.4s, font-size 0.4s, color 0.4s;
+      transition: font-family 0.4s, font-size 0.4s, color 0.4s
     }
 
     hr.rule {
       border: none;
       border-top: 1px solid var(--border);
       margin: 44px 0;
-      transition: border-color 0.4s;
+      transition: border-color 0.4s
     }
 
     .bio {
@@ -335,19 +330,19 @@
       line-height: 1.85;
       color: var(--muted);
       max-width: 620px;
-      margin-bottom: 20px;
+      margin-bottom: 20px
     }
 
     .bio strong {
       color: var(--text);
-      font-weight: 400;
+      font-weight: 400
     }
 
     .skills-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 32px 44px;
-      margin-top: 44px;
+      margin-top: 44px
     }
 
     .sg-label {
@@ -357,25 +352,25 @@
       text-transform: uppercase;
       color: var(--accent);
       margin-bottom: 8px;
-      transition: color 0.4s, font-family 0.4s;
+      transition: color 0.4s, font-family 0.4s
     }
 
     .sg-items {
       font-size: 13px;
       color: var(--muted);
-      line-height: 2;
+      line-height: 2
     }
 
     .sg-items em {
       color: var(--text);
-      font-style: normal;
+      font-style: normal
     }
 
     .contact-row {
       display: flex;
       gap: 24px;
       flex-wrap: wrap;
-      margin-top: 44px;
+      margin-top: 44px
     }
 
     .contact-link {
@@ -387,21 +382,21 @@
       letter-spacing: 0.1em;
       color: var(--muted);
       text-decoration: none;
-      transition: color 0.2s;
+      transition: color 0.2s
     }
 
     .contact-link:hover {
-      color: var(--accent);
+      color: var(--accent)
     }
 
     .exp-item {
       margin-bottom: 40px;
       padding-bottom: 40px;
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid var(--border)
     }
 
     .exp-item:last-of-type {
-      border-bottom: none;
+      border-bottom: none
     }
 
     .exp-top {
@@ -410,7 +405,7 @@
       align-items: baseline;
       flex-wrap: wrap;
       gap: 8px;
-      margin-bottom: 4px;
+      margin-bottom: 4px
     }
 
     .exp-title {
@@ -419,14 +414,14 @@
       font-weight: var(--w-display);
       letter-spacing: var(--ls-h);
       color: var(--text);
-      transition: font-family 0.4s, color 0.4s;
+      transition: font-family 0.4s, color 0.4s
     }
 
     .exp-date {
       font-family: var(--f-mono);
       font-size: 10px;
       letter-spacing: 0.08em;
-      color: var(--muted);
+      color: var(--muted)
     }
 
     .exp-co {
@@ -434,31 +429,58 @@
       font-size: 10px;
       letter-spacing: 0.1em;
       color: var(--accent);
-      margin-bottom: 12px;
+      margin-bottom: 12px
     }
 
     .exp-body {
       font-size: 13px;
       color: var(--muted);
       line-height: 1.8;
-      max-width: 580px;
+      max-width: 580px
     }
 
     .exp-body strong {
       color: var(--text);
-      font-weight: 400;
+      font-weight: 400
+    }
+
+    .exp-bullets {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.8;
+      max-width: 580px;
+      padding-left: 0;
+      list-style: none;
+      margin-top: 10px
+    }
+
+    .exp-bullets li {
+      padding: 3px 0 3px 14px;
+      position: relative
+    }
+
+    .exp-bullets li::before {
+      content: '—';
+      position: absolute;
+      left: 0;
+      color: var(--accent)
+    }
+
+    .exp-bullets li strong {
+      color: var(--text);
+      font-weight: 400
     }
 
     .edu-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 14px;
+      gap: 14px
     }
 
     .edu-card {
       border: 1px solid var(--border);
       padding: 18px 20px;
-      transition: border-color 0.4s;
+      transition: border-color 0.4s
     }
 
     .edu-deg {
@@ -466,7 +488,7 @@
       font-size: 16px;
       font-weight: var(--w-display);
       color: var(--text);
-      margin-bottom: 5px;
+      margin-bottom: 5px
     }
 
     .edu-school {
@@ -474,12 +496,12 @@
       font-size: 9px;
       letter-spacing: 0.14em;
       color: var(--accent);
-      margin-bottom: 5px;
+      margin-bottom: 5px
     }
 
     .edu-note {
       font-size: 12px;
-      color: var(--muted);
+      color: var(--muted)
     }
 
     .award-item {
@@ -489,12 +511,12 @@
       font-size: 13px;
       color: var(--muted);
       padding: 10px 0;
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid var(--border)
     }
 
     .award-item strong {
       color: var(--text);
-      font-weight: 400;
+      font-weight: 400
     }
 
     .pdf-btn {
@@ -510,20 +532,21 @@
       border: 1px solid var(--border);
       padding: 10px 22px;
       margin-top: 40px;
-      transition: background 0.2s, color 0.2s, border-color 0.2s;
+      margin-right: 12px;
+      transition: background 0.2s, color 0.2s, border-color 0.2s
     }
 
     .pdf-btn:hover {
       background: var(--accent);
       color: var(--bg);
-      border-color: var(--accent);
+      border-color: var(--accent)
     }
 
     .filter-row {
       display: flex;
       gap: 4px;
       flex-wrap: wrap;
-      margin-bottom: 36px;
+      margin-bottom: 36px
     }
 
     .f-btn {
@@ -536,37 +559,36 @@
       border: 1px solid var(--border);
       padding: 7px 16px;
       cursor: pointer;
-      transition: background 0.2s, color 0.2s, border-color 0.2s, font-family 0.4s;
+      transition: background 0.2s, color 0.2s, border-color 0.2s, font-family 0.4s
     }
 
     .f-btn.active,
     .f-btn:hover {
       background: var(--accent);
       color: var(--bg);
-      border-color: var(--accent);
+      border-color: var(--accent)
     }
 
-    /* Card grid */
     .proj-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 16px;
+      gap: 16px
     }
 
     .proj-card {
       border: 1px solid var(--border);
       overflow: hidden;
       cursor: pointer;
-      transition: border-color 0.2s, transform 0.2s;
+      transition: border-color 0.2s, transform 0.2s
     }
 
     .proj-card:hover {
       border-color: var(--accent);
-      transform: translateY(-2px);
+      transform: translateY(-2px)
     }
 
     .proj-card.hidden {
-      display: none;
+      display: none
     }
 
     .proj-card-img {
@@ -574,14 +596,14 @@
       height: 150px;
       overflow: hidden;
       position: relative;
-      background: var(--accent-dim);
+      background: var(--accent-dim)
     }
 
     .proj-card-img img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      display: block;
+      display: block
     }
 
     .proj-card-img-ph {
@@ -596,11 +618,11 @@
       text-transform: uppercase;
       color: var(--accent);
       padding: 0 16px;
-      text-align: center;
+      text-align: center
     }
 
     .proj-card-body {
-      padding: 16px 18px;
+      padding: 16px 18px
     }
 
     .proj-card-sub {
@@ -608,7 +630,7 @@
       font-size: 9px;
       letter-spacing: 0.1em;
       color: var(--accent);
-      margin-bottom: 6px;
+      margin-bottom: 6px
     }
 
     .proj-card-title {
@@ -619,20 +641,20 @@
       color: var(--text);
       margin-bottom: 8px;
       line-height: 1.1;
-      transition: font-family 0.4s;
+      transition: font-family 0.4s
     }
 
     .proj-card-desc {
       font-size: 12px;
       color: var(--muted);
       line-height: 1.65;
-      margin-bottom: 12px;
+      margin-bottom: 12px
     }
 
     .proj-tags {
       display: flex;
       flex-wrap: wrap;
-      gap: 4px;
+      gap: 4px
     }
 
     .proj-tag {
@@ -640,7 +662,7 @@
       font-size: 9px;
       color: var(--muted);
       border: 1px solid var(--border);
-      padding: 2px 8px;
+      padding: 2px 8px
     }
 
     #modal {
@@ -650,18 +672,18 @@
       display: none;
       align-items: center;
       justify-content: center;
-      padding: 20px;
+      padding: 20px
     }
 
     #modal.open {
-      display: flex;
+      display: flex
     }
 
     .modal-overlay {
       position: absolute;
       inset: 0;
       background: rgba(0, 0, 0, 0.75);
-      backdrop-filter: blur(8px);
+      backdrop-filter: blur(8px)
     }
 
     .modal-box {
@@ -675,13 +697,13 @@
       overflow-y: auto;
       display: grid;
       grid-template-columns: 1fr 1fr;
-      transition: background 0.4s;
+      transition: background 0.4s
     }
 
     .modal-media {
       position: relative;
       background: #000;
-      min-height: 280px;
+      min-height: 280px
     }
 
     .modal-media img,
@@ -689,12 +711,12 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      display: block;
+      display: block
     }
 
     .modal-media iframe {
       border: none;
-      min-height: 320px;
+      min-height: 320px
     }
 
     .modal-nav {
@@ -705,7 +727,7 @@
       justify-content: space-between;
       width: 100%;
       padding: 0 10px;
-      pointer-events: none;
+      pointer-events: none
     }
 
     .modal-nav-btn {
@@ -720,11 +742,11 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: background 0.2s;
+      transition: background 0.2s
     }
 
     .modal-nav-btn:hover {
-      background: rgba(0, 0, 0, 0.9);
+      background: rgba(0, 0, 0, 0.9)
     }
 
     .modal-dots {
@@ -733,7 +755,7 @@
       left: 50%;
       transform: translateX(-50%);
       display: flex;
-      gap: 6px;
+      gap: 6px
     }
 
     .modal-dot {
@@ -742,17 +764,17 @@
       border-radius: 50%;
       background: rgba(255, 255, 255, 0.4);
       cursor: pointer;
-      transition: background 0.2s;
+      transition: background 0.2s
     }
 
     .modal-dot.active {
-      background: #fff;
+      background: #fff
     }
 
     .modal-info {
-      padding: 28px 28px 28px;
+      padding: 28px;
       display: flex;
-      flex-direction: column;
+      flex-direction: column
     }
 
     .modal-close {
@@ -769,7 +791,7 @@
       font-size: 16px;
       display: flex;
       align-items: center;
-      justify-content: center;
+      justify-content: center
     }
 
     .modal-info-label {
@@ -778,7 +800,7 @@
       letter-spacing: 0.2em;
       text-transform: uppercase;
       color: var(--accent);
-      margin-bottom: 8px;
+      margin-bottom: 8px
     }
 
     .modal-info-title {
@@ -788,7 +810,7 @@
       letter-spacing: var(--ls-h);
       color: var(--text);
       margin-bottom: 16px;
-      line-height: 1.1;
+      line-height: 1.1
     }
 
     .modal-info-desc {
@@ -796,26 +818,26 @@
       color: var(--muted);
       line-height: 1.8;
       flex: 1;
-      margin-bottom: 20px;
+      margin-bottom: 20px
     }
 
     .modal-info-desc strong {
       color: var(--text);
-      font-weight: 400;
+      font-weight: 400
     }
 
     .modal-info-tags {
       display: flex;
       flex-wrap: wrap;
       gap: 4px;
-      margin-bottom: 20px;
+      margin-bottom: 20px
     }
 
     .modal-links {
       display: flex;
       gap: 12px;
       flex-wrap: wrap;
-      margin-top: auto;
+      margin-top: auto
     }
 
     .modal-link {
@@ -829,12 +851,12 @@
       text-decoration: none;
       border: 1px solid var(--border);
       padding: 8px 16px;
-      transition: background 0.2s, color 0.2s;
+      transition: background 0.2s, color 0.2s
     }
 
     .modal-link:hover {
       background: var(--accent);
-      color: var(--bg);
+      color: var(--bg)
     }
 
     #mode-bar {
@@ -849,7 +871,7 @@
       backdrop-filter: blur(16px);
       padding: 4px;
       border: 1px solid var(--border);
-      transition: border-color 0.5s;
+      transition: border-color 0.5s
     }
 
     .mode-btn {
@@ -865,16 +887,16 @@
       display: flex;
       align-items: center;
       gap: 7px;
-      transition: color 0.2s, background 0.2s, font-family 0.4s;
+      transition: color 0.2s, background 0.2s, font-family 0.4s
     }
 
     .mode-btn:hover {
-      color: var(--text);
+      color: var(--text)
     }
 
     .mode-btn.active {
       color: var(--bg);
-      background: var(--accent);
+      background: var(--accent)
     }
 
     .mode-dot {
@@ -882,64 +904,62 @@
       height: 5px;
       border-radius: 50%;
       background: currentColor;
-      flex-shrink: 0;
+      flex-shrink: 0
     }
 
-    @media (max-width: 768px) {
+    @media(max-width:768px) {
       .home-inner {
         padding: 0 6vw;
-        max-width: 100%;
+        max-width: 100%
       }
 
       .home-curtain {
-        width: 100%;
+        width: 100%
       }
 
       .skills-grid,
       .edu-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr
       }
 
       .proj-grid {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr 1fr
       }
 
       .modal-box {
         grid-template-columns: 1fr;
-        max-height: 85vh;
+        max-height: 85vh
       }
 
       .sc {
-        padding: 80px 6vw 110px;
+        padding: 80px 6vw 110px
       }
 
       #nav {
-        padding: 0 20px;
+        padding: 0 20px
       }
 
       .home-curtain {
         width: 100%;
-        background: linear-gradient(to top, var(--bg) 30%, transparent 85%);
+        background: linear-gradient(to top, var(--bg) 30%, transparent 85%)
       }
     }
 
-    @media (max-width: 480px) {
+    @media(max-width:480px) {
       .proj-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr
       }
 
       .nav-wordmark {
-        display: none;
+        display: none
       }
     }
   </style>
 </head>
 
 <body>
-
   <div id="canvas-container"></div>
 
-  <!-- Nav -->
   <nav id="nav">
     <span class="nav-wordmark">ParthCV</span>
     <div class="nav-links">
@@ -950,15 +970,15 @@
     </div>
   </nav>
 
-  <!-- ── HOME ─────────────────────────────────────────────────── -->
+  <!-- HOME -->
   <section id="home" class="section active">
     <div class="home-curtain"></div>
     <div class="home-inner">
       <div class="home-eyebrow">Vancouver, BC &nbsp;·&nbsp; Graphics Programmer</div>
       <h1 class="home-name">Parth<br>Chaturvedi</h1>
       <p class="home-sub">
-        Building <em>Going Down</em> — a solo UE5 psychological horror game.<br>
-        Previously shipped shader optimizations live in <em>Honkai: Star Rail</em> at Huawei.
+        Shipped shader optimizations live in <em>Honkai: Star Rail</em> at Huawei.<br>
+        Now building <em>Going Down</em> — a solo UE5 horror game where light is your only weapon.
       </p>
       <div class="home-actions">
         <a href="https://github.com/ParthCv" target="_blank" class="home-link">
@@ -977,26 +997,35 @@
     </div>
   </section>
 
-  <!-- ── ABOUT ─────────────────────────────────────────────────── -->
+  <!-- ABOUT -->
   <section id="about" class="section">
     <div class="sc">
       <div class="sc-label">About</div>
-      <h2 class="sc-heading">Who I am</h2>
+      <h2 class="sc-heading">Background</h2>
 
       <p class="bio">
-        I'm a <strong>graphics programmer and software engineer</strong> based in Vancouver, BC.
-        BCIT graduate with a BSc in Applied Computer Science (Games Development, GPA 88%)
-        and a CST Diploma in Predictive Analytics (GPA 86%).
+        I'm a <strong>graphics programmer</strong> based in Vancouver. I care about what happens between the CPU
+        submitting a draw call and a pixel appearing on screen — the pipeline, the math, the tradeoffs. That's the part
+        that pulls me in.
       </p>
       <p class="bio">
-        From September 2024 to March 2026 I worked at <strong>Huawei Technologies Canada</strong>
-        building an automated shader optimization platform that delivered a
-        <strong>5.5% GPU performance gain</strong> and 12% reduction in per-frame instruction
-        segments at 0.999 SSIM — shipped live in Honkai: Star Rail.
+        From 2024 to 2026 I was at <strong>Huawei Technologies Canada</strong> building tooling to automatically
+        optimize shaders in production mobile games. The platform combined a custom GLSL parser, a GNN for algorithm
+        detection, and an LLM-driven pipeline to find and apply optimizations — delivering a <strong>5.5% GPU
+          performance gain</strong> at 0.999 SSIM, shipped into Honkai: Star Rail. I also cut the manual performance
+        testing process from 30 minutes to 9 per capture.
       </p>
       <p class="bio">
-        I'm currently developing <strong>Going Down</strong>, a first-person psychological horror
-        puzzle game in UE5, and looking for my next role in graphics programming or game development.
+        Outside work I've been building <strong>Going Down</strong> solo in UE5 for about 8 months — a psychological
+        horror puzzle game where shadows kill you and the only safe thing is light. Six puzzle systems, a chase
+        sequence, cutscenes, a full narrative pipeline. It's the most sustained thing I've built on my own and I'm not
+        done yet.
+      </p>
+      <p class="bio">
+        I also built a 3D engine from scratch with a team — deferred PBR, Cook-Torrance BRDF, IBL, full ECS — and
+        shipped Duck Hunt in it as a demo. The generative flower system running behind this site
+        (<strong>Peonia</strong>) is another solo project: 11 procedural species, fake 3D projection,
+        diffuse/specular/rim lighting, nine render modes.
       </p>
 
       <hr class="rule">
@@ -1006,8 +1035,8 @@
           <div class="sg-label">Graphics & Rendering</div>
           <div class="sg-items">
             <em>OpenGL</em> · <em>Vulkan</em> · <em>Deferred PBR</em><br>
-            Cook-Torrance BRDF · IBL<br>
-            <em>GLSL</em> · Shader Optimization · RenderDoc
+            Cook-Torrance BRDF · IBL · GLSL<br>
+            Shader Optimization · RenderDoc
           </div>
         </div>
         <div>
@@ -1027,22 +1056,23 @@
         <div>
           <div class="sg-label">AI & ML</div>
           <div class="sg-items">
-            PyTorch Geometric · TensorFlow<br>
-            YOLO · GNN · LLM Pipelines
+            <em>PyTorch Geometric</em> · TensorFlow · Keras<br>
+            YOLO · GNN classification · LLM pipelines<br>
+            RL feedback systems
           </div>
         </div>
         <div>
           <div class="sg-label">Tools & Pipeline</div>
           <div class="sg-items">
             Git · Perforce · Docker · Jenkins<br>
-            Linux · Blender · RenderDoc
+            Linux · Blender · RenderDoc · tree-sitter
           </div>
         </div>
         <div>
-          <div class="sg-label">Frameworks</div>
+          <div class="sg-label">Web & Frameworks</div>
           <div class="sg-items">
             ReactJS · ExpressJS · Laravel<br>
-            Android · Flutter
+            Android · Flutter · Firebase · SQL
           </div>
         </div>
       </div>
@@ -1061,7 +1091,7 @@
     </div>
   </section>
 
-  <!-- ── RESUME ─────────────────────────────────────────────────── -->
+  <!-- RESUME -->
   <section id="resume" class="section">
     <div class="sc">
       <div class="sc-label">Experience</div>
@@ -1073,15 +1103,22 @@
           <div class="exp-date">Sep 2024 — Mar 2026</div>
         </div>
         <div class="exp-co">Huawei Technologies Canada · Vancouver, BC</div>
-        <div class="exp-body">
-          Built an automated shader optimization platform targeting top mobile titles —
-          <strong>Genshin Impact</strong> and <strong>Honkai: Star Rail</strong>.
-          Delivered <strong>5.5% GPU performance gain</strong> and 12% reduction in
-          per-frame instruction segments at 0.999 SSIM. Shipped live in Honkai: Star Rail.
-          Built GNN-based algorithm classification (PyTorch Geometric), LLM optimization
-          pipelines, automated RenderDoc profiling, and custom tree-sitter GLSL grammar
-          extensions. Led a 3-person team, mentored 2 new hires.
-        </div>
+        <ul class="exp-bullets">
+          <li>Built an automated shader optimization platform in Python targeting <strong>Genshin Impact</strong> and
+            <strong>Honkai: Star Rail</strong> — delivered <strong>5.5% GPU performance gain</strong> and 12% reduction
+            in per-frame instruction segments at 0.999 SSIM. Shipped live in Honkai: Star Rail.</li>
+          <li>Engineered a CLI tool in Python/Bash that cut per-capture performance testing from <strong>30 minutes to
+              9</strong>, enabling overnight batch runs with automatic result logging and visual diff output.</li>
+          <li>Developed a custom GLSL parser using tree-sitter to generate ASTs, enabling automated algorithm detection,
+            precision reduction, and lighting model simplification across fragment and compute shaders.</li>
+          <li>Built a <strong>GNN (PyTorch Geometric)</strong> for shader algorithm classification — integrated with an
+            LLM pipeline to surface optimization strategies from detected patterns.</li>
+          <li>Designed an LLM-driven evaluation pipeline that analyzed automated performance and visual quality metrics
+            (artifacts, clarity, frame interactions) as feedback signal for iterative optimization decisions.</li>
+          <li>Researched emerging mobile graphics techniques including <strong>Gaussian Splatting, NeRFs, ReSTIR, and
+              MegaLights</strong> — evaluating applicability to mobile GPU constraints.</li>
+          <li>Onboarded and mentored 2 new hires. Led technical delivery across a 3-person team.</li>
+        </ul>
       </div>
 
       <div class="exp-item">
@@ -1090,11 +1127,13 @@
           <div class="exp-date">Jun — Aug 2022</div>
         </div>
         <div class="exp-co">Precisely · Delhi</div>
-        <div class="exp-body">
-          Built a Python/VTK tool to parse GML and JSON 3D city data and render
-          <strong>3D city models integrated into MapInfo Pro</strong>. Capable of
-          rendering thousands of buildings at multiple LODs with texture data.
-        </div>
+        <ul class="exp-bullets">
+          <li>Built a Python/VTK tool to parse GML and JSON 3D city data and render <strong>full 3D city models
+              integrated into MapInfo Pro</strong> — capable of handling thousands of buildings at multiple LODs with
+            texture support.</li>
+          <li>Built the UI in PyQt and integrated the tool as a standalone feature within the existing Mapbasic
+            workflow.</li>
+        </ul>
       </div>
 
       <div class="exp-item">
@@ -1103,10 +1142,11 @@
           <div class="exp-date">Jun — Aug 2021</div>
         </div>
         <div class="exp-co">Droid7 Technolabs · Delhi</div>
-        <div class="exp-body">
-          Built ReactJS frontend for a freelance job posting platform.
-          Integrated Laravel 8 API for auth and full CRUD operations.
-        </div>
+        <ul class="exp-bullets">
+          <li>Built the ReactJS frontend for a freelance job posting platform from designer wireframes — implemented
+            auth flows and search with full CRUD via hooks.</li>
+          <li>Integrated Laravel 8 API for seamless frontend-backend communication.</li>
+        </ul>
       </div>
 
       <hr class="rule">
@@ -1115,7 +1155,7 @@
         <div class="edu-card">
           <div class="edu-deg">BSc Applied Computer Science</div>
           <div class="edu-school">BCIT · Sep 2023 – Apr 2026</div>
-          <div class="edu-note">Games Development · GPA 88%</div>
+          <div class="edu-note">Games Development (with Co-op) · GPA 88%</div>
         </div>
         <div class="edu-card">
           <div class="edu-deg">CST Diploma</div>
@@ -1124,24 +1164,29 @@
         </div>
       </div>
 
-      <div style="margin-top: 40px;">
-        <div class="sc-label" style="margin-bottom: 12px;">Awards</div>
+      <div style="margin-top:40px;">
+        <div class="sc-label" style="margin-bottom:12px;">Awards</div>
         <div class="award-item">
           <span><strong>YVR Hackathon 2024</strong> — Best Technical Implementation</span>
           <span>4th overall</span>
         </div>
         <div class="award-item">
-          <strong>BCIT WinterHacks 2021</strong> — Best Visuals
+          <span><strong>BCIT WinterHacks 2021</strong> — Best Visuals</span>
         </div>
       </div>
 
-      <a href="assets/resume.pdf" target="_blank" class="pdf-btn">
-        <i class="bi bi-download"></i> Download Resume PDF
-      </a>
+      <div style="margin-top:40px;">
+        <a href="assets/files/Resume_GameDev_Parth_Chaturvedi.pdf" target="_blank" class="pdf-btn">
+          <i class="bi bi-download"></i> Game Dev Resume
+        </a>
+        <a href="assets/files/Resume_SWE_Parth_Chaturvedi.pdf" target="_blank" class="pdf-btn">
+          <i class="bi bi-download"></i> SWE Resume
+        </a>
+      </div>
     </div>
   </section>
 
-  <!-- ── PROJECTS ───────────────────────────────────────────────── -->
+  <!-- PROJECTS -->
   <section id="projects" class="section">
     <div class="sc">
       <div class="sc-label">Projects</div>
@@ -1164,11 +1209,9 @@
           <div class="proj-card-body">
             <div class="proj-card-sub">UE5 · Solo · In Dev</div>
             <div class="proj-card-title">Going Down</div>
-            <div class="proj-card-desc">Psychological horror. Shadows kill. Light saves.</div>
+            <div class="proj-card-desc">Shadows kill. Light saves. A horror game built entirely alone.</div>
             <div class="proj-tags">
-              <span class="proj-tag">UE5</span>
-              <span class="proj-tag">Horror</span>
-              <span class="proj-tag">Solo</span>
+              <span class="proj-tag">UE5</span><span class="proj-tag">Horror</span><span class="proj-tag">Solo</span>
             </div>
           </div>
         </div>
@@ -1180,27 +1223,25 @@
           <div class="proj-card-body">
             <div class="proj-card-sub">C++ / OpenGL · Team</div>
             <div class="proj-card-title">Duck Hunt 3DF</div>
-            <div class="proj-card-desc">3D engine from scratch. Deferred PBR, IBL, ECS.</div>
+            <div class="proj-card-desc">Built a 3D engine from scratch. Deferred PBR, IBL, full ECS architecture.</div>
             <div class="proj-tags">
-              <span class="proj-tag">C++</span>
-              <span class="proj-tag">OpenGL</span>
-              <span class="proj-tag">PBR</span>
+              <span class="proj-tag">C++</span><span class="proj-tag">OpenGL</span><span
+                class="proj-tag">PBR</span><span class="proj-tag">ECS</span>
             </div>
           </div>
         </div>
 
-        <div class="proj-card" data-cat="graphics game" data-id="peonia">
+        <div class="proj-card" data-cat="graphics" data-id="peonia">
           <div class="proj-card-img">
             <div class="proj-card-img-ph">Peonia</div>
           </div>
           <div class="proj-card-body">
             <div class="proj-card-sub">p5.js · Solo · This site</div>
             <div class="proj-card-title">Peonia</div>
-            <div class="proj-card-desc">11 procedural flowers. You're looking at it.</div>
+            <div class="proj-card-desc">11 procedural flower species. You're already looking at it.</div>
             <div class="proj-tags">
-              <span class="proj-tag">p5.js</span>
-              <span class="proj-tag">3D Projection</span>
-              <span class="proj-tag">Generative</span>
+              <span class="proj-tag">p5.js</span><span class="proj-tag">Generative</span><span class="proj-tag">3D
+                Projection</span>
             </div>
           </div>
         </div>
@@ -1212,11 +1253,9 @@
           <div class="proj-card-body">
             <div class="proj-card-sub">Swift / SceneKit · Team</div>
             <div class="proj-card-title">Solarium</div>
-            <div class="proj-card-desc">Solarpunk iOS isometric puzzle game.</div>
+            <div class="proj-card-desc">Solarpunk iOS puzzle game. Led architecture and puzzle systems.</div>
             <div class="proj-tags">
-              <span class="proj-tag">Swift</span>
-              <span class="proj-tag">SceneKit</span>
-              <span class="proj-tag">iOS</span>
+              <span class="proj-tag">Swift</span><span class="proj-tag">SceneKit</span><span class="proj-tag">iOS</span>
             </div>
           </div>
         </div>
@@ -1228,11 +1267,24 @@
           <div class="proj-card-body">
             <div class="proj-card-sub">Unity · Team</div>
             <div class="proj-card-title">Shadow Dancers</div>
-            <div class="proj-card-desc">Survival stealth horror. Enemy AI with light/sound detection.</div>
+            <div class="proj-card-desc">Stealth horror with enemy AI that hears and sees. Published in BCIT showcase.
+            </div>
             <div class="proj-tags">
-              <span class="proj-tag">Unity</span>
-              <span class="proj-tag">C#</span>
-              <span class="proj-tag">AI</span>
+              <span class="proj-tag">Unity</span><span class="proj-tag">C#</span><span class="proj-tag">AI</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="proj-card" data-cat="game" data-id="color-theory">
+          <div class="proj-card-img">
+            <div class="proj-card-img-ph">Color Theory</div>
+          </div>
+          <div class="proj-card-body">
+            <div class="proj-card-sub">Unity 2D · Game Jam · Team of 3</div>
+            <div class="proj-card-title">Color Theory</div>
+            <div class="proj-card-desc">Web-playable puzzle game from a jam. Surprisingly well received.</div>
+            <div class="proj-tags">
+              <span class="proj-tag">Unity</span><span class="proj-tag">Game Jam</span><span class="proj-tag">Web</span>
             </div>
           </div>
         </div>
@@ -1242,13 +1294,13 @@
             <img src="assets/img/portfolio/YVR_Hackathon/detect.png" alt="YVR Hackathon" loading="lazy">
           </div>
           <div class="proj-card-body">
-            <div class="proj-card-sub">Python · Award Winner</div>
+            <div class="proj-card-sub">Python · Hackathon · Award</div>
             <div class="proj-card-title">YVR Hackathon</div>
-            <div class="proj-card-desc">Real-time airport monitoring. YOLOv7 on Raspberry Pi.</div>
+            <div class="proj-card-desc">Real-time airport monitoring pipeline. YOLOv7 on a Raspberry Pi. Won best
+              technical implementation.</div>
             <div class="proj-tags">
-              <span class="proj-tag">YOLOv7</span>
-              <span class="proj-tag">Python</span>
-              <span class="proj-tag">Award</span>
+              <span class="proj-tag">YOLOv7</span><span class="proj-tag">Python</span><span
+                class="proj-tag">Award</span>
             </div>
           </div>
         </div>
@@ -1260,11 +1312,10 @@
           <div class="proj-card-body">
             <div class="proj-card-sub">C · OS Kernel</div>
             <div class="proj-card-title">PintOS</div>
-            <div class="proj-card-desc">MLFQ scheduler replacing round-robin in an educational OS.</div>
+            <div class="proj-card-desc">Replaced round-robin with a multi-level feedback queue scheduler in an
+              educational OS kernel.</div>
             <div class="proj-tags">
-              <span class="proj-tag">C</span>
-              <span class="proj-tag">OS</span>
-              <span class="proj-tag">Scheduler</span>
+              <span class="proj-tag">C</span><span class="proj-tag">OS</span><span class="proj-tag">Scheduler</span>
             </div>
           </div>
         </div>
@@ -1274,12 +1325,11 @@
             <img src="assets/img/portfolio/VocabWar/bg.png" alt="Vocab War" loading="lazy">
           </div>
           <div class="proj-card-body">
-            <div class="proj-card-sub">React / Firebase</div>
+            <div class="proj-card-sub">React / Firebase · Team</div>
             <div class="proj-card-title">Vocab War</div>
-            <div class="proj-card-desc">Real-time multiplayer word game with Firebase lobby.</div>
+            <div class="proj-card-desc">Real-time multiplayer word game with Firebase lobby system.</div>
             <div class="proj-tags">
-              <span class="proj-tag">React</span>
-              <span class="proj-tag">Firebase</span>
+              <span class="proj-tag">React</span><span class="proj-tag">Firebase</span>
             </div>
           </div>
         </div>
@@ -1291,10 +1341,9 @@
           <div class="proj-card-body">
             <div class="proj-card-sub">JS · Industry Project</div>
             <div class="proj-card-title">Tap It</div>
-            <div class="proj-card-desc">Competitive tapping game for the Oooh iOS platform.</div>
+            <div class="proj-card-desc">Competitive tapping game shipped into the Oooh iOS social platform.</div>
             <div class="proj-tags">
-              <span class="proj-tag">JavaScript</span>
-              <span class="proj-tag">Industry</span>
+              <span class="proj-tag">JavaScript</span><span class="proj-tag">Industry</span>
             </div>
           </div>
         </div>
@@ -1303,12 +1352,11 @@
     </div>
   </section>
 
-  <!-- ── MODAL ──────────────────────────────────────────────────── -->
+  <!-- MODAL -->
   <div id="modal">
     <div class="modal-overlay" id="modal-overlay"></div>
     <div class="modal-box">
       <button class="modal-close" id="modal-close"><i class="bi bi-x-lg"></i></button>
-
       <div class="modal-media" id="modal-media">
         <img id="modal-img" src="" alt="">
         <div class="modal-nav" id="modal-nav">
@@ -1317,7 +1365,6 @@
         </div>
         <div class="modal-dots" id="modal-dots"></div>
       </div>
-
       <div class="modal-info">
         <div class="modal-info-label" id="modal-label"></div>
         <div class="modal-info-title" id="modal-title"></div>
@@ -1328,21 +1375,15 @@
     </div>
   </div>
 
-  <!-- ── MODE BAR ───────────────────────────────────────────────── -->
+  <!-- MODE BAR -->
   <div id="mode-bar">
-    <button class="mode-btn" data-mode="organic">
-      <span class="mode-dot"></span><span>Organic</span>
-    </button>
-    <button class="mode-btn active" data-mode="digital">
-      <span class="mode-dot"></span><span>Digital</span>
-    </button>
-    <button class="mode-btn" data-mode="wire">
-      <span class="mode-dot"></span><span>Wire</span>
-    </button>
+    <button class="mode-btn" data-mode="organic"><span class="mode-dot"></span><span>Organic</span></button>
+    <button class="mode-btn active" data-mode="digital"><span class="mode-dot"></span><span>Digital</span></button>
+    <button class="mode-btn" data-mode="wire"><span class="mode-dot"></span><span>Wire</span></button>
   </div>
 
-  <!-- Flower scripts -->
-  <script src="/assets/js/p5.min.js"> </script>
+  <!-- Flower scripts — unchanged -->
+  <script src="/assets/js/p5.min.js"></script>
   <script src="/assets/js/constants.js"></script>
   <script src="/assets/js/globals.js"></script>
   <script src="/assets/js/lighting.js"></script>
@@ -1353,27 +1394,25 @@
   <script src="/assets/js/sketch.js"></script>
   <script src="/assets/js/portfolio.js"></script>
 
-  <!-- Project data + portfolio logic -->
   <script>
-    // ── Project data (add your images here) ────────────────────
     const PROJECT_DATA = {
       'going-down': {
         label: 'UE5 · Solo · In Development',
         title: 'Going Down',
-        desc: 'First-person psychological horror puzzle game. <strong>Shadows kill you. Light is safety.</strong> Six interconnected puzzle systems, dynamic shadow/light AI detection, chase sequence, cutscenes, original narrative pipeline. Built entirely solo in UE5.',
-        tags: ['UE5', 'Blueprints', 'Horror', 'Solo'],
-        images: [], // add: ['assets/img/portfolio/GoingDown/1.jpg', ...]
-        video: null, // add: 'https://www.youtube.com/embed/YOUR_ID'
+        desc: 'A first-person psychological horror puzzle game built entirely solo in UE5 over 8 months. The premise: <strong>shadows will kill you. Light is the only safe thing.</strong> The whole game is built around that tension.\n\nSix interconnected puzzle systems — lock and door, pattern keypad, generator, electric switch, picture rotation, and contextual interaction hints. A dynamic shadow and light detection system drives the enemy AI awareness. There\'s a scripted chase sequence, cutscenes, environmental storytelling, and a full narrative pipeline. Still in active development toward a full milestone.',
+        tags: ['UE5', 'Blueprints', 'Horror', 'Puzzle', 'Solo', 'In Dev'],
+        images: [],
+        video: null,
         links: [{
           label: 'In Development',
           url: null
         }]
       },
       'duck-hunt': {
-        label: 'C++ / OpenGL · Team',
+        label: 'C++ / OpenGL · Team of 6 · Sep–Dec 2024',
         title: 'Duck Hunt 3DF',
-        desc: '3D game engine built from scratch. <strong>Deferred PBR rendering</strong>, Cook-Torrance BRDF, image-based lighting, HDR skybox, full entity-component-system architecture. Shipped Duck Hunt as the flagship demo.',
-        tags: ['C++', 'OpenGL', 'PBR', 'ECS', 'IBL'],
+        desc: 'We built a 3D game engine from scratch in C++ and shipped Duck Hunt in it as the flagship demo. I led all graphics programming.\n\n<strong>Deferred PBR rendering pipeline</strong> with Cook-Torrance BRDF, image-based lighting (IBL), and HDR skybox. Full entity-component-system architecture — we actually refactored to ECS mid-project when the scene graph started falling apart, which was painful but the right call. Physics integration, scene management, input system, the works.',
+        tags: ['C++', 'OpenGL', 'PBR', 'IBL', 'ECS', 'Cook-Torrance'],
         images: [],
         video: null,
         links: [{
@@ -1383,10 +1422,10 @@
         }]
       },
       'peonia': {
-        label: 'p5.js · Solo · This site',
+        label: 'p5.js · Solo · Running on this site',
         title: 'Peonia',
-        desc: 'Generative flower system — <strong>11 procedural species</strong> with fake 3D projection, diffuse/specular/rim lighting, configurable stems, leaves, and stamen. Nine render modes with a full post-processing pipeline. The background you\'re looking at.',
-        tags: ['p5.js', '3D Projection', 'Shading', 'Generative', 'Post-Processing'],
+        desc: 'The generative flower system running behind this page. <strong>11 procedural species</strong> — each one a different combination of petal geometry, stamen type, leaf structure, and bloom behavior. Fake 3D projection with diffuse, specular, and rim lighting per-petal. Nine render modes. Full post-processing pipeline including bloom, vignette, and chromatic aberration.\n\nThe three aesthetic modes (Organic, Digital, Wire) each change the color palette, typography, and flower rendering style simultaneously. The flowers you\'re seeing were never stored — they\'re computed fresh every frame.',
+        tags: ['p5.js', '3D Projection', 'Generative Art', 'Shading', 'Post-Processing', 'Solo'],
         images: [],
         video: null,
         links: [{
@@ -1396,10 +1435,10 @@
         }]
       },
       'solarium': {
-        label: 'Swift / SceneKit · Team',
+        label: 'Swift / SceneKit / SpriteKit · Team · Jan–Apr 2024',
         title: 'Solarium',
-        desc: 'Solarpunk-themed iOS isometric puzzle game in Swift. Led architecture, puzzle system design, and mobile performance optimization. Custom Blender assets. Sequential puzzle gameplay with 5-puzzle demo.',
-        tags: ['Swift', 'SceneKit', 'SpriteKit', 'iOS', 'Blender'],
+        desc: 'An isometric puzzle game for iPhone with a Solarpunk theme — plants, light, and mechanisms. I led the architecture: player class, animation system, puzzle framework. Built a sequential puzzle system for the 5-puzzle demo and focused on mobile performance throughout.\n\nCustom Blender assets for the visual identity. The world was inspired by Unreal Engine aesthetics applied to a mobile constraint set, which was a fun problem.',
+        tags: ['Swift', 'SceneKit', 'SpriteKit', 'iOS', 'Blender', 'Puzzles'],
         images: ['assets/img/portfolio/Solarium/main.png', 'assets/img/portfolio/Solarium/ball.png',
           'assets/img/portfolio/Solarium/lift.png', 'assets/img/portfolio/Solarium/threetubes.png'
         ],
@@ -1411,25 +1450,38 @@
         }]
       },
       'shadow-dancers': {
-        label: 'Unity · Team',
+        label: 'Unity · URP · Team · Sep–Dec 2023',
         title: 'Shadow Dancers',
-        desc: 'Survival stealth horror game. Built enemy AI with <strong>dynamic waypoint/path system</strong>, sound detection, and light detection mechanics. Published in BCIT games showcase.',
-        tags: ['Unity', 'C#', 'AI', 'URP', 'Perforce'],
+        desc: 'A survival stealth horror game — think Thief but smaller and meaner. I built the enemy AI: dynamic waypoint and path system, C# component for runtime stat modification, and the detection systems.\n\n<strong>Sound detection</strong> and <strong>light detection</strong> are separate systems that both feed into enemy awareness state. The light detection in particular — checking whether the player is in shadow or illuminated — was the interesting technical piece, and it ended up influencing what I wanted to build in Going Down.\n\nPublished in the BCIT annual games showcase.',
+        tags: ['Unity', 'C#', 'URP', 'AI', 'Stealth', 'Perforce'],
         images: ['assets/img/portfolio/ShadowDancers/hell.png', 'assets/img/portfolio/ShadowDancers/main.png',
           'assets/img/portfolio/ShadowDancers/light.png', 'assets/img/portfolio/ShadowDancers/detect.png'
         ],
         video: null,
         links: [{
-          label: 'Showcase',
+          label: 'BCIT Showcase',
           url: 'https://commons.bcit.ca/news/2024/02/the-power-of-play-be-part-of-the-gaming-industry/',
           icon: 'bi-box-arrow-up-right'
         }]
       },
+      'color-theory': {
+        label: 'Unity 2D · Game Jam · Team of 3 · 2024',
+        title: 'Color Theory',
+        desc: 'A web-playable puzzle game made in a game jam with two friends. The mechanic is color-swapping — enemies and hazards react differently depending on what color state you\'re in. We shipped it in the jam window and it got a surprisingly good reception from the community.\n\nEnemy detection, audio, level transitions, web build — all in the jam timeline.',
+        tags: ['Unity', 'C#', 'Game Jam', 'Web Build', '2D'],
+        images: [],
+        video: null,
+        links: [{
+          label: 'Play (Web)',
+          url: null,
+          icon: 'bi-play-circle'
+        }]
+      },
       'yvr': {
-        label: 'Python · Hackathon · Award',
+        label: 'Python · Raspberry Pi · Hackathon · Apr 2024',
         title: 'YVR Hackathon',
-        desc: 'Real-time airport monitoring on Raspberry Pi. Custom <strong>YOLOv7 model</strong> trained on YVR camera data detecting unattended bags, people, and debris. FTP server pipeline to live dashboard. <strong>Best Technical Implementation</strong>, 4th place overall.',
-        tags: ['Python', 'YOLOv7', 'Raspberry Pi', 'PyTorch', 'Award'],
+        desc: 'A week-long hackathon at Vancouver International Airport. The problem was bird nests in aircraft engines — we pivoted to a broader airport monitoring solution.\n\nBuilt a pipeline on Raspberry Pi that pulled live camera feeds and sensor data via FTP server, ran them through a <strong>custom YOLOv7 model</strong> trained on images we captured from YVR cameras, and flagged unattended bags, people in restricted areas, and debris. Sensor logging via MQTT stored structured log files for review.\n\n<strong>Best Technical Implementation award. 4th place overall.</strong>',
+        tags: ['Python', 'YOLOv7', 'PyTorch', 'Raspberry Pi', 'MQTT', 'Award'],
         images: ['assets/img/portfolio/YVR_Hackathon/detect.png', 'assets/img/portfolio/YVR_Hackathon/main.jpg'],
         video: null,
         links: [{
@@ -1439,10 +1491,10 @@
         }]
       },
       'pintos': {
-        label: 'C · OS Kernel',
+        label: 'C · OS Kernel · Jan–Apr 2024',
         title: 'PintOS',
-        desc: 'Replaced round-robin with a <strong>multi-level feedback queue scheduler</strong> in the PintOS educational OS. Modified synchronization primitives for dynamic process priority.',
-        tags: ['C', 'OS', 'Scheduler', 'Concurrency'],
+        desc: 'Replaced the basic round-robin scheduler in the PintOS educational OS with a <strong>multi-level feedback queue scheduler</strong> in C. Tasks get prioritized dynamically based on CPU usage history, which required modifying the synchronization primitives to handle changing process priorities without deadlock.\n\nLow-level OS internals work — the kind of thing that makes everything above it make more sense.',
+        tags: ['C', 'Operating Systems', 'Scheduler', 'Concurrency', 'Synchronization'],
         images: ['assets/img/portfolio/PintOs/res.png', 'assets/img/portfolio/PintOs/mlfqs.png'],
         video: null,
         links: [{
@@ -1452,10 +1504,10 @@
         }]
       },
       'vocab-war': {
-        label: 'React / Firebase · Team',
+        label: 'React / Firebase · Team · May 2021',
         title: 'Vocab War',
-        desc: 'Multiplayer word game with real-time Firebase database and lobby system. Players compete to form words from shared letters.',
-        tags: ['React', 'Firebase', 'Multiplayer', 'Figma'],
+        desc: 'Multiplayer word game where players race to form words from a shared pool of letters. Built in a team of 4 over 5 weeks. Planned in Figma, built with ReactJS frontend and Firebase for real-time state and auth.\n\nPlayable live — the lobby system actually works.',
+        tags: ['React', 'Firebase', 'Multiplayer', 'Real-time', 'Figma'],
         images: ['assets/img/portfolio/VocabWar/bg.png', 'assets/img/portfolio/VocabWar/home-page.png',
           'assets/img/portfolio/VocabWar/game-page.png'
         ],
@@ -1473,10 +1525,10 @@
         ]
       },
       'tap-it': {
-        label: 'JavaScript · Industry Project',
+        label: 'JavaScript · Industry Project · Sep–Dec 2022',
         title: 'Tap It',
-        desc: 'Competitive tapping game for the Oooh iOS social media platform. Players compete through stages for high scores. Integrated into their app with in-app score and reaction storage.',
-        tags: ['JavaScript', 'Oooh3', 'Docker', 'Industry'],
+        desc: 'Industry project for Oooh, a social media app with built-in games. We built TapIt — players compete against a host to tap through escalating stages for a high score. Reactions and scores stored in-app.\n\nBuilt in their custom Oooh3 JavaScript framework, integrated into their existing iOS platform. Collaborative team of four, running in Docker.',
+        tags: ['JavaScript', 'Oooh3', 'Docker', 'Industry', 'Team'],
         images: ['assets/img/portfolio/Ooh/bg.png', 'assets/img/portfolio/Ooh/home.png',
           'assets/img/portfolio/Ooh/game.png'
         ],
@@ -1489,54 +1541,47 @@
       }
     }
 
-    // ── Modal logic ─────────────────────────────────────────────
-    let modal_images = []
-    let modal_img_idx = 0
+    // Modal logic — unchanged from your original
+    let modal_images = [],
+      modal_img_idx = 0
 
     function openModal(id) {
       const p = PROJECT_DATA[id]
       if (!p) return
-
       modal_images = p.images || []
       modal_img_idx = 0
-
       document.getElementById('modal-label').textContent = p.label
       document.getElementById('modal-title').innerHTML = p.title
-      document.getElementById('modal-desc').innerHTML = p.desc
-
+      document.getElementById('modal-desc').innerHTML = p.desc.replace(/\n/g, '<br>')
       const tagsEl = document.getElementById('modal-tags')
       tagsEl.innerHTML = p.tags.map(t => `<span class="proj-tag">${t}</span>`).join('')
-
       const linksEl = document.getElementById('modal-links')
       linksEl.innerHTML = p.links.map(l => l.url ?
         `<a href="${l.url}" target="_blank" class="modal-link"><i class="bi ${l.icon || 'bi-arrow-up-right'}"></i> ${l.label}</a>` :
-        `<span class="modal-link" style="opacity:0.5; cursor:default"><i class="bi bi-clock"></i> ${l.label}</span>`
+        `<span class="modal-link" style="opacity:0.5;cursor:default"><i class="bi bi-clock"></i> ${l.label}</span>`
       ).join('')
-
-      // Media: video takes priority
       const mediaEl = document.getElementById('modal-media')
       const imgEl = document.getElementById('modal-img')
       const navEl = document.getElementById('modal-nav')
       const dotsEl = document.getElementById('modal-dots')
-
       if (p.video) {
-        imgEl.style.display = 'none'
-        navEl.style.display = 'none'
+        imgEl.style.display = 'none';
+        navEl.style.display = 'none';
         dotsEl.innerHTML = ''
         let iframe = mediaEl.querySelector('iframe')
         if (!iframe) {
-          iframe = document.createElement('iframe')
-          iframe.allow = 'autoplay; encrypted-media'
-          iframe.allowFullscreen = true
+          iframe = document.createElement('iframe');
+          iframe.allow = 'autoplay; encrypted-media';
+          iframe.allowFullscreen = true;
           mediaEl.appendChild(iframe)
         }
-        iframe.style.display = 'block'
+        iframe.style.display = 'block';
         iframe.src = p.video
       } else if (modal_images.length > 0) {
         const iframe = mediaEl.querySelector('iframe')
         if (iframe) {
           iframe.style.display = 'none';
-          iframe.src = '';
+          iframe.src = ''
         }
         imgEl.style.display = 'block'
         navEl.style.display = modal_images.length > 1 ? 'flex' : 'none'
@@ -1544,14 +1589,13 @@
       } else {
         const iframe = mediaEl.querySelector('iframe')
         if (iframe) {
-          iframe.style.display = 'none';
+          iframe.style.display = 'none'
         }
-        imgEl.style.display = 'none'
-        navEl.style.display = 'none'
+        imgEl.style.display = 'none';
+        navEl.style.display = 'none';
         dotsEl.innerHTML = ''
         mediaEl.style.background = 'var(--accent-dim)'
       }
-
       document.getElementById('modal').classList.add('open')
     }
 
@@ -1560,23 +1604,22 @@
       document.getElementById('modal-img').src = modal_images[modal_img_idx]
       const dotsEl = document.getElementById('modal-dots')
       dotsEl.innerHTML = modal_images.map((_, i) =>
-        `<div class="modal-dot ${i === modal_img_idx ? 'active' : ''}" onclick="goToImg(${i})"></div>`
-      ).join('')
+        `<div class="modal-dot ${i === modal_img_idx ? 'active' : ''}" onclick="goToImg(${i})"></div>`).join('')
     }
 
     function goToImg(i) {
       modal_img_idx = i;
-      updateModalImg();
+      updateModalImg()
     }
 
     document.getElementById('modal-prev').onclick = () => {
-      if (!modal_images.length) return
-      modal_img_idx = (modal_img_idx - 1 + modal_images.length) % modal_images.length
+      if (!modal_images.length) return;
+      modal_img_idx = (modal_img_idx - 1 + modal_images.length) % modal_images.length;
       updateModalImg()
     }
     document.getElementById('modal-next').onclick = () => {
-      if (!modal_images.length) return
-      modal_img_idx = (modal_img_idx + 1) % modal_images.length
+      if (!modal_images.length) return;
+      modal_img_idx = (modal_img_idx + 1) % modal_images.length;
       updateModalImg()
     }
 
@@ -1588,19 +1631,16 @@
 
     document.getElementById('modal-close').onclick = closeModal
     document.getElementById('modal-overlay').onclick = closeModal
-
     document.addEventListener('keydown', e => {
       if (e.key === 'Escape') closeModal()
       if (e.key === 'ArrowLeft') document.getElementById('modal-prev').click()
       if (e.key === 'ArrowRight') document.getElementById('modal-next').click()
     })
 
-    // Wire up cards
     document.querySelectorAll('.proj-card').forEach(card => {
       card.addEventListener('click', () => openModal(card.dataset.id))
     })
   </script>
-
 </body>
 
 </html>

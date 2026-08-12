@@ -1,24 +1,21 @@
 const PORTFOLIO_MODES = {
   organic: {
-    flowers:       ['peony', 'lotus', 'lily'],
-    renders:       [0],           // DEFAULT only — clean no effects
-    rotation:      0.008,
-    canvas_bg:     [242, 237, 228],
-    effects:       { scanlines: false, aberration: false, glitch: false, grain: false, bloom: true }
+    renders:   [0],                    // DEFAULT only — clean, no effects
+    rotation:  0.008,
+    canvas_bg: [242, 237, 228],
+    effects:   { scanlines: false, aberration: false, glitch: false, grain: false, bloom: true }
   },
   digital: {
-    flowers:       ['gerbera', 'sunflower', 'pericallis'],
-    renders:       [2, 1, 5],     // cycles: DOTS → ASCII → RINGS
-    rotation:      0.009,
-    canvas_bg:     [4, 5, 15],
-    effects:       { scanlines: false, aberration: true, glitch: true, grain: true, bloom: false }
+    renders:   [1, 2, 3, 4, 5, 6, 7],  // ASCII, DOTS, SQUARES, CROSSES, RINGS, TRIANGLES, HATCHING
+    rotation:  0.009,
+    canvas_bg: [4, 5, 15],
+    effects:   { scanlines: false, aberration: true, glitch: true, grain: true, bloom: false }
   },
   wire: {
-    flowers:       ['rose', 'hibiscus', 'calibrachoa'],
-    renders:       [8],           // WIREFRAME only
-    rotation:      0.0011,
-    canvas_bg:     [0, 0, 0],
-    effects:       { scanlines: true, aberration: false, glitch: false, grain: false, bloom: false }
+    renders:   [8],                    // WIREFRAME only
+    rotation:  0.0011,
+    canvas_bg: [0, 0, 0],
+    effects:   { scanlines: true, aberration: false, glitch: false, grain: false, bloom: false }
   }
 }
 
@@ -83,10 +80,11 @@ document.querySelectorAll('.f-btn').forEach(btn => {
 
 function cycleFlower() {
   if (is_wilting) return
+  if (typeof bloom !== 'undefined' && bloom < 1) return   // don't wilt mid-bloom
   is_wilting = true
 
-  const start  = performance.now()
-  const cfg    = PORTFOLIO_MODES[current_mode]
+  const start = performance.now()
+  const cfg   = PORTFOLIO_MODES[current_mode]
 
   function wiltStep(now) {
     const progress = Math.min(1, (now - start) / WILT_DURATION)
@@ -95,21 +93,16 @@ function cycleFlower() {
     if (progress < 1) {
       requestAnimationFrame(wiltStep)
     } else {
-      // Switch flower
-      const modeFlowers = cfg.flowers
-      const curIdx      = modeFlowers.indexOf(
-        typeof FLOWER_LIST !== 'undefined' ? FLOWER_LIST[flower_index] : ''
-      )
-      const nextName = modeFlowers[(curIdx + 1) % modeFlowers.length]
-      switchToFlower(nextName)
+      // advance through the full flower list — same for every mode
+      const nextIdx = (flower_index + 1) % FLOWER_LIST.length
+      switchToFlower(FLOWER_LIST[nextIdx])
 
-      // In digital mode, cycle render mode
+      // digital is the only mode that cycles render modes
       if (current_mode === 'digital' && typeof render_mode !== 'undefined') {
         render_cycle_idx = (render_cycle_idx + 1) % cfg.renders.length
         render_mode = cfg.renders[render_cycle_idx]
       }
 
-      // Reset wilt
       if (typeof wilt !== 'undefined') wilt = 0
       is_wilting = false
     }
@@ -150,10 +143,9 @@ function applyMode(mode) {
 }
 
 function applyFlowerMode(mode) {
-  if (typeof FLOWER_LIST === 'undefined') return
   const cfg = PORTFOLIO_MODES[mode]
 
-  // Render mode
+  // Render mode — this mode's first/only render
   if (typeof render_mode !== 'undefined') render_mode = cfg.renders[0]
 
   // Rotation speed
@@ -161,9 +153,6 @@ function applyFlowerMode(mode) {
 
   // Canvas background color
   if (typeof canvas_bg_color !== 'undefined') canvas_bg_color = cfg.canvas_bg
-
-  // Switch to first flower
-  switchToFlower(cfg.flowers[0])
 
   // Effects
   if (typeof POST_FX !== 'undefined') {
