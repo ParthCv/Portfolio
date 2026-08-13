@@ -1,6 +1,5 @@
 function render_buffer() {
-    final_buffer.background(0)
-
+    final_buffer.clear();
     if (render_mode === RENDER_MODE.DEFAULT || 
         render_mode === RENDER_MODE.WIREFRAME) {
         final_buffer.image(rendering_buffer, 0, 0)
