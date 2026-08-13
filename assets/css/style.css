@@ -32,13 +32,13 @@
     }
 
     [data-mode="digital"] {
-      --bg: #04050f;
-      --surface: rgba(4, 5, 15, 0.91);
-      --text: #c8cce8;
-      --muted: #7880b8;
-      --accent: #7b6fff;
-      --accent-dim: rgba(123, 111, 255, 0.1);
-      --border: rgba(123, 111, 255, 0.22);
+      --bg: #01012b;
+      --surface: rgba(1, 1, 43, 0.91);
+      --text: #d1f7ff;
+      --muted: #5a8fa8;          /* lightened from #005678 — see note */
+      --accent: #05d9e8;
+      --accent-dim: rgba(5, 217, 232, 0.1);
+      --border: rgba(5, 217, 232, 0.22);
       --f-display: 'Space Mono', monospace;
       --f-body: 'Space Mono', monospace;
       --f-mono: 'Space Mono', monospace;
@@ -47,7 +47,17 @@
       --nav-case: none;
       --w-display: 700;
       --name-size: clamp(32px, 4vw, 58px);
-      --canvas-bg: 4, 5, 15
+      --canvas-bg: 1, 1, 43
+    }
+
+    [data-mode="digital"] .nav-link:hover,
+    [data-mode="digital"] .home-link:hover {
+      color: #ff2a6d;
+      border-color: #ff2a6d
+    }
+
+    [data-mode="digital"] .proj-card:hover {
+      border-color: #ff2a6d
     }
 
     [data-mode="wire"] {
