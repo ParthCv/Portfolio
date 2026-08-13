@@ -8,7 +8,7 @@ const PORTFOLIO_MODES = {
   digital: {
     renders:   [1, 2, 3, 4, 5, 6, 7],  // ASCII, DOTS, SQUARES, CROSSES, RINGS, TRIANGLES, HATCHING
     rotation:  0.009,
-    canvas_bg: [4, 5, 15],
+    canvas_bg: [1, 1, 43],
     effects:   { scanlines: false, aberration: true, glitch: true, grain: true, bloom: false }
   },
   wire: {
